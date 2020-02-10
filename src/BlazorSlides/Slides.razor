@@ -1,0 +1,78 @@
+﻿<div>
+    <div class="@_slideshowContainer">
+        @foreach (var slide in _slides)
+        {
+            <InternalSlide @key="@slide.Index" Index="@slide.Index" CurrentSlide="@_currentSlide" NumberOfSlides="@_slides.Count" Caption="@slide.Caption">
+                @((MarkupString)slide.Content)
+            </InternalSlide>
+        }
+
+        <a class="@_prev" @onclick="@Previous">&#10094;</a>
+        <a class="@_next" @onclick="@Next">&#10095;</a>
+    </div>
+
+    <div class="@_dotsContainer">
+        @foreach (var slide in _slides)
+        {
+            string dotClass = GetDotClass(slide.Index);
+            <span class="@dotClass" @onclick="@(() => { DotClick(slide.Index); })"></span>
+        }
+    </div>
+</div>
+
+<Styled @bind-Classname="@_slideshowContainer">
+    max-width: 1000px;
+    position: relative;
+    margin: auto;
+</Styled>
+
+<Styled @bind-Classname="@_prev">
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    margin-top: -22px;
+    padding: 16px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+</Styled>
+
+<Styled Classname="@_prev" PseudoClass="PseudoClasses.Hover">
+    background-color: rgba(0,0,0,0.8);
+</Styled>
+
+<Styled @bind-Classname="@_rightSide">
+    right: 0;
+    border-radius: 3px 0 0 3px;
+</Styled>
+
+<Styled @bind-Classname="@_next" Compose1="@_prev" Compose2="@_rightSide" />
+
+<Styled @bind-Classname="@_dot">
+    cursor: pointer;
+    height: 15px;
+    width: 15px;
+    margin: 0 2px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
+</Styled>
+
+<Styled Classname="@_dot" PseudoClass="PseudoClasses.Hover">
+    background-color: #717171;
+</Styled>
+
+<Styled @bind-Classname="@_active">
+    background-color: #717171;
+</Styled>
+
+<Styled @bind-Classname="@_dotActive" Compose1="@_dot" Compose2="@_active" />
+
+<Styled @bind-Classname="@_dotsContainer">
+    text-align: center;
+</Styled>

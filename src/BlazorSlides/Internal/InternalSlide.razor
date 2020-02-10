@@ -1,0 +1,41 @@
+﻿<div class="@_currentSlideClass">
+    <div class="@_slideNumberClass">@Index / @NumberOfSlides</div>
+    @ChildContent
+    @if (Caption != null)
+    {
+        <div class="@_captionClass">@Caption</div>
+    }
+</div>
+
+<Styled @bind-Classname="@_fade" IsKeyframes="true">
+    from {opacity: .4};
+    to {opacity: 1};
+</Styled>
+
+<Styled @bind-Classname="@_hideSlide">
+    animation: @_fade 1.5s; 
+    display: none;
+</Styled>
+
+<Styled @bind-Classname="@_showSlide">
+    animation: @_fade 1.5s;
+    display: block;
+</Styled>
+
+<Styled @bind-Classname="@_captionClass">
+    color: #f2f2f2;
+    font-size: 15px;
+    padding: 8px 12px;
+    position: absolute;
+    bottom: 8px;
+    width: 100%;
+    text-align: center;
+</Styled>
+
+<Styled @bind-Classname="@_slideNumberClass">
+    color: #f2f2f2;
+    font-size: 12px;
+    padding: 8px 12px;
+    position: absolute;
+    top: 0;
+</Styled>
