@@ -1,78 +1,90 @@
-﻿<div>
-    <div class="@_slideshowContainer">
-        @foreach (var slide in _slides)
+﻿<div class="@_revealContainer" role="application">
+    <div class="@_slidesContainer">
+        @foreach (var slide in _slideItems)
         {
-            <InternalSlide @key="@slide.Index" Index="@slide.Index" CurrentSlide="@_currentSlide" NumberOfSlides="@_slides.Count" Caption="@slide.Caption">
+            <InternalSlide @key="@slide.Index" Index="@slide.Index" CurrentSlide="@_currentSlide" NumberOfSlides="@_slideItems.Count" Caption="@slide.Caption">
                 @((MarkupString)slide.Content)
             </InternalSlide>
-        }
-
-        <a class="@_prev" @onclick="@Previous">&#10094;</a>
-        <a class="@_next" @onclick="@Next">&#10095;</a>
-    </div>
-
-    <div class="@_dotsContainer">
-        @foreach (var slide in _slides)
-        {
-            string dotClass = GetDotClass(slide.Index);
-            <span class="@dotClass" @onclick="@(() => { DotClick(slide.Index); })"></span>
         }
     </div>
 </div>
 
-<Styled @bind-Classname="@_slideshowContainer">
-    max-width: 1000px;
+@* Reset CSS *@
+<Styled>
+    @_mixins.Normalize()
+</Styled>
+
+@* Global Styles *@
+
+<Styled>
+    html {
+        width: 100%;
+        height: 100%;
+        height: 100vh;
+        height: calc( var(--vh, 1vh) * 100);
+        overflow: hidden;
+    }
+
+    body {
+        height: 100%;
+        overflow: hidden;
+        position: relative;
+        line-height: 1;
+        margin: 0;
+        background-color: #fff;
+        color: #000;
+    }
+</Styled>
+
+@* Main reveal container *@
+
+<Styled @bind-Classname="@_reveal">
+    label: reveal;
     position: relative;
-    margin: auto;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    -ms-touch-action: pinch-zoom;
+    touch-action: pinch-zoom;
 </Styled>
 
-<Styled @bind-Classname="@_prev">
-    cursor: pointer;
+<Styled Classname="@_reveal" PseudoClass="PseudoClasses.After">
+    content: '';
+    font-style: italic;
+</Styled>
+
+<Styled @bind-Classname="@_center">
+    min-height: 0 !important;
+</Styled>
+
+@* Slides container *@
+
+<Styled @bind-Classname="@_revealContainer" Compose1="@_reveal" Compose2="@_center" />
+
+<Styled @bind-Classname="@_slides">
+    label: slides;
     position: absolute;
-    top: 50%;
-    width: auto;
-    margin-top: -22px;
-    padding: 16px;
-    color: white;
-    font-weight: bold;
-    font-size: 18px;
-    transition: 0.6s ease;
-    border-radius: 0 3px 3px 0;
-    user-select: none;
-</Styled>
-
-<Styled Classname="@_prev" PseudoClass="PseudoClasses.Hover">
-    background-color: rgba(0,0,0,0.8);
-</Styled>
-
-<Styled @bind-Classname="@_rightSide">
+    width: 100%;
+    height: 100%;
+    top: 0;
     right: 0;
-    border-radius: 3px 0 0 3px;
-</Styled>
-
-<Styled @bind-Classname="@_next" Compose1="@_prev" Compose2="@_rightSide" />
-
-<Styled @bind-Classname="@_dot">
-    cursor: pointer;
-    height: 15px;
-    width: 15px;
-    margin: 0 2px;
-    background-color: #bbb;
-    border-radius: 50%;
-    display: inline-block;
-    transition: background-color 0.6s ease;
-</Styled>
-
-<Styled Classname="@_dot" PseudoClass="PseudoClasses.Hover">
-    background-color: #717171;
-</Styled>
-
-<Styled @bind-Classname="@_active">
-    background-color: #717171;
-</Styled>
-
-<Styled @bind-Classname="@_dotActive" Compose1="@_dot" Compose2="@_active" />
-
-<Styled @bind-Classname="@_dotsContainer">
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    pointer-events: none;
+    overflow: visible;
+    z-index: 1;
     text-align: center;
+    -webkit-perspective: 600px;
+    perspective: 600px;
+    -webkit-perspective-origin: 50% 40%;
+    perspective-origin: 50% 40%;
 </Styled>
+
+<Styled @bind-Classname="@_size">
+    width: 960px;
+    height: 700px;
+    zoom: 1;
+</Styled>
+
+<Styled @bind-Classname="@_slidesContainer" Compose1="@_slides" Compose2="@_center" Compose3="@_size" />

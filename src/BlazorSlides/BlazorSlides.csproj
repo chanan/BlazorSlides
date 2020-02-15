@@ -21,6 +21,7 @@
     <PackageReference Include="CSHTMLTokenizer" Version="0.8.1" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor" Version="3.2.0-preview1.20073.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="3.1.1" />
+    <PackageReference Include="Polished" Version="1.0.0" />
   </ItemGroup>
 
 </Project>

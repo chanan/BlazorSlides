@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
+using Polished;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,18 +20,18 @@ namespace BlazorSlides
         private readonly ServiceProvider _emptyServiceProvider = new ServiceCollection().BuildServiceProvider();
         private readonly Func<string, string> _encoder = (string t) => t;
 
-        private List<SlideItem> _slides = new List<SlideItem>();
+        //Main reveal container
+        private string _revealContainer;
+        private string _reveal;
+        private string _center;
 
-        //Css Classes
-        private string _slideshowContainer;
-        private string _prev;
-        private string _rightSide;
-        private string _next;
-        private string _dot;
-        private string _active;
-        private string _dotActive;
-        private string _dotsContainer;
+        //Slides container
+        private string _slidesContainer;
+        private string _slides;
+        private string _size;
 
+        private IMixins _mixins = new Mixins();
+        private List<SlideItem> _slideItems = new List<SlideItem>();
         private int _currentSlide = 1;
 
         [Parameter] public RenderFragment ChildContent { get; set; }
@@ -42,7 +43,7 @@ namespace BlazorSlides
 
         private void Next()
         {
-            if(_currentSlide == _slides.Count)
+            if(_currentSlide == _slideItems.Count)
             {
                 _currentSlide = 1;
             }
@@ -56,7 +57,7 @@ namespace BlazorSlides
         {
             if (_currentSlide == 1)
             {
-                _currentSlide = _slides.Count;
+                _currentSlide = _slideItems.Count;
             }
             else
             {
@@ -64,26 +65,10 @@ namespace BlazorSlides
             }
         }
 
-        private string GetDotClass(int index)
-        {
-            if(index == _currentSlide)
-            {
-                return _dotActive;
-            }
-            else
-            {
-                return _dot;
-            }
-        }
-        private void DotClick(int newIndex)
-        {
-            _currentSlide = newIndex;
-        }
-
         private void ProcessParameters()
         {
             string content = RenderAsString();
-            _slides = ParseSlides(content);
+            _slideItems = ParseSlides(content);
         }
 
         private List<SlideItem> ParseSlides(string content)
@@ -106,7 +91,6 @@ namespace BlazorSlides
                         divNum = 0;
                         open = true;
                         slideTag = true;
-                        caption = GetCaption(token);
                     }
                     if(open && IsOpenDiv(token))
                     {
@@ -146,24 +130,9 @@ namespace BlazorSlides
             return list;
         }
 
-        private string GetCaption(IToken token)
-        {
-            string ret = null;
-            StartTag startTag = (StartTag)token;
-            foreach(IToken attr in startTag.Attributes)
-            {
-                if(((AttributeToken)attr).Name == "data-blazorslide-caption")
-                {
-                    string caption = ((AttributeToken)attr).Value.ToString();
-                    ret = caption.Substring(1, caption.Length - 2);
-                }
-            }
-            return ret;
-        }
-
         private bool IsOpenDiv(IToken token)
         {
-            if (token.TokenType == TokenType.StartTag && ((StartTag)token).Name == "div")
+            if (token.TokenType == TokenType.StartTag && ((StartTag)token).Name == "section")
             {
                 return true;
             }
@@ -175,7 +144,7 @@ namespace BlazorSlides
 
         private bool IsCloseDiv(IToken token)
         {
-            if(token.TokenType == TokenType.EndTag && ((EndTag)token).Name == "div")
+            if(token.TokenType == TokenType.EndTag && ((EndTag)token).Name == "section")
             {
                 return true;
             }
@@ -190,15 +159,8 @@ namespace BlazorSlides
             if(token.TokenType == TokenType.StartTag)
             {
                 StartTag startTag = (StartTag)token;
-                if (startTag.Name != "div") return false;
-                bool found = false;
-                foreach(IToken attribute in startTag.Attributes)
-                {
-                    if(attribute.TokenType == TokenType.Attribute && ((AttributeToken)attribute).Name == "data-blazorslide")
-                    {
-                        found = true;
-                    }
-                }
+                if (startTag.Name != "section") return false;
+                bool found = startTag.Attributes.Exists(attribute => attribute.TokenType == TokenType.Attribute && ((AttributeToken)attribute).Name == "data-blazorslide");
                 return found;
             }
             else
