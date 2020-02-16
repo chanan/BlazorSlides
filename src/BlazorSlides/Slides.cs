@@ -3,6 +3,7 @@ using CSHTMLTokenizer;
 using CSHTMLTokenizer.Tokens;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
 using Polished;
@@ -31,8 +32,14 @@ namespace BlazorSlides
         private string _size;
 
         private IMixins _mixins = new Mixins();
+
+        //State
         private List<SlideItem> _slideItems = new List<SlideItem>();
         private int _currentSlide = 1;
+        private bool _hasHorizontal = false;
+        private bool _hasVertical = false;
+        private bool _hasDarkBackground = false;
+        private bool _hasLightBackground = true;
 
         [Parameter] public RenderFragment ChildContent { get; set; }
 
@@ -41,34 +48,38 @@ namespace BlazorSlides
             ProcessParameters();
         }
 
-        private void Next()
+        //Event callbacks
+        private void OnNext(MouseEventArgs e)
         {
-            if(_currentSlide == _slideItems.Count)
-            {
-                _currentSlide = 1;
-            }
-            else
+            if(_currentSlide != _slideItems.Count)
             {
                 _currentSlide++;
             }
         }
 
-        private void Previous()
+        private void OnPrevious(MouseEventArgs e)
         {
-            if (_currentSlide == 1)
-            {
-                _currentSlide = _slideItems.Count;
-            }
-            else
+            if (_currentSlide != 1)
             {
                 _currentSlide--;
             }
+        }
+
+        private void OnUp(MouseEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void OnDown(MouseEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         private void ProcessParameters()
         {
             string content = RenderAsString();
             _slideItems = ParseSlides(content);
+            _hasHorizontal = _slideItems.Count > 1;
         }
 
         private List<SlideItem> ParseSlides(string content)

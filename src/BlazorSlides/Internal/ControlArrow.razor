@@ -1,0 +1,96 @@
+﻿<div class="@_finalArrow"></div>
+
+<Styled @bind-Classname="@_controlsArrow">
+    label: controls-arrow;
+    position: relative;
+    width: 3.6em;
+    height: 3.6em;
+</Styled>
+
+<Styled Classname="@_controlsArrow" PseudoClass="PseudoClasses.Before">
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2.6em;
+    height: 0.5em;
+    border-radius: 0.25em;
+    background-color: currentColor;
+    transition: all 0.15s ease, background-color 0.8s ease;
+    -webkit-transform-origin: 0.2em 50%;
+    transform-origin: 0.2em 50%;
+    will-change: transform;
+    -webkit-transform: translateX(0.5em) translateY(1.55em) rotate(45deg);
+    transform: translateX(0.5em) translateY(1.55em) rotate(45deg);
+</Styled>
+
+<Styled Classname="@_controlsArrow" PseudoClass="PseudoClasses.After">
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2.6em;
+    height: 0.5em;
+    border-radius: 0.25em;
+    background-color: currentColor;
+    transition: all 0.15s ease, background-color 0.8s ease;
+    -webkit-transform-origin: 0.2em 50%;
+    transform-origin: 0.2em 50%;
+    will-change: transform;
+    -webkit-transform: translateX(0.5em) translateY(1.55em) rotate(-45deg);
+    transform: translateX(0.5em) translateY(1.55em) rotate(-45deg);
+</Styled>
+
+@* Styled does not currently support chaining psuedo classes. Workaround: *@
+
+<Styled>
+    .@_controlsArrow:hover:before {
+        -webkit-transform: translateX(0.5em) translateY(1.55em) rotate(40deg);
+        transform: translateX(0.5em) translateY(1.55em) rotate(40deg);
+    }
+    .@_controlsArrow:hover:after {
+        -webkit-transform: translateX(0.5em) translateY(1.55em) rotate(-40deg);
+        transform: translateX(0.5em) translateY(1.55em) rotate(-40deg);
+    }
+    .@_controlsArrow:active:before {
+        -webkit-transform: translateX(0.5em) translateY(1.55em) rotate(36deg);
+        transform: translateX(0.5em) translateY(1.55em) rotate(36deg);
+    }
+    .@_controlsArrow:active:after {
+        -webkit-transform: translateX(0.5em) translateY(1.55em) rotate(-36deg);
+        transform: translateX(0.5em) translateY(1.55em) rotate(-36deg);
+    }
+</Styled>
+
+<Styled @bind-Classname="@_arrowRight">
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+</Styled>
+
+<Styled @bind-Classname="@_arrowUp">
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+</Styled>
+
+<Styled @bind-Classname="@_arrowDown">
+    -webkit-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+</Styled>
+
+<Styled @bind-Classname="@_finalArrow" 
+    Compose1="@_controlsArrow" 
+    Compose3="@_arrowRight" Compose3If="@(ArrowDirection == ArrowDirection.Right)"
+    Compose4="@_arrowUp" Compose4If="@(ArrowDirection == ArrowDirection.Up)"
+    Compose5="@_arrowDown" Compose5If="@(ArrowDirection == ArrowDirection.Down)"
+/>
+
+@code {
+    private string _finalArrow;
+    private string _controlsArrow;
+    private string _arrowRight;
+    private string _arrowUp;
+    private string _arrowDown;
+
+    [Parameter] public ArrowDirection ArrowDirection { get; set; }
+    [Parameter] public bool IsEnabled { get; set; }
+}

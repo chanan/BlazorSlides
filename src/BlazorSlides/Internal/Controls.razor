@@ -1,0 +1,105 @@
+﻿<aside class="@_controlsFinal">
+    @if (HasHorizontal)
+    {
+        <ControlButton 
+            ArrowDirection="ArrowDirection.Left" IsEnabled="@(IsArrowLeftEnabled())"
+            HasHorizontal="@HasHorizontal" HasVertical="@HasVertical"
+            OnClick="@OnPrevious" 
+        />
+        <ControlButton 
+            ArrowDirection="ArrowDirection.Right" IsEnabled="@(IsArrowRightEnabled())"
+            HasHorizontal="@HasHorizontal" HasVertical="@HasVertical"
+            OnClick="@OnNext" 
+        />
+    }
+    @if (HasVertical)
+    {
+        <ControlButton 
+            ArrowDirection="ArrowDirection.Up" IsEnabled="@(IsArrowUpEnabled())"
+            HasHorizontal="@HasHorizontal" HasVertical="@HasVertical"
+            OnClick="@OnUp" 
+        />
+        <ControlButton 
+            ArrowDirection="ArrowDirection.Down" IsEnabled="@(IsArrowDownEnabled())"
+            HasHorizontal="@HasHorizontal" HasVertical="@HasVertical"
+            OnClick="@OnDown" 
+        />
+    }
+</aside>
+
+<Styled @bind-Classname="@_controls">
+    label: controls;
+    position: absolute;
+    top: auto;
+    bottom: 12px;
+    right: 12px;
+    left: auto;
+    z-index: 11;
+    pointer-events: none;
+    font-size: 10px;
+</Styled>
+
+<Styled @bind-Classname="@_dark">
+    color: #fff;
+</Styled>
+
+<Styled @bind-Classname="@_light">
+    color: #000;
+</Styled>
+
+<Styled @bind-Classname="@_controlsFinal" 
+    ComposeBase="@_controls"
+    ComposeDark="@_dark" ComposeDarkIf="@HasDarkBackground"
+    ComposeLight="@_light" ComposeLightIf="@HasLightBackground"
+/>
+
+@code {
+    //Styles
+    private string _controlsFinal;
+    private string _controls;
+    private string _dark;
+    private string _light;
+
+    //Parameters
+    [Parameter] public int NumberOfSlides { get; set; }
+    [Parameter] public int CurrentSlide { get; set; }
+    [Parameter] public bool HasHorizontal { get; set; }
+    [Parameter] public bool HasVertical { get; set; }
+    [Parameter] public bool HasDarkBackground { get; set; }
+    [Parameter] public bool HasLightBackground { get; set; }
+
+    //Event callbacks
+    [Parameter] public EventCallback<MouseEventArgs> OnNext { get; set; }
+    [Parameter] public EventCallback<MouseEventArgs> OnPrevious { get; set; }
+    [Parameter] public EventCallback<MouseEventArgs> OnUp { get; set; }
+    [Parameter] public EventCallback<MouseEventArgs> OnDown { get; set; }
+
+    private bool IsArrowLeftEnabled()
+    {
+        return CurrentSlide > 1;
+    }
+
+    private bool IsArrowRightEnabled()
+    {
+        return CurrentSlide < NumberOfSlides;
+    }
+
+    private bool IsArrowUpEnabled()
+    {
+        return false;
+    }
+
+    private bool IsArrowDownEnabled()
+    {
+        return false;
+    }
+}
+
+@* 
+    TODO:
+    * Highlight
+    * navigation mode
+    * fragments
+    * layout and media query
+    * no hover
+*@

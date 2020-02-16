@@ -7,6 +7,13 @@
             </InternalSlide>
         }
     </div>
+    <Controls 
+        CurrentSlide="@_currentSlide" NumberOfSlides="@_slideItems.Count" 
+        HasHorizontal="@_hasHorizontal" HasVertical="@_hasVertical"
+        HasDarkBackground="@_hasDarkBackground" HasLightBackground="@_hasLightBackground"
+        OnNext="@OnNext" OnPrevious="@OnPrevious"
+        OnUp="@OnUp" OnDown="@OnDown"
+    />
 </div>
 
 @* Reset CSS *@
