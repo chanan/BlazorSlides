@@ -7,6 +7,12 @@
             </InternalSlide>
         }
     </div>
+    @if (_showProgress)
+    {
+        <Progress
+            CurrentSlide="@_currentSlide" NumberOfSlides="@_slideItems.Count"
+        />
+    }
     <Controls 
         CurrentSlide="@_currentSlide" NumberOfSlides="@_slideItems.Count" 
         HasHorizontal="@_hasHorizontal" HasVertical="@_hasVertical"
@@ -14,6 +20,10 @@
         OnNext="@OnNext" OnPrevious="@OnPrevious"
         OnUp="@OnUp" OnDown="@OnDown"
     />
+    @if (_showSlideNumbers)
+    {
+        <SlideNumbers CurrentSlide="@_currentSlide" />
+    }
 </div>
 
 @* Reset CSS *@

@@ -40,6 +40,8 @@ namespace BlazorSlides
         private bool _hasVertical = false;
         private bool _hasDarkBackground = false;
         private bool _hasLightBackground = true;
+        private bool _showProgress = true;
+        private bool _showSlideNumbers = true;
 
         [Parameter] public RenderFragment ChildContent { get; set; }
 

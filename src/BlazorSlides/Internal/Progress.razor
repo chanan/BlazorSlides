@@ -1,0 +1,89 @@
+﻿<div class="@_progress">
+    <span class="@_span"></span>
+</div>
+
+<Styled @bind-Classname="@_progress">
+    label: progress;
+    position: absolute;
+    height: 3px;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    z-index: 10;
+    background-color: rgba(0, 0, 0, 0.2);
+    color: #fff;
+</Styled>
+
+<Styled Classname="@_progress" PseudoClass="PseudoClasses.After">
+    content: '';
+    display: block;
+    position: absolute;
+    height: 10px;
+    width: 100%;
+    top: -10px;
+</Styled>
+
+<Styled @bind-Classname="@_span">
+    label: progress-span;
+    display: block;
+    height: 100%;
+    width: 0px;
+    background-color: currentColor;
+    transition: width 800ms cubic-bezier(0.26, 0.86, 0.44, 0.985);
+    width: @getProgress()
+</Styled>
+
+
+@code {
+    //Styles
+    private string _progress;
+    private string _span;
+
+    [Parameter] public int NumberOfSlides { get; set; }
+    [Parameter] public int CurrentSlide { get; set; }
+
+    private string getProgress()
+    {
+        double progress = Math.Min((CurrentSlide / NumberOfSlides), 1);
+        progress *= 970; //TODO: 970 hardcoded for now. Should be: dom.wrapper.offsetWidth
+        return progress.ToString("F2") + "px;";
+    }
+}
+
+@*
+    TODO:
+    * Progress click
+    * Current slide fragments
+    * offsetWidth
+*@
+
+@*
+function getProgress() {
+
+    // The number of past and total slides
+    var totalCount = getTotalSlides();
+    var pastCount = getSlidePastCount();
+
+    if( currentSlide ) {
+
+        var allFragments = currentSlide.querySelectorAll( '.fragment' );
+
+        // If there are fragments in the current slide those should be
+        // accounted for in the progress.
+        if( allFragments.length > 0 ) {
+            var visibleFragments = currentSlide.querySelectorAll( '.fragment.visible' );
+
+            // This value represents how big a portion of the slide progress
+            // that is made up by its fragments (0-1)
+            var fragmentWeight = 0.9;
+
+            // Add fragment progress to the past slide count
+            pastCount += ( visibleFragments.length / allFragments.length ) * fragmentWeight;
+        }
+
+    }
+
+    return Math.min( pastCount / ( totalCount - 1 ), 1 );
+
+}
+*@
