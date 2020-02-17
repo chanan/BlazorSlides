@@ -28,14 +28,14 @@ namespace BlazorSlides
 
         //Slides container
         private string _slidesContainer;
-        private string _slides;
+        private string _slidesClass;
         private string _size;
 
         private IMixins _mixins = new Mixins();
 
         //State
-        private List<SlideItem> _slideItems = new List<SlideItem>();
-        private int _currentSlide = 1;
+        private List<IHorizontalSlide> _slides = new List<IHorizontalSlide>();
+        private int _currentHorizontalIndex = 1;
         private bool _hasHorizontal = false;
         private bool _hasVertical = false;
         private bool _hasDarkBackground = false;
@@ -53,17 +53,17 @@ namespace BlazorSlides
         //Event callbacks
         private void OnNext(MouseEventArgs e)
         {
-            if(_currentSlide != _slideItems.Count)
+            if(_currentHorizontalIndex != _slides.Count)
             {
-                _currentSlide++;
+                _currentHorizontalIndex++;
             }
         }
 
         private void OnPrevious(MouseEventArgs e)
         {
-            if (_currentSlide != 1)
+            if (_currentHorizontalIndex != 1)
             {
-                _currentSlide--;
+                _currentHorizontalIndex--;
             }
         }
 
@@ -80,106 +80,106 @@ namespace BlazorSlides
         private void ProcessParameters()
         {
             string content = RenderAsString();
-            _slideItems = ParseSlides(content);
-            _hasHorizontal = _slideItems.Count > 1;
+            _slides = ParseSlides(content);
+            _hasHorizontal = _slides.Count > 1;
         }
 
-        private List<SlideItem> ParseSlides(string content)
+        private List<IHorizontalSlide> ParseSlides(string content)
         {
-            List<SlideItem> list = new List<SlideItem>();
+            List<IHorizontalSlide> list = new List<IHorizontalSlide>();
             List<Line> lines = Tokenizer.Parse(content);
             List<IToken> tokens = new List<IToken>();
-            bool open = false;
-            int divNum = 0;
-            int index = 0;
-            bool slideTag = false;
-            string caption = null;
+            int horizontalIndex = 0;
+            int verticalIndex = 0;
+            bool horizontal = false;
+            bool vertical = false;
+            bool inTag = false;
+            List <VerticalSlide> verticalSlides = new List<VerticalSlide>();
             foreach(var line in lines)
             {
                 foreach(var token in line.Tokens)
                 {
-                    if (!open && IsOpenSlide(token))
+                    if (horizontal && vertical && IsOpenSection(token))
+                    {
+                        throw new FormatException("Sections can only be two levels deep");
+                    }
+                    if (horizontal && !vertical && IsOpenSection(token))
                     {
                         tokens = new List<IToken>();
-                        divNum = 0;
-                        open = true;
-                        slideTag = true;
+                        vertical = true;
+                        inTag = true;
                     }
-                    if(open && IsOpenDiv(token))
-                    {
-                        divNum++;
-                    }
-                    if(open && IsCloseDiv(token))
-                    {
-                        divNum--;
-                    }
-                    if(open && IsCloseDiv(token) && divNum == 0)
+                    if (horizontal && !vertical  && IsCloseSection(token))
                     {
                         StringBuilder sb = new StringBuilder();
-                        foreach(var t in tokens)
+                        foreach (var t in tokens)
                         {
                             sb.Append(t.ToHtml());
                         }
-                        list.Add(new SlideItem
+                        if(verticalSlides.Count > 0)
+                        {
+                            list.Add(new HorizontalSlideContainer
+                            {
+                                HorizontalIndex = ++horizontalIndex,
+                                VerticalSlides = verticalSlides
+                            });
+                        }
+                        else
+                        {
+                            list.Add(new HorizontalSlideContent
+                            {
+                                Content = sb.ToString(),
+                                HorizontalIndex = ++horizontalIndex
+                            });
+                        }
+                        horizontal = false;
+                        tokens = new List<IToken>();
+                        verticalSlides = new List<VerticalSlide>();
+                        verticalIndex = 0;
+                        inTag = false;
+                    }
+                    if (horizontal && vertical && IsCloseSection(token))
+                    {
+                        StringBuilder sb = new StringBuilder();
+                        foreach (var t in tokens)
+                        {
+                            sb.Append(t.ToHtml());
+                        }
+                        verticalSlides.Add(new VerticalSlide
                         {
                             Content = sb.ToString(),
-                            Index = ++index,
-                            Caption = caption
-                        }); ;
-                        open = false;
-                        slideTag = true;
-                        caption = null;
+                            VerticalIndex = ++verticalIndex,
+                            HorizontalIndex = horizontalIndex + 1
+                        });
+                        vertical = false;
+                        tokens = new List<IToken>();
+                        inTag = false;
                     }
-                    if(!slideTag)
+                    if (!horizontal && IsOpenSection(token))
+                    {
+                        tokens = new List<IToken>();
+                        verticalSlides = new List<VerticalSlide>();
+                        horizontal = true;
+                        vertical = false;
+                        inTag = true;
+                    }
+                    if (!IsOpenSection(token) && !IsCloseSection(token) && inTag)
                     {
                         tokens.Add(token);
-                    } 
-                    else
-                    {
-                        slideTag = false;
                     }
                 }
             }
             return list;
         }
 
-        private bool IsOpenDiv(IToken token)
+        private bool IsOpenSection(IToken token)
         {
-            if (token.TokenType == TokenType.StartTag && ((StartTag)token).Name == "section")
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return token.TokenType == TokenType.StartTag && ((StartTag)token).Name == "section";
         }
 
-        private bool IsCloseDiv(IToken token)
+        private bool IsCloseSection(IToken token)
         {
-            if(token.TokenType == TokenType.EndTag && ((EndTag)token).Name == "section")
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        bool IsOpenSlide(IToken token)
-        {
-            if(token.TokenType == TokenType.StartTag)
-            {
-                StartTag startTag = (StartTag)token;
-                if (startTag.Name != "section") return false;
-                bool found = startTag.Attributes.Exists(attribute => attribute.TokenType == TokenType.Attribute && ((AttributeToken)attribute).Name == "data-blazorslide");
-                return found;
-            }
-            else
-            {
-                return false;
-            }
+            return token.TokenType == TokenType.EndTag && ((EndTag)token).Name == "section";
         }
 
         private string RenderAsString()

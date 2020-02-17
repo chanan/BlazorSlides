@@ -1,5 +1,5 @@
 ﻿<section class="@_currentSlideClass">
-    @ChildContent
+    @((MarkupString)GetContent())
 </section>
 
 <Styled @bind-Classname="@_slide">
@@ -44,10 +44,36 @@
 </Styled>
 
 <Styled @bind-Classname="@_currentSlideClass"
-    Compose1="@_slide"
-    Compose2="@_center"
-    Compose3="@_present"
-    Compose4="@_notPresent"
-    Compose3If="@(Index == CurrentSlide)"
-    Compose4If="@(Index != CurrentSlide)"
-/>
+        Compose1="@_slide"
+        Compose2="@_center"
+        Compose3="@_present"
+        Compose4="@_notPresent"
+        Compose3If="@(HorizontalSlide.HorizontalIndex == CurrentHorizontalIndex)"
+        Compose4If="@(HorizontalSlide.HorizontalIndex != CurrentHorizontalIndex)" />
+
+@code {
+    //Css classes
+    private string _currentSlideClass;
+    private string _slide;
+    private string _center;
+    private string _notPresent;
+    private string _future;
+    private string _present;
+    private string _past;
+
+    [Parameter] public int CurrentHorizontalIndex { get; set; }
+    [Parameter] public IHorizontalSlide HorizontalSlide { get; set; }
+
+    private string GetContent()
+    {
+        if (HorizontalSlide is ISlideWithContent)
+        {
+            return ((ISlideWithContent)HorizontalSlide).Content;
+        }
+        else
+        {
+            VerticalSlide first = ((HorizontalSlideContainer)HorizontalSlide).VerticalSlides.First();
+            return ((ISlideWithContent)first).Content;
+        }
+    }
+} 

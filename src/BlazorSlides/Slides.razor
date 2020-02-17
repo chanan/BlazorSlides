@@ -1,20 +1,18 @@
 ﻿<div class="@_revealContainer" role="application">
     <div class="@_slidesContainer">
-        @foreach (var slide in _slideItems)
+        @foreach (IHorizontalSlide slide in _slides)
         {
-            <InternalSlide @key="@slide.Index" Index="@slide.Index" CurrentSlide="@_currentSlide" NumberOfSlides="@_slideItems.Count" Caption="@slide.Caption">
-                @((MarkupString)slide.Content)
-            </InternalSlide>
+            <Slide HorizontalSlide="@slide" CurrentHorizontalIndex="@_currentHorizontalIndex" />
         }
     </div>
     @if (_showProgress)
     {
         <Progress
-            CurrentSlide="@_currentSlide" NumberOfSlides="@_slideItems.Count"
+            CurrentSlide="@_currentHorizontalIndex" NumberOfSlides="@_slides.Count"
         />
     }
     <Controls 
-        CurrentSlide="@_currentSlide" NumberOfSlides="@_slideItems.Count" 
+        CurrentSlide="@_currentHorizontalIndex" NumberOfSlides="@_slides.Count" 
         HasHorizontal="@_hasHorizontal" HasVertical="@_hasVertical"
         HasDarkBackground="@_hasDarkBackground" HasLightBackground="@_hasLightBackground"
         OnNext="@OnNext" OnPrevious="@OnPrevious"
@@ -22,7 +20,7 @@
     />
     @if (_showSlideNumbers)
     {
-        <SlideNumbers CurrentSlide="@_currentSlide" />
+        <SlideNumbers CurrentSlide="@_currentHorizontalIndex" />
     }
 </div>
 
@@ -78,7 +76,7 @@
 
 <Styled @bind-Classname="@_revealContainer" Compose1="@_reveal" Compose2="@_center" />
 
-<Styled @bind-Classname="@_slides">
+<Styled @bind-Classname="@_slidesClass">
     label: slides;
     position: absolute;
     width: 100%;
@@ -104,4 +102,4 @@
     zoom: 1;
 </Styled>
 
-<Styled @bind-Classname="@_slidesContainer" Compose1="@_slides" Compose2="@_center" Compose3="@_size" />
+<Styled @bind-Classname="@_slidesContainer" Compose1="@_slidesClass" Compose2="@_center" Compose3="@_size" />

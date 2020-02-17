@@ -4,10 +4,10 @@ using System.Text;
 
 namespace BlazorSlides.Internal
 {
-    class SlideItem
+    class VerticalSlide : ISlide, ISlideWithContent
     {
-        public int Index { get; set; }
-        public string Caption { get; set; }
+        public int VerticalIndex { get; set; }
+        public int HorizontalIndex { get; set; }
         public string Content { get; set; }
     }
 }
