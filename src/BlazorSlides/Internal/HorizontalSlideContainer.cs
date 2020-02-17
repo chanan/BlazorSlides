@@ -4,9 +4,9 @@ using System.Text;
 
 namespace BlazorSlides.Internal
 {
-    class HorizontalSlideContainer : IHorizontalSlide
+    class HorizontalSlideContainer : IHorizontalSlide, ISlideContainer
     {
         public int HorizontalIndex { get; set; }
-        public List<VerticalSlide> VerticalSlides { get; set; }
+        public List<IVerticalSlide> VerticalSlides { get; set; }
     }
 }

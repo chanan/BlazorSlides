@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BlazorSlides.Internal
 {
-    public interface ISlideWithContent
+    public interface ISlideWithContent : ISlide
     {
         public string Content { get; set; }
     }

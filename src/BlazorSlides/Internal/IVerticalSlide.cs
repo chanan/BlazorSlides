@@ -4,7 +4,8 @@ using System.Text;
 
 namespace BlazorSlides.Internal
 {
-    public interface IHorizontalSlide
+    public interface IVerticalSlide : ISlideWithContent
     {
+        public int VerticalIndex { get; set; }
     }
 }

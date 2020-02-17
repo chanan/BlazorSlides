@@ -36,6 +36,7 @@ namespace BlazorSlides
         //State
         private List<IHorizontalSlide> _slides = new List<IHorizontalSlide>();
         private int _currentHorizontalIndex = 1;
+        private int _currentVerticalIndex = 1;
         private bool _hasHorizontal = false;
         private bool _hasVertical = false;
         private bool _hasDarkBackground = false;
@@ -94,7 +95,7 @@ namespace BlazorSlides
             bool horizontal = false;
             bool vertical = false;
             bool inTag = false;
-            List <VerticalSlide> verticalSlides = new List<VerticalSlide>();
+            List <IVerticalSlide> verticalSlides = new List<IVerticalSlide>();
             foreach(var line in lines)
             {
                 foreach(var token in line.Tokens)
@@ -134,7 +135,7 @@ namespace BlazorSlides
                         }
                         horizontal = false;
                         tokens = new List<IToken>();
-                        verticalSlides = new List<VerticalSlide>();
+                        verticalSlides = new List<IVerticalSlide>();
                         verticalIndex = 0;
                         inTag = false;
                     }
@@ -158,7 +159,7 @@ namespace BlazorSlides
                     if (!horizontal && IsOpenSection(token))
                     {
                         tokens = new List<IToken>();
-                        verticalSlides = new List<VerticalSlide>();
+                        verticalSlides = new List<IVerticalSlide>();
                         horizontal = true;
                         vertical = false;
                         inTag = true;

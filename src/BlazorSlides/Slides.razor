@@ -2,7 +2,7 @@
     <div class="@_slidesContainer">
         @foreach (IHorizontalSlide slide in _slides)
         {
-            <Slide HorizontalSlide="@slide" CurrentHorizontalIndex="@_currentHorizontalIndex" />
+            <Slide CurrentSlide="@slide" CurrentHorizontalIndex="@_currentHorizontalIndex" CurrentVerticalIndex="@_currentVerticalIndex" />
         }
     </div>
     @if (_showProgress)
