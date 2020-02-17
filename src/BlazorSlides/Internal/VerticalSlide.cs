@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BlazorSlides.Internal
+﻿namespace BlazorSlides.Internal
 {
-    class VerticalSlide : ISlide, IVerticalSlide, ISlideWithContent
+    internal class VerticalSlide : ISlide, IVerticalSlide, ISlideWithContent
     {
         public int VerticalIndex { get; set; }
         public int HorizontalIndex { get; set; }

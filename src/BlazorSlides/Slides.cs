@@ -22,27 +22,27 @@ namespace BlazorSlides
         private readonly Func<string, string> _encoder = (string t) => t;
 
         //Main reveal container
-        private string _revealContainer;
-        private string _reveal;
-        private string _center;
+        private readonly string _revealContainer;
+        private readonly string _reveal;
+        private readonly string _center;
 
         //Slides container
-        private string _slidesContainer;
-        private string _slidesClass;
-        private string _size;
+        private readonly string _slidesContainer;
+        private readonly string _slidesClass;
+        private readonly string _size;
 
-        private IMixins _mixins = new Mixins();
+        private readonly IMixins _mixins = new Mixins();
 
         //State
         private List<IHorizontalSlide> _slides = new List<IHorizontalSlide>();
         private int _currentHorizontalIndex = 1;
-        private int _currentVerticalIndex = 1;
+        private readonly int _currentVerticalIndex = 1;
         private bool _hasHorizontal = false;
-        private bool _hasVertical = false;
-        private bool _hasDarkBackground = false;
-        private bool _hasLightBackground = true;
-        private bool _showProgress = true;
-        private bool _showSlideNumbers = true;
+        private readonly bool _hasVertical = false;
+        private readonly bool _hasDarkBackground = false;
+        private readonly bool _hasLightBackground = true;
+        private readonly bool _showProgress = true;
+        private readonly bool _showSlideNumbers = true;
 
         [Parameter] public RenderFragment ChildContent { get; set; }
 
@@ -54,7 +54,7 @@ namespace BlazorSlides
         //Event callbacks
         private void OnNext(MouseEventArgs e)
         {
-            if(_currentHorizontalIndex != _slides.Count)
+            if (_currentHorizontalIndex != _slides.Count)
             {
                 _currentHorizontalIndex++;
             }
@@ -95,10 +95,10 @@ namespace BlazorSlides
             bool horizontal = false;
             bool vertical = false;
             bool inTag = false;
-            List <IVerticalSlide> verticalSlides = new List<IVerticalSlide>();
-            foreach(var line in lines)
+            List<IVerticalSlide> verticalSlides = new List<IVerticalSlide>();
+            foreach (Line line in lines)
             {
-                foreach(var token in line.Tokens)
+                foreach (IToken token in line.Tokens)
                 {
                     if (horizontal && vertical && IsOpenSection(token))
                     {
@@ -110,14 +110,14 @@ namespace BlazorSlides
                         vertical = true;
                         inTag = true;
                     }
-                    if (horizontal && !vertical  && IsCloseSection(token))
+                    if (horizontal && !vertical && IsCloseSection(token))
                     {
                         StringBuilder sb = new StringBuilder();
-                        foreach (var t in tokens)
+                        foreach (IToken t in tokens)
                         {
                             sb.Append(t.ToHtml());
                         }
-                        if(verticalSlides.Count > 0)
+                        if (verticalSlides.Count > 0)
                         {
                             list.Add(new HorizontalSlideContainer
                             {
@@ -142,7 +142,7 @@ namespace BlazorSlides
                     if (horizontal && vertical && IsCloseSection(token))
                     {
                         StringBuilder sb = new StringBuilder();
-                        foreach (var t in tokens)
+                        foreach (IToken t in tokens)
                         {
                             sb.Append(t.ToHtml());
                         }

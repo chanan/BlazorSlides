@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace BlazorSlides.Internal
 {
-    class HorizontalSlideContainer : IHorizontalSlide, ISlideContainer
+    internal class HorizontalSlideContainer : IHorizontalSlide, ISlideContainer
     {
         public int HorizontalIndex { get; set; }
         public List<IVerticalSlide> VerticalSlides { get; set; }
