@@ -7,10 +7,13 @@
     </div>
     @if (_showProgress)
     {
-        <Progress CurrentHorizontalIndex="@_currentHorizontalIndex" CurrentVerticalIndex="@_currentVerticalIndex" NumberOfSlides="@_slides.Count" />
+        <Progress
+            NumberOfSlides="@_countOfSlides" PastCount="@_currentPastCount"
+            CurrentHorizontalIndex="@_currentHorizontalIndex" CurrentVerticalIndex="@_currentVerticalIndex"  
+        />
     }
     <Controls 
-        NumberOfSlides="@_slides.Count" NumberOfVerticalSlides="@_CurrentNumberOfVerticalSlides"
+        NumberOfHorizontalSlides="@_countOfHorizontalSlide" NumberOfVerticalSlides="@_CurrentNumberOfVerticalSlides"
         CurrentHorizontalIndex="@_currentHorizontalIndex" CurrentVerticalIndex="@_currentVerticalIndex"  
         HasHorizontal="@_hasHorizontal" HasVertical="@_hasVertical"
         HasDarkBackground="@_hasDarkBackground" HasLightBackground="@_hasLightBackground"

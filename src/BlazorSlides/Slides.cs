@@ -35,9 +35,12 @@ namespace BlazorSlides
 
         //State
         private List<IHorizontalSlide> _slides = new List<IHorizontalSlide>();
+        private int _countOfHorizontalSlide = 0;
+        private int _countOfSlides = 0;
         private int _currentHorizontalIndex = 1;
         private int _currentVerticalIndex = 0;
         private int _CurrentNumberOfVerticalSlides = 0;
+        private int _currentPastCount = 0;
         private bool _hasHorizontal = false;
         private bool _hasVertical = false;
         private bool _hasDarkBackground = false;
@@ -60,6 +63,7 @@ namespace BlazorSlides
                 _currentHorizontalIndex++;
             }
             UpdateVerticalState();
+            UpdatePastCount();
         }
 
         private void OnPrevious(MouseEventArgs e)
@@ -69,22 +73,25 @@ namespace BlazorSlides
                 _currentHorizontalIndex--;
             }
             UpdateVerticalState();
+            UpdatePastCount();
         }
 
         private void OnUp(MouseEventArgs e)
         {
-            if(_currentVerticalIndex != 1)
+            if (_currentVerticalIndex != 1)
             {
                 _currentVerticalIndex--;
             }
+            UpdatePastCount();
         }
 
         private void OnDown(MouseEventArgs e)
         {
-            if(_currentVerticalIndex != _CurrentNumberOfVerticalSlides)
+            if (_currentVerticalIndex != _CurrentNumberOfVerticalSlides)
             {
                 _currentVerticalIndex++;
             }
+            UpdatePastCount();
         }
 
         private void ProcessParameters()
@@ -93,6 +100,18 @@ namespace BlazorSlides
             _slides = ParseSlides(content);
             _hasHorizontal = _slides.Count > 1;
             _hasVertical = _slides.Any(slide => slide is ISlideContainer);
+            _countOfHorizontalSlide = _slides.Count;
+            _countOfSlides = _slides.Sum(slide =>
+            {
+                if (slide is ISlideWithContent)
+                {
+                    return 1;
+                }
+                else
+                {
+                    return ((ISlideContainer)slide).VerticalSlides.Count;
+                }
+            });
             UpdateVerticalState();
         }
 
@@ -196,7 +215,7 @@ namespace BlazorSlides
 
         private void UpdateVerticalState()
         {
-            var currentSlide = _slides[_currentHorizontalIndex - 1];
+            IHorizontalSlide currentSlide = _slides[_currentHorizontalIndex - 1];
             if (currentSlide is ISlideContainer)
             {
                 _currentVerticalIndex = 1;
@@ -207,6 +226,33 @@ namespace BlazorSlides
                 _currentVerticalIndex = 0;
                 _CurrentNumberOfVerticalSlides = 0;
             }
+        }
+
+        private void UpdatePastCount()
+        {
+            _currentPastCount = _slides.Sum(slide =>
+            {
+                switch (slide)
+                {
+                    case ISlideWithContent content:
+                        return _currentHorizontalIndex > content.HorizontalIndex  ? 1 : 0;
+                    case ISlideContainer stack:
+                        if (_currentHorizontalIndex > stack.HorizontalIndex)
+                        {
+                            return stack.VerticalSlides.Count;
+                        }
+                        else if(_currentHorizontalIndex == stack.HorizontalIndex)
+                        {
+                            return _currentVerticalIndex - 1;
+                        }
+                        else
+                        {
+                            return 0;
+                        }
+                    default:
+                        throw new ArgumentException("No such Slide should exist");
+                }
+            });
         }
 
         private string RenderAsString()

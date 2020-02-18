@@ -61,7 +61,7 @@
     private string _light;
 
     //Parameters
-    [Parameter] public int NumberOfSlides { get; set; }
+    [Parameter] public int NumberOfHorizontalSlides { get; set; }
     [Parameter] public int NumberOfVerticalSlides { get; set; }
     [Parameter] public int CurrentHorizontalIndex { get; set; }
     [Parameter] public int CurrentVerticalIndex { get; set; }
@@ -83,7 +83,7 @@
 
     private bool IsArrowRightEnabled()
     {
-        return CurrentHorizontalIndex < NumberOfSlides;
+        return CurrentHorizontalIndex < NumberOfHorizontalSlides;
     }
 
     private bool IsArrowUpEnabled()
