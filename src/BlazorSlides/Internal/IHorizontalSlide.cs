@@ -1,6 +1,6 @@
 ﻿namespace BlazorSlides.Internal
 {
-    public interface IHorizontalSlide
+    public interface IHorizontalSlide : ISlide
     {
     }
 }

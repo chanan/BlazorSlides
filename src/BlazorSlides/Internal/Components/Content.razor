@@ -37,19 +37,22 @@
 
 <Styled @bind-Classname="@_future">
     label: future;
+    pointer-events: none;
 </Styled>
 
 <Styled @bind-Classname="@_past">
     label: past;
+    pointer-events: none;
 </Styled>
 
 <Styled @bind-Classname="@_currentSlideClass"
-        Compose1="@_slide"
-        Compose2="@_center"
-        Compose3="@_present"
-        Compose4="@_notPresent"
-        Compose3If="@(((ISlide)CurrentSlide).HorizontalIndex == CurrentHorizontalIndex)"
-        Compose4If="@(((ISlide)CurrentSlide).HorizontalIndex != CurrentHorizontalIndex)" />
+    ComposeSlide="@_slide"
+    ComposeCenter="@_center"
+    ComposePresent="@_present" ComposePresentIf="@(IsPresent())"
+    ComposeNotPresent="@_notPresent" ComposeNotPresentIf="@(!IsPresent())"
+    ComposePast="@_past" ComposePastIf="@(!IsPresent() && IsPast())"
+    ComposeFuture="@_future" ComposeFutureIf="@(!IsPresent() && !IsPast())"
+/>
 
 @code {
     //Css classes
@@ -64,4 +67,28 @@
     [Parameter] public int CurrentHorizontalIndex { get; set; }
     [Parameter] public int CurrentVerticalIndex { get; set; }
     [Parameter] public ISlideWithContent CurrentSlide { get; set; }
+
+    private bool IsPresent()
+    {
+        if(CurrentVerticalIndex == 0)
+        {
+            return ((ISlide)CurrentSlide).HorizontalIndex == CurrentHorizontalIndex;
+        }
+        else
+        {
+            return ((ISlide)CurrentSlide).HorizontalIndex == CurrentHorizontalIndex && ((IVerticalSlide)CurrentSlide).VerticalIndex == CurrentVerticalIndex;
+        }
+    }
+
+    private bool IsPast()
+    {
+        if (CurrentVerticalIndex == 0)
+        {
+            return ((ISlide)CurrentSlide).HorizontalIndex < CurrentHorizontalIndex;
+        }
+        else
+        {
+            return ((ISlide)CurrentSlide).HorizontalIndex == CurrentHorizontalIndex && ((IVerticalSlide)CurrentSlide).VerticalIndex < CurrentVerticalIndex;
+        }
+    }
 } 

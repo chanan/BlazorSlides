@@ -1,6 +1,11 @@
 ﻿<div class="@_slideNumber">
     <a class="@_slideNumberLink" href="@GetLink()">
-        <span>@CurrentSlide</span>
+        <span>@CurrentHorizontalIndex</span>
+        @if (CurrentVerticalIndex != 0)
+        {
+            <span class="slide-number-delimiter">.</span>
+            <span>@CurrentVerticalIndex</span>
+        }
     </a>
 </div>
 
@@ -28,11 +33,12 @@
     private string _slideNumber;
     private string _slideNumberLink;
 
-    [Parameter] public int CurrentSlide { get; set; }
+    [Parameter] public int CurrentHorizontalIndex { get; set; }
+    [Parameter] public int CurrentVerticalIndex { get; set; }
 
     private string GetLink()
     {
-        return "#/" + (CurrentSlide - 1);
+        return "#/" + (CurrentHorizontalIndex - 1);
     }
 }
 

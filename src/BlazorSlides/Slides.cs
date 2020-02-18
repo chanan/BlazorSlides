@@ -22,27 +22,28 @@ namespace BlazorSlides
         private readonly Func<string, string> _encoder = (string t) => t;
 
         //Main reveal container
-        private readonly string _revealContainer;
-        private readonly string _reveal;
-        private readonly string _center;
+        private string _revealContainer;
+        private string _reveal;
+        private string _center;
 
         //Slides container
-        private readonly string _slidesContainer;
-        private readonly string _slidesClass;
-        private readonly string _size;
+        private string _slidesContainer;
+        private string _slidesClass;
+        private string _size;
 
         private readonly IMixins _mixins = new Mixins();
 
         //State
         private List<IHorizontalSlide> _slides = new List<IHorizontalSlide>();
         private int _currentHorizontalIndex = 1;
-        private readonly int _currentVerticalIndex = 1;
+        private int _currentVerticalIndex = 0;
+        private int _CurrentNumberOfVerticalSlides = 0;
         private bool _hasHorizontal = false;
-        private readonly bool _hasVertical = false;
-        private readonly bool _hasDarkBackground = false;
-        private readonly bool _hasLightBackground = true;
-        private readonly bool _showProgress = true;
-        private readonly bool _showSlideNumbers = true;
+        private bool _hasVertical = false;
+        private bool _hasDarkBackground = false;
+        private bool _hasLightBackground = true;
+        private bool _showProgress = true;
+        private bool _showSlideNumbers = true;
 
         [Parameter] public RenderFragment ChildContent { get; set; }
 
@@ -58,6 +59,7 @@ namespace BlazorSlides
             {
                 _currentHorizontalIndex++;
             }
+            UpdateVerticalState();
         }
 
         private void OnPrevious(MouseEventArgs e)
@@ -66,16 +68,23 @@ namespace BlazorSlides
             {
                 _currentHorizontalIndex--;
             }
+            UpdateVerticalState();
         }
 
         private void OnUp(MouseEventArgs e)
         {
-            throw new NotImplementedException();
+            if(_currentVerticalIndex != 1)
+            {
+                _currentVerticalIndex--;
+            }
         }
 
         private void OnDown(MouseEventArgs e)
         {
-            throw new NotImplementedException();
+            if(_currentVerticalIndex != _CurrentNumberOfVerticalSlides)
+            {
+                _currentVerticalIndex++;
+            }
         }
 
         private void ProcessParameters()
@@ -83,6 +92,8 @@ namespace BlazorSlides
             string content = RenderAsString();
             _slides = ParseSlides(content);
             _hasHorizontal = _slides.Count > 1;
+            _hasVertical = _slides.Any(slide => slide is ISlideContainer);
+            UpdateVerticalState();
         }
 
         private List<IHorizontalSlide> ParseSlides(string content)
@@ -181,6 +192,21 @@ namespace BlazorSlides
         private bool IsCloseSection(IToken token)
         {
             return token.TokenType == TokenType.EndTag && ((EndTag)token).Name == "section";
+        }
+
+        private void UpdateVerticalState()
+        {
+            var currentSlide = _slides[_currentHorizontalIndex - 1];
+            if (currentSlide is ISlideContainer)
+            {
+                _currentVerticalIndex = 1;
+                _CurrentNumberOfVerticalSlides = ((ISlideContainer)currentSlide).VerticalSlides.Count;
+            }
+            else
+            {
+                _currentVerticalIndex = 0;
+                _CurrentNumberOfVerticalSlides = 0;
+            }
         }
 
         private string RenderAsString()

@@ -40,11 +40,12 @@
     private string _span;
 
     [Parameter] public int NumberOfSlides { get; set; }
-    [Parameter] public int CurrentSlide { get; set; }
+    [Parameter] public int CurrentHorizontalIndex { get; set; }
+    [Parameter] public int CurrentVerticalIndex { get; set; }
 
     private string getProgress()
     {
-        double progress = Math.Min((CurrentSlide / NumberOfSlides), 1);
+        double progress = Math.Min((CurrentHorizontalIndex / NumberOfSlides), 1);
         progress *= 970; //TODO: 970 hardcoded for now. Should be: dom.wrapper.offsetWidth
         return progress.ToString("F2") + "px;";
     }

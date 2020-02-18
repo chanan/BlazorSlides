@@ -1,11 +1,11 @@
 ﻿@if (CurrentSlide is ISlideWithContent)
 {
-    <SlideContent CurrentSlide="@((ISlideWithContent)CurrentSlide)" CurrentHorizontalIndex="@CurrentHorizontalIndex" CurrentVerticalIndex="@CurrentVerticalIndex" />
+    <Content CurrentSlide="@((ISlideWithContent)CurrentSlide)" CurrentHorizontalIndex="@CurrentHorizontalIndex" CurrentVerticalIndex="@CurrentVerticalIndex" />
 }
 
 @if (CurrentSlide is ISlideContainer)
 {
-    <SlideContainer CurrentSlide="@((ISlideContainer)CurrentSlide)" CurrentHorizontalIndex="@CurrentHorizontalIndex" CurrentVerticalIndex="@CurrentVerticalIndex" />
+    <Stack CurrentSlide="@((ISlideContainer)CurrentSlide)" CurrentHorizontalIndex="@CurrentHorizontalIndex" CurrentVerticalIndex="@CurrentVerticalIndex" />
 }
 
 @code {

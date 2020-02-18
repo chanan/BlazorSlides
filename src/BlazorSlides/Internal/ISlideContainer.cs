@@ -2,7 +2,7 @@
 
 namespace BlazorSlides.Internal
 {
-    public interface ISlideContainer
+    public interface ISlideContainer : ISlide
     {
         public List<IVerticalSlide> VerticalSlides { get; set; }
     }
