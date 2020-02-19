@@ -1,5 +1,5 @@
 ﻿<div class="@_progress">
-    <span class="@_span" />
+    <span class="@_span">@SlidesWidth</span>
 </div>
 
 <Styled @bind-Classname="@_progress">
@@ -35,7 +35,7 @@
 
 
 @code {
-        //Styles
+    //Styles
     private string _progress;
     private string _span;
 
@@ -43,11 +43,12 @@
     [Parameter] public int PastCount { get; set; }
     [Parameter] public int CurrentHorizontalIndex { get; set; }
     [Parameter] public int CurrentVerticalIndex { get; set; }
+    [Parameter] public int SlidesWidth { get; set; }
 
     private string getProgress()
     {
         double progress = Math.Min(((double)PastCount / (double)(NumberOfSlides - 1)), 1);
-        progress *= 970; //TODO: 970 hardcoded for now. Should be: dom.wrapper.offsetWidth
+        progress *= SlidesWidth;
         return progress.ToString("F2") + "px;";
     }
 }

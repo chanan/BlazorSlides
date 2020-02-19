@@ -1,4 +1,5 @@
 ﻿using BlazorSlides.Internal;
+using BlazorSlides.Internal.Components;
 using CSHTMLTokenizer;
 using CSHTMLTokenizer.Tokens;
 using Microsoft.AspNetCore.Components;
@@ -33,6 +34,13 @@ namespace BlazorSlides
 
         private readonly IMixins _mixins = new Mixins();
 
+        //JsInterop
+        private Scripts _scripts;
+        private ElementReference _domWrapper;
+
+        //Variables for JSInterop
+        private int _offsetWidth = 0;
+
         //State
         private List<IHorizontalSlide> _slides = new List<IHorizontalSlide>();
         private int _countOfHorizontalSlide = 0;
@@ -55,8 +63,28 @@ namespace BlazorSlides
             ProcessParameters();
         }
 
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (firstRender)
+            {
+                await _scripts.SetInstance();
+                await UpdateJsInteropVars();
+            }
+        }
+
+        //Scripts Events
+        private async Task _OnWindowResize(object ignored)
+        {
+            await UpdateJsInteropVars();
+        }
+
+        async Task UpdateJsInteropVars()
+        {
+            _offsetWidth = await _scripts.GetOffsetWidth();
+        }
+
         //Event callbacks
-        private void OnNext(MouseEventArgs e)
+        private async Task OnNext(MouseEventArgs e)
         {
             if (_currentHorizontalIndex != _slides.Count)
             {
@@ -64,6 +92,7 @@ namespace BlazorSlides
             }
             UpdateVerticalState();
             UpdatePastCount();
+            await UpdateJsInteropVars();
         }
 
         private void OnPrevious(MouseEventArgs e)

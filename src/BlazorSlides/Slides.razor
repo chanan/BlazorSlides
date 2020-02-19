@@ -1,4 +1,4 @@
-﻿<div class="@_revealContainer" role="application">
+﻿<div class="@_revealContainer" role="application" @ref="@_domWrapper">
     <div class="@_slidesContainer">
         @foreach (IHorizontalSlide slide in _slides)
         {
@@ -8,6 +8,7 @@
     @if (_showProgress)
     {
         <Progress
+            SlidesWidth="@_offsetWidth"
             NumberOfSlides="@_countOfSlides" PastCount="@_currentPastCount"
             CurrentHorizontalIndex="@_currentHorizontalIndex" CurrentVerticalIndex="@_currentVerticalIndex"  
         />
@@ -105,3 +106,5 @@
 </Styled>
 
 <Styled @bind-Classname="@_slidesContainer" Compose1="@_slidesClass" Compose2="@_center" Compose3="@_size" />
+
+<Scripts @ref="@_scripts" DomWrapper="@_domWrapper" OnWindowResize="@_OnWindowResize" />
