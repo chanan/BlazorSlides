@@ -19,6 +19,7 @@ namespace BlazorSlides
 {
     public partial class Slides : ComponentBase
     {
+        //Variables for RenderAsString
         private readonly ServiceProvider _emptyServiceProvider = new ServiceCollection().BuildServiceProvider();
         private readonly Func<string, string> _encoder = (string t) => t;
 
@@ -86,42 +87,72 @@ namespace BlazorSlides
         //Event callbacks
         private async Task OnNext(MouseEventArgs e)
         {
+          if(nextFragment() == false)
+          {
             if (_currentHorizontalIndex != _slides.Count)
             {
                 _currentHorizontalIndex++;
             }
             UpdateVerticalState();
             UpdatePastCount();
-            await UpdateJsInteropVars();
+          }
+          await UpdateJsInteropVars();
         }
 
-        private void OnPrevious(MouseEventArgs e)
+        private bool nextFragment() {
+          SlideWithContent slide = (SlideWithContent)GetCurrentSlide();
+          return slide.NextFragment();
+        }
+
+        private async Task OnPrevious(MouseEventArgs e)
         {
+          if(PreviousFragment() == false)
+          {
             if (_currentHorizontalIndex != 1)
             {
                 _currentHorizontalIndex--;
             }
             UpdateVerticalState();
             UpdatePastCount();
+          }
+          await UpdateJsInteropVars();
         }
 
-        private void OnUp(MouseEventArgs e)
+        private bool PreviousFragment()
+        {
+          SlideWithContent slide = (SlideWithContent)GetCurrentSlide();
+          return slide.PreviousFragment();
+        }
+
+        private async Task OnUp(MouseEventArgs e)
         {
             if (_currentVerticalIndex != 1)
             {
                 _currentVerticalIndex--;
             }
             UpdatePastCount();
+            await UpdateJsInteropVars();
         }
 
-        private void OnDown(MouseEventArgs e)
+        private async Task OnDown(MouseEventArgs e)
         {
             if (_currentVerticalIndex != _CurrentNumberOfVerticalSlides)
             {
                 _currentVerticalIndex++;
             }
             UpdatePastCount();
+            await UpdateJsInteropVars();
         }
+
+        private ISlide GetCurrentSlide() {
+          IHorizontalSlide horizontalSlide = _slides[_currentHorizontalIndex - 1];
+          if(horizontalSlide is HorizontalSlideContent) {
+            return horizontalSlide;
+          } else {
+            HorizontalSlideContainer container = (HorizontalSlideContainer) horizontalSlide;
+            return container.VerticalSlides[_currentVerticalIndex - 1];
+          }
+        } 
 
         private void ProcessParameters()
         {
@@ -171,11 +202,6 @@ namespace BlazorSlides
                     }
                     if (horizontal && !vertical && IsCloseSection(token))
                     {
-                        StringBuilder sb = new StringBuilder();
-                        foreach (IToken t in tokens)
-                        {
-                            sb.Append(t.ToHtml());
-                        }
                         if (verticalSlides.Count > 0)
                         {
                             list.Add(new HorizontalSlideContainer
@@ -186,11 +212,12 @@ namespace BlazorSlides
                         }
                         else
                         {
-                            list.Add(new HorizontalSlideContent
+                            HorizontalSlideContent slide = new HorizontalSlideContent
                             {
-                                Content = sb.ToString(),
                                 HorizontalIndex = ++horizontalIndex
-                            });
+                            };
+                            slide.Content = GetSlideContents(tokens);
+                            list.Add(slide);
                         }
                         horizontal = false;
                         tokens = new List<IToken>();
@@ -200,17 +227,13 @@ namespace BlazorSlides
                     }
                     if (horizontal && vertical && IsCloseSection(token))
                     {
-                        StringBuilder sb = new StringBuilder();
-                        foreach (IToken t in tokens)
+                        VerticalSlide slide = new VerticalSlide
                         {
-                            sb.Append(t.ToHtml());
-                        }
-                        verticalSlides.Add(new VerticalSlide
-                        {
-                            Content = sb.ToString(),
                             VerticalIndex = ++verticalIndex,
                             HorizontalIndex = horizontalIndex + 1
-                        });
+                        };
+                        slide.Content = GetSlideContents(tokens);
+                        verticalSlides.Add(slide);
                         vertical = false;
                         tokens = new List<IToken>();
                         inTag = false;
@@ -230,6 +253,63 @@ namespace BlazorSlides
                 }
             }
             return list;
+        }
+
+        private List<IContent> GetSlideContents(List<IToken> tokens) {
+          bool isFragment = false;
+          int tagCount = 0;
+          List<IToken> fragmentList = new List<IToken>();
+          List<IContent> list = new List<IContent>();
+          foreach(var token in tokens)
+          {
+            switch(token.TokenType) {
+              case TokenType.StartTag:
+              if(isFragment) {
+                  fragmentList.Add(token);
+                  tagCount++;
+              } else {
+                if(isStartTagFragment((StartTag)token)) {
+                  isFragment = true;
+                  fragmentList = new List<IToken>();
+                  fragmentList.Add(token);
+                  tagCount = 0;
+                } else {
+                  list.Add(new StringContent { Content = token.ToHtml() });
+                }
+              } 
+              break;
+              case TokenType.EndTag:
+                if(isFragment) {
+                  tagCount--;
+                  fragmentList.Add(token);
+                  if(tagCount == -1) {
+                  isFragment = false;
+                  StringBuilder sb = new StringBuilder();
+                  foreach(IToken t in fragmentList) {
+                    sb.Append(t.ToHtml());
+                  }
+                  list.Add(new FragmentContent { Content = sb.ToString() });
+                  fragmentList = new List<IToken>();
+                  tagCount = 0;
+                  }
+                } else {
+                  list.Add(new StringContent { Content = token.ToHtml() });
+                }
+                break;
+              default:
+                if(isFragment) {
+                  fragmentList.Add(token);
+                } else {
+                  list.Add(new StringContent { Content = token.ToHtml() });
+                }
+                break;
+            }
+          }
+          return list;
+        }
+
+        private bool isStartTagFragment(StartTag startTag) {
+          return startTag.Attributes.Any(token => ((AttributeToken)token).Name.ToLower() == "class" &&  ((AttributeToken)token).Value.Content.ToLower() == "fragment" );
         }
 
         private bool IsOpenSection(IToken token)

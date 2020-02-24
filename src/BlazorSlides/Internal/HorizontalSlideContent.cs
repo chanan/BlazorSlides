@@ -1,8 +1,7 @@
 ﻿namespace BlazorSlides.Internal
 {
-    internal class HorizontalSlideContent : IHorizontalSlide, ISlideWithContent
+    internal class HorizontalSlideContent : SlideWithContent, IHorizontalSlide, ISlideWithContent
     {
         public int HorizontalIndex { get; set; }
-        public string Content { get; set; }
     }
 }

@@ -1,5 +1,22 @@
-﻿<section class="@_currentSlideClass">
-    @((MarkupString)CurrentSlide.Content)
+<section class="@_currentSlideClass">
+  @foreach (var content in CurrentSlide.Contents)
+  {
+    switch(content.Content) {
+      case StringContent sc:
+        @((MarkupString)sc.Content)
+        break;
+      case FragmentContent fc:
+        <Fragment 
+          CurrentHorizontalIndex="@CurrentHorizontalIndex" 
+          CurrentVerticalIndex="@CurrentVerticalIndex"
+          CurrentSlide="@CurrentSlide"
+          Content="@fc.Content"
+          IsCurrent="@content.IsCurrent"
+          IsPast="@content.IsPast"
+        />
+        break;
+    }
+  }
 </section>
 
 <Styled @bind-Classname="@_slide">

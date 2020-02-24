@@ -1,0 +1,43 @@
+﻿<span class="@_fragmentClass">
+  @((MarkupString)Content)
+</span>
+
+<Styled @bind-Classname="@_fragment">
+  label: fragment;
+  opacity: 0;
+  visibility: hidden;
+  transition: all .2s ease;
+</Styled>
+
+<Styled @bind-Classname="@_visible">
+  label: visible;
+  opacity: 1;
+  visibility: inherit;
+</Styled>
+
+<Styled @bind-Classname="@_currentFragment">
+  label: current-fragment;
+  visibility: inherit;
+</Styled>
+
+<Styled
+  @bind-Classname="@_fragmentClass"
+  ComposeBase="@_fragment"
+  ComposeVisible="@_visible" ComposeVisibleIf="@(IsPast || IsCurrent)"
+  ComposeCurrent="@_currentFragment" ComposeCurrentIf="@IsCurrent"
+/>
+
+@code {
+  //Styles
+  private string _fragmentClass;
+  private string _fragment;
+  private string _visible;
+  private string _currentFragment;
+
+  [Parameter] public int CurrentHorizontalIndex { get; set; }
+  [Parameter] public int CurrentVerticalIndex { get; set; }
+  [Parameter] public ISlideWithContent CurrentSlide { get; set; }
+  [Parameter] public string Content { get; set; }
+  [Parameter] public bool IsCurrent { get; set; }
+  [Parameter] public bool IsPast { get; set; }
+}
