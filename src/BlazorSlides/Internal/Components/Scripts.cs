@@ -1,17 +1,33 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace BlazorSlides.Internal.Components
 {
-    partial class Scripts : ComponentBase
+    public class Scripts : ComponentBase
     {
-        private bool _shouldRender = true;
-
+        private SemaphoreSlim _lock = new SemaphoreSlim(1, 1);
+        //Injections
         [Inject] IJSRuntime JSRuntime { get; set; }
 
         //Parameters
         [Parameter] public ElementReference? DomWrapper { get; set; }
+
+        //Components
+        protected override async Task OnInitializedAsync()
+        {
+            await _lock.WaitAsync();
+        }
+
+        protected override async void OnAfterRender(bool firstRender)
+        {
+            if (firstRender)
+            {
+                await JSRuntime.InvokeVoidAsync("eval", _script);
+                _lock.Release();
+            }
+        }
 
         //Events
         [Parameter] public EventCallback OnWindowResize { get; set; }
@@ -27,7 +43,9 @@ namespace BlazorSlides.Internal.Components
 
         internal async Task SetInstance()
         {
+            await _lock.WaitAsync();
             await JSRuntime.InvokeVoidAsync("BlazorSlides.setInstance", DotNetObjectReference.Create(this));
+            _lock.Release();
         }
 
         [JSInvokable]
@@ -36,33 +54,21 @@ namespace BlazorSlides.Internal.Components
             await OnWindowResize.InvokeAsync(new object());
         }
 
-        protected override void OnAfterRender(bool firstRender)
-        {
-            _shouldRender = false;
-        }
-
-        protected override bool ShouldRender()
-        {
-            return _shouldRender;
-        }
-
-        private string _script = @"
-<script>
-    let instance;
-    window.BlazorSlides = {
-        setInstance: function (_instance) {
-            instance = _instance;
-            window.addEventListener('resize', onWindowResize, false);
-        },
-        offsetWidth: function (domWrapper) {
-            return domWrapper ? domWrapper.offsetWidth : 0;
-        }
+        private readonly string _script = @"
+let instance;
+window.BlazorSlides = {
+    setInstance: function (_instance) {
+        instance = _instance;
+        window.addEventListener('resize', onWindowResize, false);
+    },
+    offsetWidth: function (domWrapper) {
+        return domWrapper ? domWrapper.offsetWidth : 0;
     }
+}
 
-    function onWindowResize() {
-        instance.invokeMethodAsync('_OnWindowResize');
-    }
-</script>
+function onWindowResize() {
+    instance.invokeMethodAsync('_OnWindowResize');
+}
 ";
     }
 }

@@ -72,12 +72,13 @@
 </Styled>
 
 <Styled @bind-Classname="@_center">
+    label: center;
     min-height: 0 !important;
 </Styled>
 
 @* Slides container *@
 
-<Styled @bind-Classname="@_revealContainer" Compose1="@_reveal" Compose2="@_center" />
+<Styled @bind-Classname="@_revealContainer" ComposeReveal="@_reveal" ComposeCenter="@_center" />
 
 <Styled @bind-Classname="@_slidesClass">
     label: slides;
@@ -100,11 +101,12 @@
 </Styled>
 
 <Styled @bind-Classname="@_size">
+    label: size;
     width: 960px;
     height: 700px;
     zoom: 1;
 </Styled>
 
-<Styled @bind-Classname="@_slidesContainer" Compose1="@_slidesClass" Compose2="@_center" Compose3="@_size" />
+<Styled @bind-Classname="@_slidesContainer" ComposeSlides="@_slidesClass" ComposeCenter="@_center" ComposeSize="@_size" />
 
 <Scripts @ref="@_scripts" DomWrapper="@_domWrapper" OnWindowResize="@_OnWindowResize" />

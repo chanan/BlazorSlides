@@ -12,13 +12,12 @@ namespace SampleClientSide
             WebAssemblyHostBuilder builder = WebAssemblyHostBuilder.CreateDefault(args);
 
             //Configure Services
-            builder.Services.AddBlazorStyled();
+            builder.Services.AddBlazorStyled(isDevelopment: true, isDebug: true);
             //End Configure Services
 
             builder.RootComponents.Add<App>("app");
 
             //Add BlazorStyled to root components
-            builder.RootComponents.Add<ClientSideStyled>("#styled");
 
             await builder.Build().RunAsync();
         }

@@ -12,7 +12,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.ExceptionServices;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BlazorSlides
@@ -87,7 +86,7 @@ namespace BlazorSlides
         //Event callbacks
         private async Task OnNext(MouseEventArgs e)
         {
-          if(nextFragment() == false)
+          if(NextFragment() == false)
           {
             if (_currentHorizontalIndex != _slides.Count)
             {
@@ -99,7 +98,7 @@ namespace BlazorSlides
           await UpdateJsInteropVars();
         }
 
-        private bool nextFragment() {
+        private bool NextFragment() {
           SlideWithContent slide = (SlideWithContent)GetCurrentSlide();
           return slide.NextFragment();
         }
@@ -216,7 +215,7 @@ namespace BlazorSlides
                             {
                                 HorizontalIndex = ++horizontalIndex
                             };
-                            slide.Content = GetSlideContents(tokens);
+                            slide.Contents = GetSlideContents(tokens);
                             list.Add(slide);
                         }
                         horizontal = false;
@@ -232,7 +231,7 @@ namespace BlazorSlides
                             VerticalIndex = ++verticalIndex,
                             HorizontalIndex = horizontalIndex + 1
                         };
-                        slide.Content = GetSlideContents(tokens);
+                        slide.Contents = GetSlideContents(tokens);
                         verticalSlides.Add(slide);
                         vertical = false;
                         tokens = new List<IToken>();
@@ -256,59 +255,84 @@ namespace BlazorSlides
         }
 
         private List<IContent> GetSlideContents(List<IToken> tokens) {
-          bool isFragment = false;
-          int tagCount = 0;
-          List<IToken> fragmentList = new List<IToken>();
-          List<IContent> list = new List<IContent>();
-          foreach(var token in tokens)
-          {
-            switch(token.TokenType) {
-              case TokenType.StartTag:
-              if(isFragment) {
-                  fragmentList.Add(token);
-                  tagCount++;
-              } else {
-                if(isStartTagFragment((StartTag)token)) {
-                  isFragment = true;
-                  fragmentList = new List<IToken>();
-                  fragmentList.Add(token);
-                  tagCount = 0;
-                } else {
-                  list.Add(new StringContent { Content = token.ToHtml() });
+            bool isFragment = false;
+            int tagCount = 0;
+            List<IToken> fragmentList = new List<IToken>();
+            List<IContent> list = new List<IContent>();
+            foreach (IToken token in tokens)
+            {
+                switch (token.TokenType)
+                {
+                    case TokenType.StartTag:
+                    {
+                        if (isFragment)
+                        {
+                            fragmentList.Add(token);
+                            tagCount++;
+                        }
+                        else
+                        {
+                            if (IsStartTagFragment((StartTag)token))
+                            {
+                                isFragment = true;
+                                fragmentList = new List<IToken> { token };
+                                tagCount = 0;
+                            }
+                            else
+                            {
+                                list.Add(new StringContent { Token = token });
+                            }
+                        }
+                        break;
+                    }
+                    case TokenType.EndTag:
+                    {
+                        if (isFragment)
+                        {
+                            tagCount--;
+                            fragmentList.Add(token);
+                            if (tagCount == -1)
+                            {
+                                isFragment = false;
+                                list.Add(new FragmentContent { Contents = TransformFragments(fragmentList) });
+                                fragmentList = new List<IToken>();
+                                tagCount = 0;
+                            }
+                        }
+                        else
+                        {
+                            list.Add(new StringContent { Token = token });
+                        }
+                        break;
+                    }
+                    default:
+                    {
+                        if (isFragment)
+                        {
+                            fragmentList.Add(token);
+                        }
+                        else
+                        {
+                            list.Add(new StringContent { Token = token });
+                        }
+                        break;
+                    }
                 }
-              } 
-              break;
-              case TokenType.EndTag:
-                if(isFragment) {
-                  tagCount--;
-                  fragmentList.Add(token);
-                  if(tagCount == -1) {
-                  isFragment = false;
-                  StringBuilder sb = new StringBuilder();
-                  foreach(IToken t in fragmentList) {
-                    sb.Append(t.ToHtml());
-                  }
-                  list.Add(new FragmentContent { Content = sb.ToString() });
-                  fragmentList = new List<IToken>();
-                  tagCount = 0;
-                  }
-                } else {
-                  list.Add(new StringContent { Content = token.ToHtml() });
-                }
-                break;
-              default:
-                if(isFragment) {
-                  fragmentList.Add(token);
-                } else {
-                  list.Add(new StringContent { Content = token.ToHtml() });
-                }
-                break;
             }
-          }
-          return list;
+            return list;
         }
 
-        private bool isStartTagFragment(StartTag startTag) {
+        private List<IContent> TransformFragments(List<IToken> tokens)
+        {
+            List<IContent> list = new List<IContent>();
+            foreach(IToken token in tokens)
+            {
+                list.Add(new StringContent { Token = token });
+            }
+            return list;
+        }
+
+        private bool IsStartTagFragment(StartTag startTag) {
           return startTag.Attributes.Any(token => ((AttributeToken)token).Name.ToLower() == "class" &&  ((AttributeToken)token).Value.Content.ToLower() == "fragment" );
         }
 
@@ -376,7 +400,7 @@ namespace BlazorSlides
             }
             catch
             {
-                //ignored dont crash if can't get result
+                //ignored don't crash if can't get result
             }
             return result;
         }

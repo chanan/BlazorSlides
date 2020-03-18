@@ -1,25 +1,13 @@
-<section class="@_currentSlideClass">
-  @foreach (var content in CurrentSlide.Contents)
-  {
-    switch(content.Content) {
-      case StringContent sc:
-        @((MarkupString)sc.Content)
-        break;
-      case FragmentContent fc:
-        <Fragment 
-          CurrentHorizontalIndex="@CurrentHorizontalIndex" 
-          CurrentVerticalIndex="@CurrentVerticalIndex"
-          CurrentSlide="@CurrentSlide"
-          Content="@fc.Content"
-          IsCurrent="@content.IsCurrent"
-          IsPast="@content.IsPast"
-        />
-        break;
-    }
-  }
+<section class="@_slide">
+    <ContentWriter Contents="@CurrentSlide.Contents" CurrentHorizontalIndex="@CurrentHorizontalIndex" CurrentVerticalIndex="@CurrentVerticalIndex" />
 </section>
 
-<Styled @bind-Classname="@_slide">
+<Styled @bind-Classname="@_slide"
+        ComposeCenter="@_center"
+        ComposePresent="@_present" ComposePresentIf="@(IsPresent())"
+        ComposeNotPresent="@_notPresent" ComposeNotPresentIf="@(!IsPresent())"
+        ComposePast="@_past" ComposePastIf="@(!IsPresent() && IsPast())"
+        ComposeFuture="@_future" ComposeFutureIf="@(!IsPresent() && !IsPast())">
     label: section;
     display: none;
     position: absolute;
@@ -36,6 +24,7 @@
 </Styled>
 
 <Styled @bind-Classname="@_center">
+    label: center;
     min-height: 0 !important;
 </Styled>
 
@@ -62,18 +51,8 @@
     pointer-events: none;
 </Styled>
 
-<Styled @bind-Classname="@_currentSlideClass"
-    ComposeSlide="@_slide"
-    ComposeCenter="@_center"
-    ComposePresent="@_present" ComposePresentIf="@(IsPresent())"
-    ComposeNotPresent="@_notPresent" ComposeNotPresentIf="@(!IsPresent())"
-    ComposePast="@_past" ComposePastIf="@(!IsPresent() && IsPast())"
-    ComposeFuture="@_future" ComposeFutureIf="@(!IsPresent() && !IsPast())"
-/>
-
 @code {
     //Css classes
-    private string _currentSlideClass;
     private string _slide;
     private string _center;
     private string _notPresent;
@@ -87,7 +66,7 @@
 
     private bool IsPresent()
     {
-        if(CurrentVerticalIndex == 0)
+        if (CurrentVerticalIndex == 0)
         {
             return ((ISlide)CurrentSlide).HorizontalIndex == CurrentHorizontalIndex;
         }
@@ -108,4 +87,4 @@
             return ((ISlide)CurrentSlide).HorizontalIndex == CurrentHorizontalIndex && ((IVerticalSlide)CurrentSlide).VerticalIndex < CurrentVerticalIndex;
         }
     }
-} 
+}
