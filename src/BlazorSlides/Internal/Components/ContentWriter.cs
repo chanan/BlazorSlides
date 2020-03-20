@@ -1,7 +1,9 @@
 ﻿using CSHTMLTokenizer.Tokens;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BlazorSlides.Internal.Components
 {
@@ -20,12 +22,13 @@ namespace BlazorSlides.Internal.Components
 
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
-            foreach (IContent content in Contents)
+            List<IContent> list = Contents.ToList();
+            foreach (IContent content in list)
             {
                 switch (content)
                 {
                     case StringContent sc:
-                        RenderToken(builder, sc.Token);
+                        RenderToken(builder, sc.Token, sc.Id);
                         break;
                     case FragmentContent fc:
                         builder.OpenComponent<Fragment>(Next());
@@ -35,11 +38,16 @@ namespace BlazorSlides.Internal.Components
                         builder.AddAttribute(Next(), "CurrentVerticalIndex", CurrentVerticalIndex);
                         builder.CloseComponent();
                         break;
+                    case MarkdownContent mc:
+                        builder.OpenRegion(Next());
+                        builder.AddMarkupContent(Next(), mc.Content);
+                        builder.CloseRegion();
+                        break;
                 }
             }
         }
 
-        private void RenderToken(RenderTreeBuilder builder, IToken Token)
+        private void RenderToken(RenderTreeBuilder builder, IToken Token, Guid id)
         {
             switch (Token)
             {
@@ -50,7 +58,7 @@ namespace BlazorSlides.Internal.Components
                     if (startTag.LineType == LineType.SingleLine || startTag.LineType == LineType.MultiLineStart)
                     {
                         builder.OpenElement(Next(), startTag.Name);
-                        builder.SetKey(Token.Id);
+                        builder.SetKey(id);
                     }
 
                     if (startTag.Attributes.Count > 0)

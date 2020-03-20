@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.ExceptionServices;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace BlazorSlides
@@ -181,83 +182,118 @@ namespace BlazorSlides
             List<IToken> tokens = new List<IToken>();
             int horizontalIndex = 0;
             int verticalIndex = 0;
+            int textareaCount = 0;
             bool horizontal = false;
             bool vertical = false;
             bool inTag = false;
+            bool hasMarkdown = true;
+            bool inMarkdown = false;
             List<IVerticalSlide> verticalSlides = new List<IVerticalSlide>();
             foreach (Line line in lines)
             {
                 foreach (IToken token in line.Tokens)
                 {
-                    if (horizontal && vertical && IsOpenSection(token))
+                    if(hasMarkdown && !inMarkdown && IsOpenMarkdown(token))
                     {
-                        throw new FormatException("Sections can only be two levels deep");
+                        inMarkdown = true;
+                        textareaCount = 0;
                     }
-                    if (horizontal && !vertical && IsOpenSection(token))
+                    else if (inMarkdown && IsOpenTextArea(token))
                     {
-                        tokens = new List<IToken>();
-                        vertical = true;
-                        inTag = true;
+                        textareaCount++;
                     }
-                    if (horizontal && !vertical && IsCloseSection(token))
+                    if (inMarkdown && IsCloseTextArea(token))
                     {
-                        if (verticalSlides.Count > 0)
+                        textareaCount--;
+                        if (textareaCount == -1)
                         {
-                            list.Add(new HorizontalSlideContainer
-                            {
-                                HorizontalIndex = ++horizontalIndex,
-                                VerticalSlides = verticalSlides
-                            });
+                            inMarkdown = false;
                         }
-                        else
-                        {
-                            HorizontalSlideContent slide = new HorizontalSlideContent
-                            {
-                                HorizontalIndex = ++horizontalIndex
-                            };
-                            slide.Contents = GetSlideContents(tokens);
-                            list.Add(slide);
-                        }
-                        horizontal = false;
-                        tokens = new List<IToken>();
-                        verticalSlides = new List<IVerticalSlide>();
-                        verticalIndex = 0;
-                        inTag = false;
                     }
-                    if (horizontal && vertical && IsCloseSection(token))
-                    {
-                        VerticalSlide slide = new VerticalSlide
-                        {
-                            VerticalIndex = ++verticalIndex,
-                            HorizontalIndex = horizontalIndex + 1
-                        };
-                        slide.Contents = GetSlideContents(tokens);
-                        verticalSlides.Add(slide);
-                        vertical = false;
-                        tokens = new List<IToken>();
-                        inTag = false;
-                    }
-                    if (!horizontal && IsOpenSection(token))
-                    {
-                        tokens = new List<IToken>();
-                        verticalSlides = new List<IVerticalSlide>();
-                        horizontal = true;
-                        vertical = false;
-                        inTag = true;
-                    }
-                    if (!IsOpenSection(token) && !IsCloseSection(token) && inTag)
+                    if (inMarkdown)
                     {
                         tokens.Add(token);
                     }
+                    if(!inMarkdown)
+                    {
+                        if (horizontal && vertical && IsOpenSection(token))
+                        {
+                            throw new FormatException("Sections can only be two levels deep");
+                        }
+                        if (horizontal && !vertical && IsOpenSection(token))
+                        {
+                            hasMarkdown = SectionHasMarkdown((StartTag)token);
+                            tokens = new List<IToken>();
+                            vertical = true;
+                            inTag = true;
+                        }
+                        if (horizontal && !vertical && IsCloseSection(token))
+                        {
+                            if (verticalSlides.Count > 0)
+                            {
+                                list.Add(new HorizontalSlideContainer
+                                {
+                                    HorizontalIndex = ++horizontalIndex,
+                                    VerticalSlides = verticalSlides
+                                });
+                            }
+                            else
+                            {
+                                HorizontalSlideContent slide = new HorizontalSlideContent
+                                {
+                                    HorizontalIndex = ++horizontalIndex
+                                };
+                                slide.Contents = GetSlideContents(tokens);
+                                list.Add(slide);
+                            }
+                            horizontal = false;
+                            tokens = new List<IToken>();
+                            verticalSlides = new List<IVerticalSlide>();
+                            verticalIndex = 0;
+                            inTag = false;
+                            hasMarkdown = false;
+                        }
+                        if (horizontal && vertical && IsCloseSection(token))
+                        {
+                            VerticalSlide slide = new VerticalSlide
+                            {
+                                VerticalIndex = ++verticalIndex,
+                                HorizontalIndex = horizontalIndex + 1
+                            };
+                            slide.Contents = GetSlideContents(tokens);
+                            verticalSlides.Add(slide);
+                            vertical = false;
+                            tokens = new List<IToken>();
+                            inTag = false;
+                            hasMarkdown = false;
+                        }
+                        if (!horizontal && IsOpenSection(token))
+                        {
+                            hasMarkdown = SectionHasMarkdown((StartTag)token);
+                            tokens = new List<IToken>();
+                            verticalSlides = new List<IVerticalSlide>();
+                            horizontal = true;
+                            vertical = false;
+                            inTag = true;
+                        }
+                        if (!IsOpenSection(token) && !IsCloseSection(token) && inTag)
+                        {
+                            tokens.Add(token);
+                        }
+                    }
                 }
+                tokens.Add(new Text(Environment.NewLine));
             }
             return list;
         }
 
         private List<IContent> GetSlideContents(List<IToken> tokens) {
             bool isFragment = false;
+            bool isMarkdown = false;
             int tagCount = 0;
+            int textareaCount = 0;
             List<IToken> fragmentList = new List<IToken>();
+            List<IToken> markdownList = new List<IToken>();
             List<IContent> list = new List<IContent>();
             foreach (IToken token in tokens)
             {
@@ -272,22 +308,31 @@ namespace BlazorSlides
                         }
                         else
                         {
-                            if (IsStartTagFragment((StartTag)token))
+                            if (!isMarkdown && IsStartTagFragment((StartTag)token))
                             {
                                 isFragment = true;
-                                fragmentList = new List<IToken> { token };
+                                fragmentList = new List<IToken>();
                                 tagCount = 0;
+                            }
+                            else if (!isMarkdown && IsOpenMarkdown(token))
+                            {
+                                isMarkdown = true;
+                                textareaCount = 0;
+                            }
+                            else if (isMarkdown && IsOpenTextArea(token))
+                            {
+                                textareaCount++;
                             }
                             else
                             {
-                                list.Add(new StringContent { Token = token });
+                                markdownList.Add(token);
                             }
                         }
                         break;
                     }
                     case TokenType.EndTag:
                     {
-                        if (isFragment)
+                        if (!isMarkdown && isFragment)
                         {
                             tagCount--;
                             fragmentList.Add(token);
@@ -297,6 +342,31 @@ namespace BlazorSlides
                                 list.Add(new FragmentContent { Contents = TransformFragments(fragmentList) });
                                 fragmentList = new List<IToken>();
                                 tagCount = 0;
+                            }
+                        }
+                        else if(isMarkdown)
+                        {
+                            if(IsCloseTextArea(token))
+                            {
+                                textareaCount--;
+                                if(textareaCount == -1)
+                                {
+                                    isMarkdown = false;
+                                    StringBuilder sb = new StringBuilder();
+                                    foreach (IToken t in markdownList)
+                                    {
+                                        sb.Append(t.ToHtml());
+                                    }
+                                    list.Add(new MarkdownContent { Content = FixTabs(sb.ToString()) });
+                                }
+                                else
+                                {
+                                    markdownList.Add(token);
+                                }                                
+                            }
+                            else
+                            {
+                                markdownList.Add(token);
                             }
                         }
                         else
@@ -311,6 +381,10 @@ namespace BlazorSlides
                         {
                             fragmentList.Add(token);
                         }
+                        else if(isMarkdown)
+                        {
+                            markdownList.Add(token);
+                        }
                         else
                         {
                             list.Add(new StringContent { Token = token });
@@ -320,6 +394,69 @@ namespace BlazorSlides
                 }
             }
             return list;
+        }
+
+        private string FixTabs(string str)
+        {
+            StringBuilder sb = new StringBuilder();
+            StringBuilder ignored = new StringBuilder();
+            var lines = str.Split(Environment.NewLine);
+            bool foundFirstLine = false;
+            foreach (string line in lines)
+            {
+                if(!foundFirstLine && line.Trim() == String.Empty)
+                {
+                    continue;
+                }
+                foundFirstLine = true;
+                bool foundChar = false;
+                foreach (char ch in line)
+                {
+                    if (!foundChar && char.IsWhiteSpace(ch))
+                    {
+                        ignored.Append(ch);
+                    }
+                    else
+                    {
+                        foundChar = true;
+                    }
+                }
+                break;
+            }
+            if (ignored.Length > 0)
+            {
+                foreach (string line in lines)
+                {
+                    string trimmed = line.Replace(ignored.ToString(), String.Empty).TrimEnd();
+                    sb.AppendLine(trimmed);
+                }
+            }
+            else
+            {
+                sb.Append(str);
+            }
+            return sb.ToString();
+        }
+
+        private bool IsOpenTextArea(IToken token)
+        {
+            return token.TokenType == TokenType.StartTag && ((StartTag)token).Name == "textarea";
+        }
+
+        private bool IsCloseTextArea(IToken token)
+        {
+            return token.TokenType == TokenType.EndTag && ((EndTag)token).Name == "textarea";
+        }
+
+        private bool IsOpenMarkdown(IToken token)
+        {
+            return token.TokenType == TokenType.StartTag && ((StartTag)token).Name == "textarea"
+                && ((StartTag)token).Attributes.Any(attr => ((AttributeToken)attr).NameOnly && ((AttributeToken)attr).Name == "data-template");
+        }
+
+        private bool SectionHasMarkdown(StartTag startTag)
+        {
+            return startTag.Attributes.Any(token => ((AttributeToken)token).Name.ToLower() == "data-markdown");
         }
 
         private List<IContent> TransformFragments(List<IToken> tokens)
