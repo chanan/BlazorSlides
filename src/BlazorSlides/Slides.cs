@@ -306,26 +306,30 @@ namespace BlazorSlides
                             fragmentList.Add(token);
                             tagCount++;
                         }
+                        if (!isFragment && !isMarkdown && IsStartTagFragment((StartTag)token))
+                        {
+                            isFragment = true;
+                            fragmentList = new List<IToken> { token };
+                            tagCount = 0;
+                        }
+                        else if (!isMarkdown && IsOpenMarkdown(token))
+                        {
+                            isMarkdown = true;
+                            textareaCount = 0;
+                        }
+                        else if (isMarkdown && IsOpenTextArea(token))
+                        {
+                            textareaCount++;
+                        }
                         else
                         {
-                            if (!isMarkdown && IsStartTagFragment((StartTag)token))
+                            if (isMarkdown)
                             {
-                                isFragment = true;
-                                fragmentList = new List<IToken>();
-                                tagCount = 0;
-                            }
-                            else if (!isMarkdown && IsOpenMarkdown(token))
-                            {
-                                isMarkdown = true;
-                                textareaCount = 0;
-                            }
-                            else if (isMarkdown && IsOpenTextArea(token))
-                            {
-                                textareaCount++;
+                                markdownList.Add(token);
                             }
                             else
                             {
-                                markdownList.Add(token);
+                                list.Add(new StringContent { Token = token });
                             }
                         }
                         break;
