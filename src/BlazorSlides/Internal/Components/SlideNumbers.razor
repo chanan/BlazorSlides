@@ -1,10 +1,10 @@
 ﻿<div class="@_slideNumber">
     <a class="@_slideNumberLink" href="@GetLink()">
-        <span>@CurrentHorizontalIndex</span>
-        @if (CurrentVerticalIndex != 0)
+        <span>@CurrentHorizontalNumber</span>
+        @if (SlidesAPI.State.VerticalSlideCount != 0)
         {
             <span class="slide-number-delimiter">.</span>
-            <span>@CurrentVerticalIndex</span>
+            <span>@CurrentVerticalNumber</span>
         }
     </a>
 </div>
@@ -27,23 +27,3 @@
 <Styled @bind-Classname="@_slideNumberLink">
     color: currentColor;
 </Styled>
-
-@code {
-    //Styles
-    private string _slideNumber;
-    private string _slideNumberLink;
-
-    [Parameter] public int CurrentHorizontalIndex { get; set; }
-    [Parameter] public int CurrentVerticalIndex { get; set; }
-
-    private string GetLink()
-    {
-        return "#/" + (CurrentHorizontalIndex - 1);
-    }
-}
-
-@*
-    TODO:
-    * Fragments
-    * Delimiter
-*@

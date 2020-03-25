@@ -1,5 +1,5 @@
 ﻿<div class="@_progress">
-    <span class="@_span">@SlidesWidth</span>
+    <span class="@_span">@SlidesAPI.State.SlidesWidth</span>
 </div>
 
 <Styled @bind-Classname="@_progress">
@@ -30,63 +30,5 @@
     width: 0px;
     background-color: currentColor;
     transition: width 800ms cubic-bezier(0.26, 0.86, 0.44, 0.985);
-    width: @getProgress()
+    width: @GetProgress()
 </Styled>
-
-
-@code {
-    //Styles
-    private string _progress;
-    private string _span;
-
-    [Parameter] public int NumberOfSlides { get; set; }
-    [Parameter] public int PastCount { get; set; }
-    [Parameter] public int CurrentHorizontalIndex { get; set; }
-    [Parameter] public int CurrentVerticalIndex { get; set; }
-    [Parameter] public int SlidesWidth { get; set; }
-
-    private string getProgress()
-    {
-        double progress = Math.Min(((double)PastCount / (double)(NumberOfSlides - 1)), 1);
-        progress *= SlidesWidth;
-        return progress.ToString("F2") + "px;";
-    }
-}
-
-@*
-    TODO:
-    * Progress click
-    * Current slide fragments
-    * offsetWidth
-*@
-
-@*
-function getProgress() {
-
-    // The number of past and total slides
-    var totalCount = getTotalSlides();
-    var pastCount = getSlidePastCount();
-
-    if( currentSlide ) {
-
-        var allFragments = currentSlide.querySelectorAll( '.fragment' );
-
-        // If there are fragments in the current slide those should be
-        // accounted for in the progress.
-        if( allFragments.length > 0 ) {
-            var visibleFragments = currentSlide.querySelectorAll( '.fragment.visible' );
-
-            // This value represents how big a portion of the slide progress
-            // that is made up by its fragments (0-1)
-            var fragmentWeight = 0.9;
-
-            // Add fragment progress to the past slide count
-            pastCount += ( visibleFragments.length / allFragments.length ) * fragmentWeight;
-        }
-
-    }
-
-    return Math.min( pastCount / ( totalCount - 1 ), 1 );
-
-}
-*@

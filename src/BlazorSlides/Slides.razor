@@ -1,31 +1,20 @@
-﻿<div class="@_revealContainer" role="application" @ref="@_domWrapper">
-    <div class="@_slidesContainer">
-        @foreach (IHorizontalSlide slide in _slides)
+﻿<CascadingValue Value=SlidesAPI Name="SlidesAPI">
+    <div class="@_revealContainer" role="application" @ref="@_domWrapper">
+        <div class="@_slidesContainer">
+            @ChildContent
+        </div>
+        @if (_showProgress)
         {
-            <Slide CurrentSlide="@slide" CurrentHorizontalIndex="@_currentHorizontalIndex" CurrentVerticalIndex="@_currentVerticalIndex" />
+            <Progress />
+        }
+        <Controls HasDarkBackground="@_hasDarkBackground" HasLightBackground="@_hasLightBackground" />
+        @if (_showSlideNumbers)
+        {
+            <SlideNumbers />
         }
     </div>
-    @if (_showProgress)
-    {
-        <Progress
-            SlidesWidth="@_offsetWidth"
-            NumberOfSlides="@_countOfSlides" PastCount="@_currentPastCount"
-            CurrentHorizontalIndex="@_currentHorizontalIndex" CurrentVerticalIndex="@_currentVerticalIndex"  
-        />
-    }
-    <Controls 
-        NumberOfHorizontalSlides="@_countOfHorizontalSlide" NumberOfVerticalSlides="@_CurrentNumberOfVerticalSlides"
-        CurrentHorizontalIndex="@_currentHorizontalIndex" CurrentVerticalIndex="@_currentVerticalIndex"  
-        HasHorizontal="@_hasHorizontal" HasVertical="@_hasVertical"
-        HasDarkBackground="@_hasDarkBackground" HasLightBackground="@_hasLightBackground"
-        OnNext="@OnNext" OnPrevious="@OnPrevious"
-        OnUp="@OnUp" OnDown="@OnDown"
-    />
-    @if (_showSlideNumbers)
-    {
-        <SlideNumbers CurrentHorizontalIndex="@_currentHorizontalIndex" CurrentVerticalIndex="@_currentVerticalIndex" />
-    }
-</div>
+    <Scripts @ref="@_scripts" DomWrapper="@_domWrapper" OnWindowResize="@_OnWindowResize" />
+</CascadingValue>
 
 @* Reset CSS *@
 <Styled>
@@ -36,21 +25,21 @@
 
 <Styled>
     html {
-        width: 100%;
-        height: 100%;
-        height: 100vh;
-        height: calc( var(--vh, 1vh) * 100);
-        overflow: hidden;
+    width: 100%;
+    height: 100%;
+    height: 100vh;
+    height: calc( var(--vh, 1vh) * 100);
+    overflow: hidden;
     }
 
     body {
-        height: 100%;
-        overflow: hidden;
-        position: relative;
-        line-height: 1;
-        margin: 0;
-        background-color: #fff;
-        color: #000;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    line-height: 1;
+    margin: 0;
+    background-color: #fff;
+    color: #000;
     }
 </Styled>
 
@@ -71,7 +60,7 @@
     font-style: italic;
 </Styled>
 
-<Styled @bind-Classname="@_center">
+<Styled @bind-Classname="@_center" GlobalStyle="Helpers.Center">
     label: center;
     min-height: 0 !important;
 </Styled>
@@ -108,5 +97,3 @@
 </Styled>
 
 <Styled @bind-Classname="@_slidesContainer" ComposeSlides="@_slidesClass" ComposeCenter="@_center" ComposeSize="@_size" />
-
-<Scripts @ref="@_scripts" DomWrapper="@_domWrapper" OnWindowResize="@_OnWindowResize" />

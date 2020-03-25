@@ -1,27 +1,27 @@
 ﻿<aside class="@_controlsFinal">
-    @if (HasHorizontal)
+    @if (SlidesAPI.State.HasHorizontal)
     {
         <ControlButton 
-            ArrowDirection="ArrowDirection.Left" IsEnabled="@(IsArrowLeftEnabled())"
-            HasHorizontal="@HasHorizontal" HasVertical="@HasVertical"
+            ArrowDirection="ArrowDirection.Left" IsEnabled="@IsArrowLeftEnabled"
+            HasHorizontal="@SlidesAPI.State.HasHorizontal" HasVertical="@SlidesAPI.State.HasVertical"
             OnClick="@OnPrevious" 
         />
         <ControlButton 
-            ArrowDirection="ArrowDirection.Right" IsEnabled="@(IsArrowRightEnabled())"
-            HasHorizontal="@HasHorizontal" HasVertical="@HasVertical"
+            ArrowDirection="ArrowDirection.Right" IsEnabled="@IsArrowRightEnabled"
+            HasHorizontal="@SlidesAPI.State.HasHorizontal" HasVertical="@SlidesAPI.State.HasVertical"
             OnClick="@OnNext" 
         />
     }
-    @if (HasVertical)
+    @if (SlidesAPI.State.HasVertical)
     {
         <ControlButton 
-            ArrowDirection="ArrowDirection.Up" IsEnabled="@(IsArrowUpEnabled())"
-            HasHorizontal="@HasHorizontal" HasVertical="@HasVertical"
+            ArrowDirection="ArrowDirection.Up" IsEnabled="@IsArrowUpEnabled"
+            HasHorizontal="@SlidesAPI.State.HasHorizontal" HasVertical="@SlidesAPI.State.HasVertical"
             OnClick="@OnUp" 
         />
         <ControlButton 
-            ArrowDirection="ArrowDirection.Down" IsEnabled="@(IsArrowDownEnabled())"
-            HasHorizontal="@HasHorizontal" HasVertical="@HasVertical"
+            ArrowDirection="ArrowDirection.Down" IsEnabled="@IsArrowDownEnabled"
+            HasHorizontal="@SlidesAPI.State.HasHorizontal" HasVertical="@SlidesAPI.State.HasVertical"
             OnClick="@OnDown" 
         />
     }
@@ -52,57 +52,3 @@
     ComposeDark="@_dark" ComposeDarkIf="@HasDarkBackground"
     ComposeLight="@_light" ComposeLightIf="@HasLightBackground"
 />
-
-@code {
-    //Styles
-    private string _controlsFinal;
-    private string _controls;
-    private string _dark;
-    private string _light;
-
-    //Parameters
-    [Parameter] public int NumberOfHorizontalSlides { get; set; }
-    [Parameter] public int NumberOfVerticalSlides { get; set; }
-    [Parameter] public int CurrentHorizontalIndex { get; set; }
-    [Parameter] public int CurrentVerticalIndex { get; set; }
-    [Parameter] public bool HasHorizontal { get; set; }
-    [Parameter] public bool HasVertical { get; set; }
-    [Parameter] public bool HasDarkBackground { get; set; }
-    [Parameter] public bool HasLightBackground { get; set; }
-
-    //Event callbacks
-    [Parameter] public EventCallback<MouseEventArgs> OnNext { get; set; }
-    [Parameter] public EventCallback<MouseEventArgs> OnPrevious { get; set; }
-    [Parameter] public EventCallback<MouseEventArgs> OnUp { get; set; }
-    [Parameter] public EventCallback<MouseEventArgs> OnDown { get; set; }
-
-    private bool IsArrowLeftEnabled()
-    {
-        return CurrentHorizontalIndex > 1;
-    }
-
-    private bool IsArrowRightEnabled()
-    {
-        return CurrentHorizontalIndex < NumberOfHorizontalSlides;
-    }
-
-    private bool IsArrowUpEnabled()
-    {
-        return NumberOfVerticalSlides != 0 && CurrentVerticalIndex > 1;
-    }
-
-    private bool IsArrowDownEnabled()
-    {
-        return NumberOfVerticalSlides != 0 && CurrentVerticalIndex < NumberOfVerticalSlides;
-    }
-}
-
-@* 
-    TODO:
-    * Highlight
-    * navigation mode
-    * fragments
-    * layout and media query
-    * no hover (used on mobile)
-    * move location if numbers?
-*@

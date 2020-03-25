@@ -48,6 +48,11 @@ namespace BlazorSlides.Internal.Components
             _lock.Release();
         }
 
+        internal async Task Log(string msg, object obj)
+        {
+            await JSRuntime.InvokeVoidAsync("BlazorSlides.log", msg, obj);
+        }
+
         [JSInvokable]
         public async void _OnWindowResize()
         {
@@ -63,6 +68,9 @@ window.BlazorSlides = {
     },
     offsetWidth: function (domWrapper) {
         return domWrapper ? domWrapper.offsetWidth : 0;
+    },
+    log: function (msg, obj) {
+        console.log(msg, obj);
     }
 }
 
