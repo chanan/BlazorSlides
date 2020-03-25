@@ -6,7 +6,7 @@ namespace BlazorSlides
     {
         //Styles
         private string _fragmentClass;
-        private string _fragment;
+        private string _past;
         private string _visible;
         private string _currentFragment;
 

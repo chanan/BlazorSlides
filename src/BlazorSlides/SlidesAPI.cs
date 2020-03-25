@@ -31,7 +31,7 @@ namespace BlazorSlides
 
         public async Task MoveNext()
         {
-            if (NextFragment() == false)
+            if (State.NextFragment() == false)
             {
                 if (State.CurrentHorizontalIndex < State.HorizontalSlideCount - 1)
                 {
@@ -39,31 +39,20 @@ namespace BlazorSlides
                     State.CurrentVerticalIndex = 0; //TODO: restore vertical index
                     State.CurrentFragmentIndex = -1;
                 }
-                //UpdateVerticalState();
             }
-            //await UpdateJsInteropVars();
             StateUpdated?.Invoke(this, State); //TODO: BeginInvoke...
-        }
-
-        private bool NextFragment()
-        {
-            //SlideWithContent slide = (SlideWithContent)GetCurrentSlide();
-            //return slide.NextFragment();
-            return false;
         }
 
         public async Task MovePrevious()
         {
-            if (PreviousFragment() == false)
+            if (State.PreviousFragment() == false)
             {
                 if (State.CurrentHorizontalIndex != 0)
                 {
                     State.CurrentHorizontalIndex--;
                     State.CurrentVerticalIndex = 0; //TODO: restore vertical index
                 }
-                //UpdateVerticalState();
             }
-            //await UpdateJsInteropVars();
             StateUpdated?.Invoke(this, State);
         }
 
@@ -80,7 +69,6 @@ namespace BlazorSlides
             {
                 State.CurrentVerticalIndex--;
             }
-            //await UpdateJsInteropVars();
             StateUpdated?.Invoke(this, State);
         }
 
@@ -90,7 +78,6 @@ namespace BlazorSlides
             {
                 State.CurrentVerticalIndex++;
             }
-            //await UpdateJsInteropVars();
             StateUpdated?.Invoke(this, State);
         }
     }

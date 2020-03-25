@@ -93,5 +93,39 @@ namespace BlazorSlides
             internalSlide.Fragments.Add(new InternalFragment { FragmentIndex = fragmentIndex });
             return fragmentIndex;
         }
+
+        internal bool NextFragment()
+        {
+            InternalSlide slide = GetCurrentSlide();
+            if(CurrentFragmentIndex < slide.Fragments.Count -1)
+            {
+                CurrentFragmentIndex++;
+                return true;
+            }
+            return false;
+        }
+
+        internal bool PreviousFragment()
+        {
+            ISlide slide = GetCurrentSlide();
+            if (CurrentFragmentIndex != -1)
+            {
+                CurrentFragmentIndex--;
+                return true;
+            }
+            return false;
+        }
+
+        //Private methods
+        private InternalSlide GetCurrentSlide()
+        {
+            ISlide slide = _slides[CurrentHorizontalIndex];
+            return slide switch
+            {
+                InternalSlide _ => (InternalSlide)slide,
+                InternalStack stack => stack.Slides[CurrentVerticalIndex],
+                _ => throw new NotImplementedException()
+            };
+        }
     }
 }

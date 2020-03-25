@@ -52,6 +52,7 @@ namespace BlazorSlides
         private void StateUpdated(object sender, State state)
         {
             StateHasChanged();
+            UpdateJsInteropVars();
             _scripts.Log("State: ", state);
         }
 

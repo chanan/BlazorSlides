@@ -2,7 +2,18 @@
     @ChildContent
 </span>
 
-<Styled @bind-Classname="@_fragment">
+<Styled @bind-Classname="@_currentFragment">
+    label: current-fragment;
+</Styled>
+
+<Styled @bind-Classname="@_past">
+    label: past-fragment;
+</Styled>
+
+<Styled @bind-Classname="@_fragmentClass"
+        ComposePast="@_past" ComposePastIf="@IsPast"
+        ComposeVisible="@_visible" ComposeVisibleIf="@IsVisible"
+        ComposeCurrent="@_currentFragment" ComposeCurrentIf="@IsCurrent">
     label: fragment;
     opacity: 0;
     visibility: hidden;
@@ -14,14 +25,3 @@
     opacity: 1;
     visibility: inherit;
 </Styled>
-
-<Styled @bind-Classname="@_currentFragment">
-    label: current-fragment;
-    visibility: inherit;
-</Styled>
-
-<Styled @bind-Classname="@_fragmentClass"
-    ComposeBase="@_fragment"
-    ComposeVisible="@_visible" ComposeVisibleIf="@(IsPast() || IsCurrent())"
-    ComposeCurrent="@_currentFragment" ComposeCurrentIf="@IsCurrent()"
-/>
