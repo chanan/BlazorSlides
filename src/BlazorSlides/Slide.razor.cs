@@ -16,38 +16,34 @@ namespace BlazorSlides
         [Parameter] public RenderFragment ChildContent { get; set; }
 
         //Injections
-        [Inject] IStyled IStyled { get; set; }
+        [Inject] private IStyled IStyled { get; set; }
         [CascadingParameter(Name = "SlidesAPI")] public SlidesAPI SlidesAPI { get; set; }
         [CascadingParameter(Name = "ParentIndex")] public int? ParentIndex { get; set; }
 
         public int HorizontalIndex { get; private set; }
         public int? VerticalIndex { get; private set; }
-        public bool IsPresent {
-            get => (!VerticalIndex.HasValue && 
-                        HorizontalIndex == SlidesAPI.State.CurrentHorizontalIndex) ||
-                   (VerticalIndex.HasValue && 
-                        HorizontalIndex == SlidesAPI.State.CurrentHorizontalIndex &&
-                        VerticalIndex.Value == SlidesAPI.State.CurrentVerticalIndex);
-        }
-        public bool IsPast { 
-            get =>  (!VerticalIndex.HasValue &&
-                        HorizontalIndex < SlidesAPI.State.CurrentHorizontalIndex) || 
-                    (VerticalIndex.HasValue && 
-                        HorizontalIndex == SlidesAPI.State.CurrentHorizontalIndex && 
-                        VerticalIndex.Value < SlidesAPI.State.CurrentVerticalIndex); 
-        }
-        public bool IsFuture { 
-            get =>  (!VerticalIndex.HasValue && 
-                        HorizontalIndex > SlidesAPI.State.CurrentHorizontalIndex) || 
-                    (VerticalIndex.HasValue && 
-                        HorizontalIndex == SlidesAPI.State.CurrentHorizontalIndex && 
-                    VerticalIndex.Value > SlidesAPI.State.CurrentVerticalIndex); 
-        }
+        public bool IsPresent => (!VerticalIndex.HasValue &&
+                                    HorizontalIndex == SlidesAPI.State.CurrentHorizontalIndex) ||
+                                 (VerticalIndex.HasValue &&
+                                    HorizontalIndex == SlidesAPI.State.CurrentHorizontalIndex &&
+                                    VerticalIndex.Value == SlidesAPI.State.CurrentVerticalIndex);
+        public bool IsPast => (!VerticalIndex.HasValue &&
+                                HorizontalIndex < SlidesAPI.State.CurrentHorizontalIndex) ||
+                              (VerticalIndex.HasValue &&
+                                HorizontalIndex == SlidesAPI.State.CurrentHorizontalIndex &&
+                                VerticalIndex.Value < SlidesAPI.State.CurrentVerticalIndex);
+
+        public bool IsFuture => (!VerticalIndex.HasValue &&
+                                    HorizontalIndex > SlidesAPI.State.CurrentHorizontalIndex) ||
+                                (VerticalIndex.HasValue &&
+                                    HorizontalIndex == SlidesAPI.State.CurrentHorizontalIndex &&
+                                    VerticalIndex.Value > SlidesAPI.State.CurrentVerticalIndex);
+
         public bool IsVertical { get; private set; }
 
         protected override void OnInitialized()
         {
-            if(!ParentIndex.HasValue)
+            if (!ParentIndex.HasValue)
             {
                 HorizontalIndex = SlidesAPI.ResgisterHorizontalSlide();
             }

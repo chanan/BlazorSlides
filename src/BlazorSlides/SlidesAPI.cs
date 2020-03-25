@@ -37,6 +37,7 @@ namespace BlazorSlides
                 {
                     State.CurrentHorizontalIndex++;
                     State.CurrentVerticalIndex = 0; //TODO: restore vertical index
+                    State.CurrentFragmentIndex = -1;
                 }
                 //UpdateVerticalState();
             }
@@ -58,6 +59,7 @@ namespace BlazorSlides
                 if (State.CurrentHorizontalIndex != 0)
                 {
                     State.CurrentHorizontalIndex--;
+                    State.CurrentVerticalIndex = 0; //TODO: restore vertical index
                 }
                 //UpdateVerticalState();
             }

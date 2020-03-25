@@ -18,13 +18,13 @@ namespace BlazorSlides
         [Parameter] public RenderFragment ChildContent { get; set; }
 
         //Injections
-        [Inject] IStyled IStyled { get; set; }
+        [Inject] private IStyled IStyled { get; set; }
         [CascadingParameter(Name = "SlidesAPI")] public SlidesAPI SlidesAPI { get; set; }
 
         public int HorizontalIndex { get; private set; }
-        public bool IsPresent { get => HorizontalIndex == SlidesAPI.State.CurrentHorizontalIndex; }
-        public bool IsPast { get => HorizontalIndex < SlidesAPI.State.CurrentHorizontalIndex; }
-        public bool IsFuture { get => HorizontalIndex > SlidesAPI.State.CurrentHorizontalIndex; }
+        public bool IsPresent => HorizontalIndex == SlidesAPI.State.CurrentHorizontalIndex;
+        public bool IsPast => HorizontalIndex < SlidesAPI.State.CurrentHorizontalIndex;
+        public bool IsFuture => HorizontalIndex > SlidesAPI.State.CurrentHorizontalIndex;
 
         protected override void OnInitialized()
         {

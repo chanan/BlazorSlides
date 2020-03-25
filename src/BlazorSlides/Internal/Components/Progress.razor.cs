@@ -13,9 +13,10 @@ namespace BlazorSlides.Internal.Components
         [CascadingParameter(Name = "SlidesAPI")] public SlidesAPI SlidesAPI { get; set; }
 
         public string ProgressWidth
-        { get
+        {
+            get
             {
-                double progress = Math.Min((double)SlidesAPI.State.CurrentPastCount / (double)(SlidesAPI.State.TotalSlideCount - 1), 1);
+                double progress = Math.Min(SlidesAPI.State.CurrentPastCount / (double)(SlidesAPI.State.TotalSlideCount - 1), 1);
                 progress *= SlidesAPI.State.SlidesWidth;
                 return progress.ToString("F2") + "px;";
             }

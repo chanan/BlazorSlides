@@ -16,15 +16,8 @@ namespace BlazorSlides.Internal.Components
             return SlidesAPI.State.VerticalSlideCount == 0 ? "#/" + SlidesAPI.State.CurrentHorizontalIndex : "#/" + SlidesAPI.State.CurrentHorizontalIndex + "/" + SlidesAPI.State.CurrentVerticalIndex;
         }
 
-        private int CurrentHorizontalNumber
-        {
-            get => SlidesAPI.State.CurrentHorizontalIndex + 1;
-        }
-
-        private int CurrentVerticalNumber
-        {
-            get => SlidesAPI.State.CurrentVerticalIndex + 1;
-        }
+        private int CurrentHorizontalNumber => SlidesAPI.State.CurrentHorizontalIndex + 1;
+        private int CurrentVerticalNumber => SlidesAPI.State.CurrentVerticalIndex + 1;
         /* TODO:
         * Fragments
         * Delimiter */

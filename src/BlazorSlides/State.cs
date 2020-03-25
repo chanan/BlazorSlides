@@ -27,14 +27,16 @@ namespace BlazorSlides
         public bool HasHorizontal => HorizontalSlideCount > 1;
         public bool HasVertical => _slides.Any(list => list is InternalStack);
         public int CurrentHorizontalIndex { get; internal set; } = 0;
-
         public int CurrentVerticalIndex { get; internal set; } = 0;
-        public int CurrentPastCount {
-            get {
+        public int CurrentFragmentIndex { get; internal set; } = -1;
+        public int CurrentPastCount
+        {
+            get
+            {
                 int ret = 0;
                 for (int i = 0; i < HorizontalSlideCount; i++)
                 {
-                    if(i < CurrentHorizontalIndex)
+                    if (i < CurrentHorizontalIndex)
                     {
                         ret += _slides[i] switch
                         {
@@ -76,7 +78,20 @@ namespace BlazorSlides
 
         internal int AddFragment(int horizontalIndex, int? verticalIndex)
         {
-            return 0;
+            ISlide islide = _slides[horizontalIndex];
+            InternalSlide internalSlide;
+            if (verticalIndex.HasValue)
+            {
+                InternalStack internalStack = (InternalStack)islide;
+                internalSlide = internalStack.Slides[verticalIndex.Value];
+            }
+            else
+            {
+                internalSlide = (InternalSlide)islide;
+            }
+            int fragmentIndex = internalSlide.Fragments.Count;
+            internalSlide.Fragments.Add(new InternalFragment { FragmentIndex = fragmentIndex });
+            return fragmentIndex;
         }
     }
 }

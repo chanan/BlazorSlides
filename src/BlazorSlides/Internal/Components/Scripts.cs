@@ -9,7 +9,7 @@ namespace BlazorSlides.Internal.Components
     {
         private SemaphoreSlim _lock = new SemaphoreSlim(1, 1);
         //Injections
-        [Inject] IJSRuntime JSRuntime { get; set; }
+        [Inject] private IJSRuntime JSRuntime { get; set; }
 
         //Parameters
         [Parameter] public ElementReference? DomWrapper { get; set; }

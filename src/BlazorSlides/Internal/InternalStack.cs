@@ -2,7 +2,7 @@
 
 namespace BlazorSlides.Internal
 {
-    class InternalStack : ISlide
+    internal class InternalStack : ISlide
     {
         public int HorizontalIndex { get; set; }
         public int? VerticalIndex { get; set; }

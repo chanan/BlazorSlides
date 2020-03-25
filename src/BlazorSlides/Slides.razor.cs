@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace BlazorSlides
 {
     public partial class Slides : ComponentBase
-    {   
+    {
         //Main reveal container
         private string _revealContainer;
         private string _reveal;
@@ -62,10 +62,10 @@ namespace BlazorSlides
             await UpdateJsInteropVars();
         }
 
-        async Task UpdateJsInteropVars()
+        private async Task UpdateJsInteropVars()
         {
             int width = await _scripts.GetOffsetWidth();
-            if(width != SlidesAPI.State.SlidesWidth)
+            if (width != SlidesAPI.State.SlidesWidth)
             {
                 SlidesAPI.State.SlidesWidth = width;
                 StateHasChanged();

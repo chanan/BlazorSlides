@@ -1,7 +1,7 @@
 ﻿namespace BlazorSlides.Internal
 {
-    class InternalFragment
+    internal class InternalFragment
     {
-        public int Index;
+        public int FragmentIndex;
     }
 }

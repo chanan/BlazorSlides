@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 
 namespace BlazorSlides.Internal.Components
 {
@@ -38,25 +37,10 @@ namespace BlazorSlides.Internal.Components
             await SlidesAPI.MoveUp();
         }
 
-        private bool IsArrowLeftEnabled
-        {
-            get => SlidesAPI.State.CurrentHorizontalIndex > 0;
-        }
-
-        private bool IsArrowRightEnabled
-        {
-            get => SlidesAPI.State.CurrentHorizontalIndex < SlidesAPI.State.HorizontalSlideCount - 1;
-        }
-
-        private bool IsArrowUpEnabled
-        {
-            get => SlidesAPI.State.VerticalSlideCount != 0 && SlidesAPI.State.CurrentVerticalIndex > 0;
-        }
-
-        private bool IsArrowDownEnabled
-        {
-            get => SlidesAPI.State.VerticalSlideCount != 0 && SlidesAPI.State.CurrentVerticalIndex < SlidesAPI.State.VerticalSlideCount - 1;
-        }
+        private bool IsArrowLeftEnabled => SlidesAPI.State.CurrentHorizontalIndex > 0;
+        private bool IsArrowRightEnabled => SlidesAPI.State.CurrentHorizontalIndex < SlidesAPI.State.HorizontalSlideCount - 1;
+        private bool IsArrowUpEnabled => SlidesAPI.State.VerticalSlideCount != 0 && SlidesAPI.State.CurrentVerticalIndex > 0;
+        private bool IsArrowDownEnabled => SlidesAPI.State.VerticalSlideCount != 0 && SlidesAPI.State.CurrentVerticalIndex < SlidesAPI.State.VerticalSlideCount - 1;
 
         /*TODO:
         * Highlight
