@@ -12,11 +12,13 @@ namespace BlazorSlides.Internal.Components
         //Injections
         [CascadingParameter(Name = "SlidesAPI")] public SlidesAPI SlidesAPI { get; set; }
 
-        private string GetProgress()
-        {
-            double progress = Math.Min((double)SlidesAPI.State.CurrentPastCount / (double)(SlidesAPI.State.TotalSlideCount - 1), 1);
-            progress *= SlidesAPI.State.SlidesWidth;
-            return progress.ToString("F2") + "px;";
+        public string ProgressWidth
+        { get
+            {
+                double progress = Math.Min((double)SlidesAPI.State.CurrentPastCount / (double)(SlidesAPI.State.TotalSlideCount - 1), 1);
+                progress *= SlidesAPI.State.SlidesWidth;
+                return progress.ToString("F2") + "px;";
+            }
         }
         /*
             TODO:

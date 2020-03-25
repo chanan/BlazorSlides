@@ -24,6 +24,11 @@ namespace BlazorSlides
             return State.AddVerticalSlide(horizontalIndex);
         }
 
+        internal int RegisterFragment(int horizontalIndex, int? verticalIndex)
+        {
+            return State.AddFragment(horizontalIndex, verticalIndex);
+        }
+
         public async Task MoveNext()
         {
             if (NextFragment() == false)

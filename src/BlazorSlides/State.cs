@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlazorSlides.Internal;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,15 +8,26 @@ namespace BlazorSlides
     public class State : EventArgs
     {
         //Private vars
-        private List<List<bool>> _map = new List<List<bool>>();
+        private List<ISlide> _slides = new List<ISlide>();
 
         //Public state
-        public int HorizontalSlideCount { get => _map.Count; }
-        public int VerticalSlideCount { get => _map[CurrentHorizontalIndex].Count == 1 ? 0 : _map[CurrentHorizontalIndex].Count; }
-        public int TotalSlideCount { get => _map.Sum(list => list.Count); }
-        public bool HasHorizontal { get => HorizontalSlideCount > 1; }
-        public bool HasVertical { get => _map.Any(list => list.Count > 1); }
+        public int HorizontalSlideCount => _slides.Count;
+        public int VerticalSlideCount => _slides[CurrentHorizontalIndex] switch
+        {
+            InternalSlide _ => 0,
+            InternalStack internalStack => internalStack.Slides.Count,
+            _ => throw new NotImplementedException()
+        };
+        public int TotalSlideCount => _slides.Sum(slide => slide switch
+        {
+            InternalSlide _ => 1,
+            InternalStack internalStack => internalStack.Slides.Count,
+            _ => throw new NotImplementedException()
+        });
+        public bool HasHorizontal => HorizontalSlideCount > 1;
+        public bool HasVertical => _slides.Any(list => list is InternalStack);
         public int CurrentHorizontalIndex { get; internal set; } = 0;
+
         public int CurrentVerticalIndex { get; internal set; } = 0;
         public int CurrentPastCount {
             get {
@@ -24,7 +36,12 @@ namespace BlazorSlides
                 {
                     if(i < CurrentHorizontalIndex)
                     {
-                        ret += _map[i].Count;
+                        ret += _slides[i] switch
+                        {
+                            InternalSlide _ => 1,
+                            InternalStack internalStack => internalStack.Slides.Count,
+                            _ => throw new NotImplementedException()
+                        };
                     }
                     if (i == CurrentHorizontalIndex)
                     {
@@ -39,21 +56,27 @@ namespace BlazorSlides
         //Internal methods
         internal int AddHorizontalSlide()
         {
-            _map.Add(new List<bool> { true });
+            _slides.Add(new InternalSlide { HorizontalIndex = _slides.Count });
             return HorizontalSlideCount - 1;
         }
 
         internal int AddStack()
         {
-            _map.Add(new List<bool>());
+            _slides.Add(new InternalStack { HorizontalIndex = _slides.Count });
             return HorizontalSlideCount - 1;
         }
 
         internal int AddVerticalSlide(int horizontalIndex)
         {
-            List<bool> list = _map[horizontalIndex];
-            list.Add(true);
-            return list.Count - 1;
+            InternalStack stack = (InternalStack)_slides[horizontalIndex];
+            int verticalIndex = stack.Slides.Count;
+            stack.Slides.Add(new InternalSlide { HorizontalIndex = horizontalIndex, VerticalIndex = verticalIndex });
+            return verticalIndex;
+        }
+
+        internal int AddFragment(int horizontalIndex, int? verticalIndex)
+        {
+            return 0;
         }
     }
 }

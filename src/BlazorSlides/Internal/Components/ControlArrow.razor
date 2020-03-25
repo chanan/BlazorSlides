@@ -83,14 +83,3 @@
     Compose4="@_arrowUp" Compose4If="@(ArrowDirection == ArrowDirection.Up)"
     Compose5="@_arrowDown" Compose5If="@(ArrowDirection == ArrowDirection.Down)"
 />
-
-@code {
-    private string _finalArrow;
-    private string _controlsArrow;
-    private string _arrowRight;
-    private string _arrowUp;
-    private string _arrowDown;
-
-    [Parameter] public ArrowDirection ArrowDirection { get; set; }
-    [Parameter] public bool IsEnabled { get; set; }
-}

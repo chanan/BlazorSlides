@@ -1,6 +1,10 @@
-﻿<section class="@_slide">
-    @ChildContent
-</section>
+﻿<CascadingValue Value=@HorizontalIndex Name="HorizontalIndex">
+    <CascadingValue Value=@VerticalIndex Name="VerticalIndex">
+        <section class="@_slide">
+            @ChildContent
+        </section>
+    </CascadingValue>
+</CascadingValue>
 
 <Styled @bind-Classname="@_slide"
         ComposeCenter="@IStyled.GlobalStyles["Helpers.Center"]"
