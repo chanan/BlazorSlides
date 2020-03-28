@@ -24,6 +24,12 @@ namespace BlazorSlides
             InternalStack internalStack => internalStack.Slides.Count,
             _ => throw new NotImplementedException()
         });
+        public int CurrentFragmentCount => _slides[CurrentHorizontalIndex] switch
+        {
+            InternalSlide slide => slide.Fragments.Count,
+            InternalStack internalStack => internalStack.Slides[CurrentVerticalIndex].Fragments.Count,
+            _ => throw new NotImplementedException()
+        };
         public bool HasHorizontal => HorizontalSlideCount > 1;
         public bool HasVertical => _slides.Any(list => list is InternalStack);
         public int CurrentHorizontalIndex { get; internal set; } = 0;
@@ -54,6 +60,7 @@ namespace BlazorSlides
             }
         }
         public int SlidesWidth { get; internal set; }
+        public bool Ready { get; internal set; } = false;
 
         //Internal methods
         internal int AddHorizontalSlide()
@@ -97,7 +104,7 @@ namespace BlazorSlides
         internal bool NextFragment()
         {
             InternalSlide slide = GetCurrentSlide();
-            if(CurrentFragmentIndex < slide.Fragments.Count -1)
+            if (CurrentFragmentIndex < slide.Fragments.Count - 1)
             {
                 CurrentFragmentIndex++;
                 return true;
@@ -107,7 +114,6 @@ namespace BlazorSlides
 
         internal bool PreviousFragment()
         {
-            ISlide slide = GetCurrentSlide();
             if (CurrentFragmentIndex != -1)
             {
                 CurrentFragmentIndex--;

@@ -1,5 +1,5 @@
 ﻿<CascadingValue Value=SlidesAPI Name="SlidesAPI">
-    <div class="@_revealContainer" role="application" @ref="@_domWrapper">
+    <div class="@_revealContainer" role="application" @ref="@_domWrapper" style="@_visible">
         <div class="@_slidesContainer">
             @ChildContent
         </div>
@@ -65,9 +65,14 @@
     min-height: 0 !important;
 </Styled>
 
-@* Slides container *@
+<ThemeManager Theme="Theme.White" Region="Region.Reveal" @bind-Classname="@_revealTheme" />
 
-<Styled @bind-Classname="@_revealContainer" ComposeReveal="@_reveal" ComposeCenter="@_center" />
+<Styled @bind-Classname="@_revealContainer"
+        ComposeReveal="@_reveal"
+        ComposeCenter="@_center"
+        ComposeTheme="@_revealTheme" />
+
+@* Slides container *@
 
 <Styled @bind-Classname="@_slidesClass">
     label: slides;
@@ -97,3 +102,17 @@
 </Styled>
 
 <Styled @bind-Classname="@_slidesContainer" ComposeSlides="@_slidesClass" ComposeCenter="@_center" ComposeSize="@_size" />
+
+@* Themes *@
+
+<ThemeManager Theme="Theme.White" Region="Region.Font" />
+
+<ThemeManager Theme="Theme.White" Region="Region.Headers" RevealClassname="@_reveal" />
+
+<ThemeManager Theme="Theme.White" Region="Region.Other" RevealClassname="@_reveal" />
+
+<ThemeManager Theme="Theme.White" Region="Region.Links" RevealClassname="@_reveal" />
+
+<ThemeManager Theme="Theme.White" Region="Region.Images" RevealClassname="@_reveal" />
+
+<ThemeManager Theme="Theme.White" Region="Region.Print" />

@@ -41,6 +41,7 @@ namespace BlazorSlides.Internal.Components
             return JSRuntime.InvokeAsync<int>("BlazorSlides.offsetWidth", DomWrapper);
         }
 
+        //Javascript commands
         internal async Task SetInstance()
         {
             await _lock.WaitAsync();

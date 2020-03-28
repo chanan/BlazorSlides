@@ -11,6 +11,8 @@ namespace BlazorSlides
         private string _revealContainer;
         private string _reveal;
         private string _center;
+        private string _revealTheme;
+        private string _visible = "visibility: hidden;";
 
         //Slides container
         private string _slidesContainer;
@@ -33,6 +35,7 @@ namespace BlazorSlides
 
         [Parameter] public RenderFragment ChildContent { get; set; }
 
+        //Component events
         protected override void OnInitialized()
         {
             SlidesAPI.StateUpdated += StateUpdated;
@@ -45,17 +48,19 @@ namespace BlazorSlides
                 await _scripts.SetInstance();
                 await UpdateJsInteropVars();
                 await _scripts.Log("Initial State: ", SlidesAPI.State);
+                SlidesAPI.State.Ready = true;
+                _visible = string.Empty;
+                await InvokeAsync(() => StateHasChanged());
             }
         }
 
-        //Slides API Events
-        private void StateUpdated(object sender, State state)
+        //Slides API events
+        private async void StateUpdated(object sender, State state)
         {
-            StateHasChanged();
-            UpdateJsInteropVars();
-            _scripts.Log("State: ", state);
+            await InvokeAsync(StateHasChanged).ConfigureAwait(false);
+            await UpdateJsInteropVars();
+            await _scripts.Log("State: ", state);
         }
-
 
         //Scripts Events
         private async Task _OnWindowResize(object ignored)
@@ -69,7 +74,7 @@ namespace BlazorSlides
             if (width != SlidesAPI.State.SlidesWidth)
             {
                 SlidesAPI.State.SlidesWidth = width;
-                StateHasChanged();
+                await InvokeAsync(() => StateHasChanged());
             }
         }
     }

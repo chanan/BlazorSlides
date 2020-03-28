@@ -17,24 +17,24 @@ namespace BlazorSlides.Internal.Components
         [Parameter] public bool HasDarkBackground { get; set; }
         [Parameter] public bool HasLightBackground { get; set; }
 
-        public async void OnNext()
+        public void OnNext()
         {
-            await SlidesAPI.MoveNext();
+            SlidesAPI.MoveNext();
         }
 
-        public async void OnPrevious()
+        public void OnPrevious()
         {
-            await SlidesAPI.MovePrevious();
+            SlidesAPI.MovePrevious();
         }
 
-        public async void OnDown()
+        public void OnDown()
         {
-            await SlidesAPI.MoveDown();
+            SlidesAPI.MoveDown();
         }
 
-        public async void OnUp()
+        public void OnUp()
         {
-            await SlidesAPI.MoveUp();
+            SlidesAPI.MoveUp();
         }
 
         private bool IsArrowLeftEnabled => SlidesAPI.State.CurrentHorizontalIndex > 0;

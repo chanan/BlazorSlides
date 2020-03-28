@@ -6,7 +6,7 @@ namespace BlazorSlides.Internal.Components
     {
         //Styles
         private string _slideNumber;
-        private string _slideNumberLink;
+        private string _delimiter;
 
         //Injections
         [CascadingParameter(Name = "SlidesAPI")] public SlidesAPI SlidesAPI { get; set; }

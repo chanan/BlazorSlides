@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 
 namespace BlazorSlides
 {
@@ -29,7 +28,7 @@ namespace BlazorSlides
             return State.AddFragment(horizontalIndex, verticalIndex);
         }
 
-        public async Task MoveNext()
+        public void MoveNext()
         {
             if (State.NextFragment() == false)
             {
@@ -40,10 +39,10 @@ namespace BlazorSlides
                     State.CurrentFragmentIndex = -1;
                 }
             }
-            StateUpdated?.Invoke(this, State); //TODO: BeginInvoke...
+            UpdateStatus();
         }
 
-        public async Task MovePrevious()
+        public void MovePrevious()
         {
             if (State.PreviousFragment() == false)
             {
@@ -51,33 +50,40 @@ namespace BlazorSlides
                 {
                     State.CurrentHorizontalIndex--;
                     State.CurrentVerticalIndex = 0; //TODO: restore vertical index
+                    State.CurrentFragmentIndex = State.CurrentFragmentIndex;
                 }
             }
-            StateUpdated?.Invoke(this, State);
+            UpdateStatus();
         }
 
-        private bool PreviousFragment()
+        public void MoveUp()
         {
-            //SlideWithContent slide = (SlideWithContent)GetCurrentSlide();
-            //return slide.PreviousFragment();
-            return false;
-        }
-
-        public async Task MoveUp()
-        {
-            if (State.CurrentVerticalIndex != 0)
+            if (State.PreviousFragment() == false)
             {
-                State.CurrentVerticalIndex--;
+                if (State.CurrentVerticalIndex != 0)
+                {
+                    State.CurrentVerticalIndex--;
+                    State.CurrentFragmentIndex = State.CurrentFragmentCount;
+                }
             }
-            StateUpdated?.Invoke(this, State);
+            UpdateStatus();
         }
 
-        public async Task MoveDown()
+        public void MoveDown()
         {
-            if (State.CurrentVerticalIndex != State.VerticalSlideCount - 1)
+            if (State.NextFragment() == false)
             {
-                State.CurrentVerticalIndex++;
+                if (State.CurrentVerticalIndex != State.VerticalSlideCount - 1)
+                {
+                    State.CurrentVerticalIndex++;
+                    State.CurrentFragmentIndex = -1;
+                }
             }
+            UpdateStatus();
+        }
+
+        private void UpdateStatus()
+        {
             StateUpdated?.Invoke(this, State);
         }
     }

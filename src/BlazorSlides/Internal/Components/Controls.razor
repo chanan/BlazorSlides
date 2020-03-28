@@ -40,10 +40,12 @@
 </Styled>
 
 <Styled @bind-Classname="@_dark">
+    label: dark;
     color: #fff;
 </Styled>
 
 <Styled @bind-Classname="@_light">
+    label: light;
     color: #000;
 </Styled>
 
@@ -52,3 +54,5 @@
     ComposeDark="@_dark" ComposeDarkIf="@HasDarkBackground"
     ComposeLight="@_light" ComposeLightIf="@HasLightBackground"
 />
+
+<ThemeManager Theme="Theme.White" Region="Region.Controls" ControlsClassname="@_controls" />

@@ -1,9 +1,9 @@
 ﻿<div class="@_slideNumber">
-    <a class="@_slideNumberLink" href="@GetLink()">
+    <a href="@GetLink()" style="color: currentColor;">
         <span>@CurrentHorizontalNumber</span>
         @if (SlidesAPI.State.VerticalSlideCount != 0)
         {
-            <span class="slide-number-delimiter">.</span>
+            <span class="@_delimiter">.</span>
             <span>@CurrentVerticalNumber</span>
         }
     </a>
@@ -24,6 +24,7 @@
     padding: 5px;
 </Styled>
 
-<Styled @bind-Classname="@_slideNumberLink">
-    color: currentColor;
+<Styled @bind-Classname="@_delimiter">
+    label: slide-number-delimiter;
+    margin: 0 3px;
 </Styled>

@@ -16,47 +16,28 @@ namespace BlazorSlides.Internal.Components
         {
             get
             {
-                double progress = Math.Min(SlidesAPI.State.CurrentPastCount / (double)(SlidesAPI.State.TotalSlideCount - 1), 1);
+                double progress = GetProgress();
                 progress *= SlidesAPI.State.SlidesWidth;
                 return progress.ToString("F2") + "px;";
             }
         }
+
+        private double GetProgress()
+        {
+            double totalCount = (double)SlidesAPI.State.TotalSlideCount;
+            double pastCount = (double)SlidesAPI.State.CurrentPastCount;
+            double allFragments = (double)SlidesAPI.State.CurrentFragmentCount;
+            if(allFragments > 0)
+            {
+                double visibleFragments = (double)SlidesAPI.State.CurrentFragmentIndex + 1;
+                double fragmentWeight = 0.9d;
+                pastCount += (visibleFragments / allFragments) * fragmentWeight;
+            }
+            return Math.Min(pastCount / (totalCount - 1), 1d);
+        }
         /*
             TODO:
             * Progress click
-            * Current slide fragments
-            * offsetWidth
-
-        function getProgress()
-        {
-
-            // The number of past and total slides
-            var totalCount = getTotalSlides();
-            var pastCount = getSlidePastCount();
-
-            if (currentSlide)
-            {
-
-                var allFragments = currentSlide.querySelectorAll('.fragment');
-
-                // If there are fragments in the current slide those should be
-                // accounted for in the progress.
-                if (allFragments.length > 0)
-                {
-                    var visibleFragments = currentSlide.querySelectorAll('.fragment.visible');
-
-                    // This value represents how big a portion of the slide progress
-                    // that is made up by its fragments (0-1)
-                    var fragmentWeight = 0.9;
-
-                    // Add fragment progress to the past slide count
-                    pastCount += (visibleFragments.length / allFragments.length) * fragmentWeight;
-                }
-
-            }
-
-            return Math.min(pastCount / (totalCount - 1), 1);
-
-        }*/
+        */
     }
 }

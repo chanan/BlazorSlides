@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace BlazorSlides.Internal.Rendering
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "BL0006:Do not use RenderTree types", Justification = "<Pending>")]
     internal class HtmlRenderer : Renderer
     {
         private static readonly HashSet<string> SelfClosingElements = new HashSet<string>(StringComparer.OrdinalIgnoreCase)

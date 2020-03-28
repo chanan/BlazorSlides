@@ -1,19 +1,10 @@
 ﻿@page "/"
 <Slides>
-    <Slide>Slide 1
-        <Markdown>
-            ## Markdown support
-
-            Write content using inline or external Markdown.
-            Instructions and more info available in the [readme](https://github.com/hakimel/reveal.js#markdown).
-
-            ```
-            ## Markdown support
-
-            Write content using inline or external Markdown.
-            Instructions and more info available in the [readme](https://github.com/hakimel/reveal.js#markdown).
-            ```
-        </Markdown>
+    <Slide>
+        <h3>Slide 1</h3>
+        <Counter Count="10">
+            <strong>This is a test</strong>
+        </Counter>
     </Slide>
     <Stack>
         <Slide>
@@ -31,5 +22,21 @@
         <Slide>Slide 3.1</Slide>
         <Slide>Slide 3.2</Slide>
     </Stack>
-    <Slide>Slide 4</Slide>
+    <Slide>
+        <h2>Slide 4</h2>
+    
+        <Markdown>
+            ## Markdown support
+
+            Write content using inline or external Markdown.
+            Instructions and more info available in the [readme](https://github.com/hakimel/reveal.js#markdown).
+
+            ```
+            ## Markdown support
+
+            Write content using inline or external Markdown.
+            Instructions and more info available in the [readme](https://github.com/hakimel/reveal.js#markdown).
+            ```
+        </Markdown>
+    </Slide>
 </Slides>
