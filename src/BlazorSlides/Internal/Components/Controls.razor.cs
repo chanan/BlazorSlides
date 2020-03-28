@@ -17,35 +17,35 @@ namespace BlazorSlides.Internal.Components
         [Parameter] public bool HasDarkBackground { get; set; }
         [Parameter] public bool HasLightBackground { get; set; }
 
-        public void OnNext()
+        //Components events
+        private void OnNext()
         {
             SlidesAPI.MoveNext();
         }
 
-        public void OnPrevious()
+        private void OnPrevious()
         {
             SlidesAPI.MovePrevious();
         }
 
-        public void OnDown()
+        private void OnDown()
         {
             SlidesAPI.MoveDown();
         }
 
-        public void OnUp()
+        private void OnUp()
         {
             SlidesAPI.MoveUp();
         }
 
-        private bool IsArrowLeftEnabled => SlidesAPI.State.CurrentHorizontalIndex > 0;
-        private bool IsArrowRightEnabled => SlidesAPI.State.CurrentHorizontalIndex < SlidesAPI.State.HorizontalSlideCount - 1;
-        private bool IsArrowUpEnabled => SlidesAPI.State.VerticalSlideCount != 0 && SlidesAPI.State.CurrentVerticalIndex > 0;
-        private bool IsArrowDownEnabled => SlidesAPI.State.VerticalSlideCount != 0 && SlidesAPI.State.CurrentVerticalIndex < SlidesAPI.State.VerticalSlideCount - 1;
+        //Private properties
+        private bool IsArrowLeftEnabled => SlidesAPI.State.HasPreviousSlide || (!SlidesAPI.State.IsVerticalSlide && SlidesAPI.State.HasPreviousFragment);
+        private bool IsArrowRightEnabled => SlidesAPI.State.HasNextSlide || (!SlidesAPI.State.IsVerticalSlide && SlidesAPI.State.HasNextFragment);
+        private bool IsArrowUpEnabled => SlidesAPI.State.HasUpSlide || (SlidesAPI.State.IsVerticalSlide && SlidesAPI.State.HasPreviousFragment);
+        private bool IsArrowDownEnabled => SlidesAPI.State.HasDownSlide || (SlidesAPI.State.IsVerticalSlide && SlidesAPI.State.HasNextFragment);
 
         /*TODO:
-        * Highlight
         * navigation mode
-        * fragments
         * layout and media query
         * no hover(used on mobile)
         * move location if numbers?*/

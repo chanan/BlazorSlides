@@ -30,15 +30,44 @@ namespace BlazorSlides
 
         private bool _hasDarkBackground = false;
         private bool _hasLightBackground = true;
-        private bool _showProgress = true;
-        private bool _showSlideNumbers = true;
 
         [Parameter] public RenderFragment ChildContent { get; set; }
+        [Parameter] public ControlsBackArrows ControlsBackArrows { get; set; } = ControlsBackArrows.Faded;
+        [Parameter] public ControlsLayout ControlsLayout { get; set; } = ControlsLayout.BottomRight;
+        [Parameter] public bool ControlsTutorial { get; set; } = true;
+        [Parameter] public bool Controls { get; set; } = true;
+        [Parameter] public bool Progress { get; set; } = true;
+        [Parameter] public bool SlideNumber { get; set; } = false;
+        [Parameter] public SlideNumberFormat SlideNumberFormat { get; set; } = SlideNumberFormat.HorizontalPeriodVertical;
+        [Parameter] public int Width { get; set; } = 960;
+        [Parameter] public int Height { get; set; } = 700;
+        [Parameter] public double Margin { get; set; } = 0.04d;
+        [Parameter] public double MinScale { get; set; } = 0.2d;
+        [Parameter] public double MaxScale { get; set; } = 2.00d;
+
+        private string HeightInPx => Height + "px";
+        private string WidthInPx => Width + "px";
 
         //Component events
         protected override void OnInitialized()
         {
             SlidesAPI.StateUpdated += StateUpdated;
+        }
+
+        protected override void OnParametersSet()
+        {
+            SlidesAPI.State.ControlsBackArrows = ControlsBackArrows;
+            SlidesAPI.State.ControlsLayout = ControlsLayout;
+            SlidesAPI.State.ControlsTutorial = ControlsTutorial;
+            SlidesAPI.State.Controls = Controls;
+            SlidesAPI.State.Progress = Progress;
+            SlidesAPI.State.SlideNumber = SlideNumber;
+            SlidesAPI.State.SlideNumberFormat = SlideNumberFormat;
+            SlidesAPI.State.Width = Width;
+            SlidesAPI.State.Height = Height;
+            SlidesAPI.State.Margin = Margin;
+            SlidesAPI.State.MinScale = MinScale;
+            SlidesAPI.State.MaxScale = MaxScale;
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)

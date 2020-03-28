@@ -61,6 +61,25 @@ namespace BlazorSlides
         }
         public int SlidesWidth { get; internal set; }
         public bool Ready { get; internal set; } = false;
+        public bool HasNextSlide => CurrentHorizontalIndex < HorizontalSlideCount - 1;
+        public bool HasPreviousSlide => CurrentHorizontalIndex > 0;
+        public bool HasUpSlide => VerticalSlideCount != 0 && CurrentVerticalIndex > 0;
+        public bool HasDownSlide => VerticalSlideCount != 0 && CurrentVerticalIndex < VerticalSlideCount - 1;
+        public bool HasNextFragment => CurrentFragmentIndex < CurrentFragmentCount - 1;
+        public bool HasPreviousFragment => CurrentFragmentIndex != -1;
+        public bool IsVerticalSlide => VerticalSlideCount > 0;
+        public ControlsBackArrows ControlsBackArrows { get; set; } = ControlsBackArrows.Faded;
+        public ControlsLayout ControlsLayout { get; set; } = ControlsLayout.BottomRight;
+        public bool ControlsTutorial { get; set; } = true;
+        public bool Controls { get; set; } = true;
+        public bool Progress { get; set; } = true;
+        public bool SlideNumber { get; set; } = false;
+        public SlideNumberFormat SlideNumberFormat { get; set; } = SlideNumberFormat.HorizontalPeriodVertical;
+        public int Width { get; set; } = 960;
+        public int Height { get; set; } = 700;
+        public double Margin { get; set; } = 0.04d;
+        public double MinScale { get; set; } = 0.2d;
+        public double MaxScale { get; set; } = 2.00d;
 
         //Internal methods
         internal int AddHorizontalSlide()
@@ -103,8 +122,7 @@ namespace BlazorSlides
 
         internal bool NextFragment()
         {
-            InternalSlide slide = GetCurrentSlide();
-            if (CurrentFragmentIndex < slide.Fragments.Count - 1)
+            if (HasNextFragment)
             {
                 CurrentFragmentIndex++;
                 return true;
@@ -114,24 +132,12 @@ namespace BlazorSlides
 
         internal bool PreviousFragment()
         {
-            if (CurrentFragmentIndex != -1)
+            if (HasPreviousFragment)
             {
                 CurrentFragmentIndex--;
                 return true;
             }
             return false;
-        }
-
-        //Private methods
-        private InternalSlide GetCurrentSlide()
-        {
-            ISlide slide = _slides[CurrentHorizontalIndex];
-            return slide switch
-            {
-                InternalSlide _ => (InternalSlide)slide,
-                InternalStack stack => stack.Slides[CurrentVerticalIndex],
-                _ => throw new NotImplementedException()
-            };
         }
     }
 }

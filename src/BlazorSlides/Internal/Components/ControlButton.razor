@@ -1,4 +1,4 @@
-﻿<button class="@_button" disabled=@(!IsEnabled) @onclick="@OnClick">
+﻿<button class="@_button" disabled=@(!IsEnabled) @onclick="@_onClick">
     <ControlArrow ArrowDirection="@ArrowDirection" IsEnabled="@IsEnabled" />
 </button>
 
@@ -8,10 +8,14 @@
         ComposeRight="@_navigateRight" ComposeRightIf="@(ArrowDirection == ArrowDirection.Right)"
         ComposeUp="@_navigateUp" ComposeUpIf="@(ArrowDirection == ArrowDirection.Up)"
         ComposeDown="@_navigateDown" ComposeDownIf="@(ArrowDirection == ArrowDirection.Down)"
-        ComposeLeftOverride="@_locationOverrideLeft" ComposeLeftOverrideIf="@(ArrowDirection == ArrowDirection.Left && !HasVertical)"
-        ComposeRightOverride="@_locationOverrideRight" ComposeRightOverrideIf="@(ArrowDirection == ArrowDirection.Right && !HasVertical)"
-        ComposeUpOverride="@_locationOverrideUp" ComposeUpOverrideIf="@(ArrowDirection == ArrowDirection.Up && !HasHorizontal)"
-        ComposeDownOverride="@_locationOverrideDown" ComposeDownOverrideIf="@(ArrowDirection == ArrowDirection.Down && !HasHorizontal)">
+        ComposeLeftOverride="@_locationOverrideLeft" ComposeLeftOverrideIf="@(ArrowDirection == ArrowDirection.Left && !SlidesAPI.State.HasVertical)"
+        ComposeRightOverride="@_locationOverrideRight" ComposeRightOverrideIf="@(ArrowDirection == ArrowDirection.Right && !SlidesAPI.State.HasVertical)"
+        ComposeUpOverride="@_locationOverrideUp" ComposeUpOverrideIf="@(ArrowDirection == ArrowDirection.Up && !SlidesAPI.State.HasHorizontal)"
+        ComposeDownOverride="@_locationOverrideDown" ComposeDownOverrideIf="@(ArrowDirection == ArrowDirection.Down && !SlidesAPI.State.HasHorizontal)"
+        ComposeFaded="@_faded" ComposeFadedIf="@IsFaded"
+        ComposeFragmented="@_fragmented" ComposeFragmentedIf="@IsFragmented"
+        ComposeHighlightRight="@_highlightRight" ComposeHighlightRightIf="@(ArrowDirection == ArrowDirection.Right && ShouldHighlight)"
+        ComposeHighlightDown="@_highlightDown" ComposeHighlightDownIf="@(ArrowDirection == ArrowDirection.Down && ShouldHighlight)">
     label: button;
     position: absolute;
     padding: 0;
@@ -77,21 +81,91 @@
 </Styled>
 
 <Styled @bind-Classname="@_locationOverrideLeft">
+    label: location-override-left;
     bottom: 1.4em;
     right: 5.5em;
 </Styled>
 
 <Styled @bind-Classname="@_locationOverrideRight">
+    label: location-override-right;
     bottom: 1.4em;
     right: 0.5em;
 </Styled>
 
 <Styled @bind-Classname="@_locationOverrideUp">
+    label: location-override-up;
     right: 1.4em;
     bottom: 5em;
 </Styled>
 
 <Styled @bind-Classname="@_locationOverrideDown">
+    label: location-override-down;
     right: 1.4em;
     bottom: 0.5em;
+</Styled>
+
+<Styled @bind-Classname="@_faded">
+    label: faded;
+    opacity: 0.3;
+</Styled>
+
+<Styled Classname="@_faded" PseudoClass="PseudoClasses.Hover">
+    opacity: 1;
+</Styled>
+
+<Styled @bind-Classname="@_fragmented">
+    label: fragmented;
+    opacity: 0.5;
+</Styled>
+
+<Styled Classname="@_fragmented" PseudoClass="PseudoClasses.Hover">
+    opacity: 1;
+</Styled>
+
+<Styled @bind-Classname="@_hidden">
+    label: hidden;
+    opacity: 0;
+    visibility: hidden;
+</Styled>
+
+<Styled IsKeyframes="true" @bind-Classname="@_bounceRight">
+    0%, 10%, 25%, 40%, 50% {
+        -webkit-transform: translateX(0);
+        transform: translateX(0); 
+    }
+    20% {
+        -webkit-transform: translateX(10px);
+        transform: translateX(10px); 
+    }
+    30% {
+        -webkit-transform: translateX(-5px);
+        transform: translateX(-5px); 
+    }
+</Styled>
+
+<Styled IsKeyframes="true" @bind-Classname="@_bounceDown">
+    0%, 10%, 25%, 40%, 50% {
+        -webkit-transform: translateY(0);
+        transform: translateY(0); 
+    }
+    20% {
+        -webkit-transform: translateY(10px);
+        transform: translateY(10px); 
+    }
+    30% {
+        -webkit-transform: translateY(-5px);
+        transform: translateY(-5px); 
+    }
+</Styled>
+
+<Styled @bind-Classname="@_highlightRight">
+    label: highlight;
+    -webkit-animation: @_bounceRight 2s 50 both ease-out;
+    animation: @_bounceRight 2s 50 both ease-out;
+</Styled>
+
+<Styled @bind-Classname="@_highlightDown">
+    label: highlight;
+    -webkit-animation: @_bounceDown 2s 50 both ease-out;
+    animation: @_bounceDown 2s 50 both ease-out;
 </Styled>

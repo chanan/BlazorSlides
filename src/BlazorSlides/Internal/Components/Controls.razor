@@ -1,29 +1,13 @@
 ﻿<aside class="@_controlsFinal">
     @if (SlidesAPI.State.HasHorizontal)
     {
-        <ControlButton 
-            ArrowDirection="ArrowDirection.Left" IsEnabled="@IsArrowLeftEnabled"
-            HasHorizontal="@SlidesAPI.State.HasHorizontal" HasVertical="@SlidesAPI.State.HasVertical"
-            OnClick="@OnPrevious" 
-        />
-        <ControlButton 
-            ArrowDirection="ArrowDirection.Right" IsEnabled="@IsArrowRightEnabled"
-            HasHorizontal="@SlidesAPI.State.HasHorizontal" HasVertical="@SlidesAPI.State.HasVertical"
-            OnClick="@OnNext" 
-        />
+        <ControlButton ArrowDirection="ArrowDirection.Left" IsEnabled="@IsArrowLeftEnabled" OnClick="@OnPrevious" />
+        <ControlButton ArrowDirection="ArrowDirection.Right" IsEnabled="@IsArrowRightEnabled" OnClick="@OnNext" />
     }
     @if (SlidesAPI.State.HasVertical)
     {
-        <ControlButton 
-            ArrowDirection="ArrowDirection.Up" IsEnabled="@IsArrowUpEnabled"
-            HasHorizontal="@SlidesAPI.State.HasHorizontal" HasVertical="@SlidesAPI.State.HasVertical"
-            OnClick="@OnUp" 
-        />
-        <ControlButton 
-            ArrowDirection="ArrowDirection.Down" IsEnabled="@IsArrowDownEnabled"
-            HasHorizontal="@SlidesAPI.State.HasHorizontal" HasVertical="@SlidesAPI.State.HasVertical"
-            OnClick="@OnDown" 
-        />
+        <ControlButton ArrowDirection="ArrowDirection.Up" IsEnabled="@IsArrowUpEnabled" OnClick="@OnUp" />
+        <ControlButton ArrowDirection="ArrowDirection.Down" IsEnabled="@IsArrowDownEnabled" OnClick="@OnDown" />
     }
 </aside>
 
