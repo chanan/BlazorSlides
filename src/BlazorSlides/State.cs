@@ -80,6 +80,7 @@ namespace BlazorSlides
         public double Margin { get; set; } = 0.04d;
         public double MinScale { get; set; } = 0.2d;
         public double MaxScale { get; set; } = 2.00d;
+        public Theme Theme { get; set; } = Theme.White;
 
         //Internal methods
         internal int AddHorizontalSlide()

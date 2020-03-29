@@ -32,6 +32,7 @@ namespace BlazorSlides
         private bool _hasLightBackground = true;
 
         [Parameter] public RenderFragment ChildContent { get; set; }
+        [Parameter] public Theme Theme { get; set; } = Theme.White;
         [Parameter] public ControlsBackArrows ControlsBackArrows { get; set; } = ControlsBackArrows.Faded;
         [Parameter] public ControlsLayout ControlsLayout { get; set; } = ControlsLayout.BottomRight;
         [Parameter] public bool ControlsTutorial { get; set; } = true;
@@ -68,6 +69,7 @@ namespace BlazorSlides
             SlidesAPI.State.Margin = Margin;
             SlidesAPI.State.MinScale = MinScale;
             SlidesAPI.State.MaxScale = MaxScale;
+            SlidesAPI.State.Theme = Theme;
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)

@@ -1,9 +1,17 @@
-﻿@if (Theme == Theme.White)
+﻿@if (SlidesAPI.State.Theme == Theme.White)
 {
-    <BlazorSlides.Internal.Components.Themes.White.WhiteTheme 
-                                                              Region="@Region" 
-                                                              @bind-Classname="@_classname" 
-                                                              RevealClassname="@RevealClassname" 
+    <BlazorSlides.Internal.Components.Themes.White.WhiteTheme Region="@Region"
+                                                              @bind-Classname="@_classname"
+                                                              RevealClassname="@RevealClassname"
+                                                              ProgressClassname="@ProgressClassname"
+                                                              ControlsClassname="@ControlsClassname" />
+}
+
+@if (SlidesAPI.State.Theme == Theme.Black)
+{
+    <BlazorSlides.Internal.Components.Themes.Black.BlackTheme Region="@Region"
+                                                              @bind-Classname="@_classname"
+                                                              RevealClassname="@RevealClassname"
                                                               ProgressClassname="@ProgressClassname"
                                                               ControlsClassname="@ControlsClassname" />
 }

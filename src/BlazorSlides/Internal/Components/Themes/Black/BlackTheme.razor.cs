@@ -1,18 +1,13 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System;
 using System.Threading.Tasks;
 
-namespace BlazorSlides.Internal.Components.Themes
+namespace BlazorSlides.Internal.Components.Themes.Black
 {
-    public partial class ThemeManager : ComponentBase
+    public partial class BlackTheme : ComponentBase
     {
         private string _classname;
         private bool _rendered = false;
-
-        //Injections
-        [CascadingParameter(Name = "SlidesAPI")] public SlidesAPI SlidesAPI { get; set; }
-
-        //Parameters
+        [Parameter] public Theme Theme { get; set; }
         [Parameter] public Region Region { get; set; }
         [Parameter] public string Classname { get; set; }
         [Parameter] public EventCallback<string> ClassnameChanged { get; set; }
@@ -22,7 +17,7 @@ namespace BlazorSlides.Internal.Components.Themes
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            if(_classname != null && !_rendered)
+            if (_classname != null && !_rendered)
             {
                 _rendered = true;
                 Classname = _classname;

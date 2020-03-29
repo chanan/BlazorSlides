@@ -17,25 +17,25 @@
         }
     </div>
     <Scripts @ref="@_scripts" DomWrapper="@_domWrapper" OnWindowResize="@_OnWindowResize" />
-</CascadingValue>
 
-@* Reset CSS *@
-<Styled>
-    @_mixins.Normalize()
-</Styled>
 
-@* Global Styles *@
+    @* Reset CSS *@
+    <Styled>
+        @_mixins.Normalize()
+    </Styled>
 
-<Styled>
-    html {
+    @* Global Styles *@
+
+    <Styled>
+        html {
         width: 100%;
         height: 100%;
         height: 100vh;
         height: calc( var(--vh, 1vh) * 100);
         overflow: hidden;
-    }
+        }
 
-    body {
+        body {
         height: 100%;
         overflow: hidden;
         position: relative;
@@ -43,79 +43,82 @@
         margin: 0;
         background-color: #fff;
         color: #000;
-    }
-</Styled>
+        }
+    </Styled>
 
-@* Main reveal container *@
+    @* Main reveal container *@
 
-<Styled @bind-Classname="@_reveal">
-    label: reveal;
-    position: relative;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    -ms-touch-action: pinch-zoom;
-    touch-action: pinch-zoom;
-</Styled>
+    <Styled @bind-Classname="@_reveal">
+        label: reveal;
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        -ms-touch-action: pinch-zoom;
+        touch-action: pinch-zoom;
+    </Styled>
 
-<Styled Classname="@_reveal" PseudoClass="PseudoClasses.After">
-    content: '';
-    font-style: italic;
-</Styled>
+    <Styled Classname="@_reveal" PseudoClass="PseudoClasses.After">
+        content: '';
+        font-style: italic;
+    </Styled>
 
-<Styled @bind-Classname="@_center" GlobalStyle="Helpers.Center">
-    label: center;
-    min-height: 0 !important;
-</Styled>
+    <Styled @bind-Classname="@_center" GlobalStyle="Helpers.Center">
+        label: center;
+        min-height: 0 !important;
+    </Styled>
 
-<ThemeManager Theme="Theme.White" Region="Region.Reveal" @bind-Classname="@_revealTheme" />
+    <ThemeManager Region="Region.Reveal" @bind-Classname="@_revealTheme" />
 
-<Styled @bind-Classname="@_revealContainer"
-        ComposeReveal="@_reveal"
-        ComposeCenter="@_center"
-        ComposeTheme="@_revealTheme" />
+    <Styled @bind-Classname="@_revealContainer"
+            ComposeReveal="@_reveal"
+            ComposeCenter="@_center"
+            ComposeTheme="@_revealTheme" />
 
-@* Slides container *@
+    @* Slides container *@
 
-<Styled @bind-Classname="@_slidesClass">
-    label: slides;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    margin: auto;
-    pointer-events: none;
-    overflow: visible;
-    z-index: 1;
-    text-align: center;
-    -webkit-perspective: 600px;
-    perspective: 600px;
-    -webkit-perspective-origin: 50% 40%;
-    perspective-origin: 50% 40%;
-</Styled>
+    <Styled @bind-Classname="@_slidesClass">
+        label: slides;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        margin: auto;
+        pointer-events: none;
+        overflow: visible;
+        z-index: 1;
+        text-align: center;
+        -webkit-perspective: 600px;
+        perspective: 600px;
+        -webkit-perspective-origin: 50% 40%;
+        perspective-origin: 50% 40%;
+    </Styled>
 
-<Styled @bind-Classname="@_size">
-    label: size;
-    width: @HeightInPx;
-    height: @WidthInPx;;
-    zoom: 1;
-</Styled>
+    <Styled @bind-Classname="@_size">
+        label: size;
+        width: @HeightInPx;
+        height: @WidthInPx;;
+        zoom: 1;
+    </Styled>
 
-<Styled @bind-Classname="@_slidesContainer" ComposeSlides="@_slidesClass" ComposeCenter="@_center" ComposeSize="@_size" />
+    <Styled @bind-Classname="@_slidesContainer" ComposeSlides="@_slidesClass" ComposeCenter="@_center" ComposeSize="@_size" />
 
-@* Themes *@
+    @* Themes *@
 
-<ThemeManager Theme="Theme.White" Region="Region.Font" />
+    <ThemeManager Region="Region.Font" />
 
-<ThemeManager Theme="Theme.White" Region="Region.Headers" RevealClassname="@_reveal" />
+    <ThemeManager Region="Region.Global" />
 
-<ThemeManager Theme="Theme.White" Region="Region.Other" RevealClassname="@_reveal" />
+    <ThemeManager Region="Region.Headers" RevealClassname="@_reveal" />
 
-<ThemeManager Theme="Theme.White" Region="Region.Links" RevealClassname="@_reveal" />
+    <ThemeManager Region="Region.Other" RevealClassname="@_reveal" />
 
-<ThemeManager Theme="Theme.White" Region="Region.Images" RevealClassname="@_reveal" />
+    <ThemeManager Region="Region.Links" RevealClassname="@_reveal" />
 
-<ThemeManager Theme="Theme.White" Region="Region.Print" />
+    <ThemeManager Region="Region.Images" RevealClassname="@_reveal" />
+
+    <ThemeManager Region="Region.Print" />
+</CascadingValue>
