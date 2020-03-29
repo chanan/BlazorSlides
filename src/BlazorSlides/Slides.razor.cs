@@ -1,6 +1,9 @@
 ﻿using BlazorSlides.Internal.Components;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Routing;
 using Polished;
+using System;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace BlazorSlides
@@ -31,6 +34,10 @@ namespace BlazorSlides
         private bool _hasDarkBackground = false;
         private bool _hasLightBackground = true;
 
+        //Injections
+        [Inject] public NavigationManager NavigationManager { get; set; }
+
+        //Parameters
         [Parameter] public RenderFragment ChildContent { get; set; }
         [Parameter] public Theme Theme { get; set; } = Theme.White;
         [Parameter] public ControlsBackArrows ControlsBackArrows { get; set; } = ControlsBackArrows.Faded;
@@ -53,6 +60,7 @@ namespace BlazorSlides
         protected override void OnInitialized()
         {
             SlidesAPI.StateUpdated += StateUpdated;
+            NavigationManager.LocationChanged += HandleLocationChanged;
         }
 
         protected override void OnParametersSet()
@@ -88,9 +96,74 @@ namespace BlazorSlides
         //Slides API events
         private async void StateUpdated(object sender, State state)
         {
-            await InvokeAsync(StateHasChanged).ConfigureAwait(false);
             await UpdateJsInteropVars();
             await _scripts.Log("State: ", state);
+            string hash = Hash(state);
+            await _scripts.UpdateHash(hash);
+            await InvokeAsync(StateHasChanged).ConfigureAwait(false);
+        }
+
+        private string Hash(State state)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("/");
+            sb.Append(state.CurrentHorizontalIndex);
+            if(state.IsVerticalSlide)
+            {
+                sb.Append("/");
+                sb.Append(state.CurrentVerticalIndex);
+            }
+            return sb.ToString();
+        }
+
+        //NavigationManager events
+        private void HandleLocationChanged(object sender, LocationChangedEventArgs e)
+        {
+            if (e.Location.Contains("#/"))
+            {
+                Navigate(e.Location.Substring(e.Location.IndexOf("#/") + 1));
+            }
+        }
+
+        private void Navigate(string hash)
+        {
+            int horizontal = ParseHorizontal(hash);
+            int? vertical = ParseVertical(hash);
+            SlidesAPI.NavigateTo(horizontal, vertical);
+        }
+
+        private int? ParseVertical(string hash)
+        {
+            string[] arr = hash.Split('/');
+            if(arr.Length != 3)
+            {
+                return null;
+            }
+            else
+            {
+                if (int.TryParse(arr[2], out int result))
+                {
+                    return result;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+        private int ParseHorizontal(string hash)
+        {
+            string[] arr = hash.Split('/');
+            if(int.TryParse(arr[1], out int result))
+            {
+                return result;
+            }
+            else
+            {
+                //This an id
+                throw new NotImplementedException();
+            }
         }
 
         //Scripts Events

@@ -82,6 +82,41 @@ namespace BlazorSlides
             UpdateStatus();
         }
 
+        public void NavigateTo(int horizontal)
+        {
+            NavigateTo(horizontal, null);
+        }
+
+        public void NavigateTo(int horizontal, int? vertical)
+        {
+            bool changed = false;
+            if(State.CurrentHorizontalIndex != horizontal)
+            {
+                State.CurrentHorizontalIndex = horizontal;
+                changed = true;
+            }
+            if(vertical.HasValue)
+            {
+                if(State.CurrentVerticalIndex != vertical.Value)
+                {
+                    State.CurrentVerticalIndex = vertical.Value;
+                    changed = true;
+                }
+            }
+            else
+            {
+                if(State.CurrentVerticalIndex != 0)
+                {
+                    State.CurrentVerticalIndex = 0; //TODO: Restore index
+                    changed = true;
+                }
+            }
+            if(changed)
+            {
+                UpdateStatus();
+            }
+        }
+
         private void UpdateStatus()
         {
             StateUpdated?.Invoke(this, State);

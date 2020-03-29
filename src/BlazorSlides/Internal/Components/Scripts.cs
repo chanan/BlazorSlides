@@ -54,6 +54,11 @@ namespace BlazorSlides.Internal.Components
             await JSRuntime.InvokeVoidAsync("BlazorSlides.log", msg, obj);
         }
 
+        internal async Task UpdateHash(string hash)
+        {
+            await JSRuntime.InvokeVoidAsync("BlazorSlides.updateHash", hash);
+        }
+
         [JSInvokable]
         public async void _OnWindowResize()
         {
@@ -72,6 +77,11 @@ window.BlazorSlides = {
     },
     log: function (msg, obj) {
         console.log(msg, obj);
+    },
+    updateHash: function(hash) {
+        if(window.location.hash !== hash) {
+            window.location.hash = hash;
+        }
     }
 }
 
