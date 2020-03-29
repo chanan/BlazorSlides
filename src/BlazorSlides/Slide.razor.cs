@@ -14,6 +14,7 @@ namespace BlazorSlides
 
         //Parameters
         [Parameter] public RenderFragment ChildContent { get; set; }
+        [Parameter] public string Id { get; set; }
 
         //Injections
         [Inject] private IStyled IStyled { get; set; }
@@ -45,12 +46,12 @@ namespace BlazorSlides
         {
             if (!ParentIndex.HasValue)
             {
-                HorizontalIndex = SlidesAPI.ResgisterHorizontalSlide();
+                HorizontalIndex = SlidesAPI.ResgisterHorizontalSlide(Id);
             }
             else
             {
                 HorizontalIndex = ParentIndex.Value;
-                VerticalIndex = SlidesAPI.ResgisterVerticalSlide(HorizontalIndex);
+                VerticalIndex = SlidesAPI.ResgisterVerticalSlide(HorizontalIndex, Id);
                 IsVertical = true;
             }
         }

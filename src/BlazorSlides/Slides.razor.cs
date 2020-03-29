@@ -107,11 +107,18 @@ namespace BlazorSlides
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("/");
-            sb.Append(state.CurrentHorizontalIndex);
-            if(state.IsVerticalSlide)
+            if(state.CurrentSlideId == null)
             {
-                sb.Append("/");
-                sb.Append(state.CurrentVerticalIndex);
+                sb.Append(state.CurrentHorizontalIndex);
+                if (state.IsVerticalSlide)
+                {
+                    sb.Append("/");
+                    sb.Append(state.CurrentVerticalIndex);
+                }
+            }
+            else
+            {
+                sb.Append(state.CurrentSlideId);
             }
             return sb.ToString();
         }
@@ -161,8 +168,14 @@ namespace BlazorSlides
             }
             else
             {
-                //This an id
-                throw new NotImplementedException();
+                if(SlidesAPI.State.TryGetHorizontalById(arr[1], out int res))
+                {
+                    return res;
+                }
+                else
+                {
+                    return 0;
+                }
             }
         }
 

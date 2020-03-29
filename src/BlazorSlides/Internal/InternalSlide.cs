@@ -7,5 +7,6 @@ namespace BlazorSlides.Internal
         public int HorizontalIndex { get; set; }
         public int? VerticalIndex { get; set; }
         public IList<InternalFragment> Fragments { get; set; } = new List<InternalFragment>();
+        public string Id { get; set; }
     }
 }

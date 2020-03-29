@@ -8,9 +8,9 @@ namespace BlazorSlides
 
         public event EventHandler<State> StateUpdated;
 
-        internal int ResgisterHorizontalSlide()
+        internal int ResgisterHorizontalSlide(string id)
         {
-            return State.AddHorizontalSlide();
+            return State.AddHorizontalSlide(id);
         }
 
         internal int ResgisterStack()
@@ -18,9 +18,9 @@ namespace BlazorSlides
             return State.AddStack();
         }
 
-        internal int ResgisterVerticalSlide(int horizontalIndex)
+        internal int ResgisterVerticalSlide(int horizontalIndex, string id)
         {
-            return State.AddVerticalSlide(horizontalIndex);
+            return State.AddVerticalSlide(horizontalIndex, id);
         }
 
         internal int RegisterFragment(int horizontalIndex, int? verticalIndex)

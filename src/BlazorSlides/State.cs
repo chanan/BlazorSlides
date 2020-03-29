@@ -34,6 +34,13 @@ namespace BlazorSlides
         public bool HasVertical => _slides.Any(list => list is InternalStack);
         public int CurrentHorizontalIndex { get; internal set; } = 0;
         public int CurrentVerticalIndex { get; internal set; } = 0;
+        internal InternalSlide CurrentSlide => _slides[CurrentHorizontalIndex] switch
+        {
+            InternalSlide slide => slide,
+            InternalStack stack => stack.Slides[CurrentVerticalIndex],
+            _ => throw new NotImplementedException()
+        };
+        public string CurrentSlideId => CurrentSlide.Id;
         public int CurrentFragmentIndex { get; internal set; } = -1;
         public int CurrentPastCount
         {
@@ -83,9 +90,9 @@ namespace BlazorSlides
         public Theme Theme { get; set; } = Theme.White;
 
         //Internal methods
-        internal int AddHorizontalSlide()
+        internal int AddHorizontalSlide(string id)
         {
-            _slides.Add(new InternalSlide { HorizontalIndex = _slides.Count });
+            _slides.Add(new InternalSlide { HorizontalIndex = _slides.Count, Id = id });
             return HorizontalSlideCount - 1;
         }
 
@@ -95,11 +102,11 @@ namespace BlazorSlides
             return HorizontalSlideCount - 1;
         }
 
-        internal int AddVerticalSlide(int horizontalIndex)
+        internal int AddVerticalSlide(int horizontalIndex, string id)
         {
             InternalStack stack = (InternalStack)_slides[horizontalIndex];
             int verticalIndex = stack.Slides.Count;
-            stack.Slides.Add(new InternalSlide { HorizontalIndex = horizontalIndex, VerticalIndex = verticalIndex });
+            stack.Slides.Add(new InternalSlide { HorizontalIndex = horizontalIndex, VerticalIndex = verticalIndex, Id = id });
             return verticalIndex;
         }
 
@@ -139,6 +146,41 @@ namespace BlazorSlides
                 return true;
             }
             return false;
+        }
+
+        internal bool TryGetHorizontalById(string id, out int res)
+        {
+            bool found = false;
+            int index = 0;
+            foreach(ISlide slide in _slides)
+            {
+                switch(slide)
+                {
+                    case InternalSlide internalSlide:
+                        if(internalSlide.Id == id)
+                        {
+                            found = true;
+                            index = internalSlide.HorizontalIndex;
+                            break;
+                        }
+                        break;
+                    case InternalStack stack:
+                        foreach(InternalSlide internalSlide in stack.Slides)
+                        {
+                            if (internalSlide.Id == id)
+                            {
+                                found = true;
+                                index = internalSlide.HorizontalIndex;
+                                break;
+                            }
+                        }
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
+            }
+            res = index;
+            return found;
         }
     }
 }
