@@ -35,7 +35,6 @@ namespace BlazorSlides
                 if (State.CurrentHorizontalIndex < State.HorizontalSlideCount - 1)
                 {
                     State.CurrentHorizontalIndex++;
-                    State.CurrentVerticalIndex = 0; //TODO: restore vertical index
                     State.CurrentFragmentIndex = -1;
                 }
             }
@@ -49,8 +48,7 @@ namespace BlazorSlides
                 if (State.CurrentHorizontalIndex != 0)
                 {
                     State.CurrentHorizontalIndex--;
-                    State.CurrentVerticalIndex = 0; //TODO: restore vertical index
-                    State.CurrentFragmentIndex = State.CurrentFragmentIndex;
+                    State.CurrentFragmentIndex = State.CurrentFragmentCount;
                 }
             }
             UpdateStatus();
@@ -100,14 +98,6 @@ namespace BlazorSlides
                 if(State.CurrentVerticalIndex != vertical.Value)
                 {
                     State.CurrentVerticalIndex = vertical.Value;
-                    changed = true;
-                }
-            }
-            else
-            {
-                if(State.CurrentVerticalIndex != 0)
-                {
-                    State.CurrentVerticalIndex = 0; //TODO: Restore index
                     changed = true;
                 }
             }

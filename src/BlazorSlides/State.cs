@@ -33,7 +33,20 @@ namespace BlazorSlides
         public bool HasHorizontal => HorizontalSlideCount > 1;
         public bool HasVertical => _slides.Any(list => list is InternalStack);
         public int CurrentHorizontalIndex { get; internal set; } = 0;
-        public int CurrentVerticalIndex { get; internal set; } = 0;
+        public int CurrentVerticalIndex { 
+            get 
+            {
+                return IsVerticalSlide ? ((InternalStack)_slides[CurrentHorizontalIndex]).VerticalIndex.Value : 0;
+            }
+
+            internal set 
+            { 
+                if(IsVerticalSlide)
+                {
+                    ((InternalStack)_slides[CurrentHorizontalIndex]).VerticalIndex = value;
+                }
+            }
+        }
         internal InternalSlide CurrentSlide => _slides[CurrentHorizontalIndex] switch
         {
             InternalSlide slide => slide,
