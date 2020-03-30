@@ -1,6 +1,7 @@
 ﻿using BlazorSlides.Internal.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
+using Microsoft.AspNetCore.Components.Web;
 using Polished;
 using System;
 using System.Text;
@@ -52,6 +53,7 @@ namespace BlazorSlides
         [Parameter] public double Margin { get; set; } = 0.04d;
         [Parameter] public double MinScale { get; set; } = 0.2d;
         [Parameter] public double MaxScale { get; set; } = 2.00d;
+        [Parameter] public Transition Transition { get; set; } = Transition.Slide;
 
         private string HeightInPx => Height + "px";
         private string WidthInPx => Width + "px";
@@ -78,6 +80,7 @@ namespace BlazorSlides
             SlidesAPI.State.MinScale = MinScale;
             SlidesAPI.State.MaxScale = MaxScale;
             SlidesAPI.State.Theme = Theme;
+            SlidesAPI.State.Transition = Transition;
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -90,6 +93,27 @@ namespace BlazorSlides
                 SlidesAPI.State.Ready = true;
                 _visible = string.Empty;
                 await InvokeAsync(() => StateHasChanged());
+            }
+        }
+
+        private void OnKeyPress(KeyboardEventArgs e)
+        {
+            switch (e.Code)
+            {
+                case "ArrowRight":
+                    SlidesAPI.MoveNext();
+                    break;
+                case "ArrowLeft":
+                    SlidesAPI.MovePrevious();
+                    break;
+                case "ArrowUp":
+                    SlidesAPI.MoveUp();
+                    break;
+                case "ArrowDown":
+                    SlidesAPI.MoveDown();
+                    break;
+                default:
+                    break;
             }
         }
 

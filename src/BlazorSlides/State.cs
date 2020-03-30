@@ -101,6 +101,7 @@ namespace BlazorSlides
         public double MinScale { get; set; } = 0.2d;
         public double MaxScale { get; set; } = 2.00d;
         public Theme Theme { get; set; } = Theme.White;
+        public Transition Transition { get; set; } = Transition.Slide;
 
         //Internal methods
         internal int AddHorizontalSlide(string id)

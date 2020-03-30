@@ -1,5 +1,5 @@
 ﻿<CascadingValue Value=SlidesAPI Name="SlidesAPI">
-    <div class="@_revealContainer" role="application" @ref="@_domWrapper" style="@_visible">
+    <div class="@_revealContainer" role="application" @ref="@_domWrapper" style="@_visible" @onkeydown="@OnKeyPress" tabindex="0">
         <div class="@_slidesContainer">
             @ChildContent
         </div>
@@ -28,21 +28,21 @@
 
     <Styled>
         html {
-        width: 100%;
-        height: 100%;
-        height: 100vh;
-        height: calc( var(--vh, 1vh) * 100);
-        overflow: hidden;
+            width: 100%;
+            height: 100%;
+            height: 100vh;
+            height: calc( var(--vh, 1vh) * 100);
+            overflow: hidden;
         }
 
         body {
-        height: 100%;
-        overflow: hidden;
-        position: relative;
-        line-height: 1;
-        margin: 0;
-        background-color: #fff;
-        color: #000;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+            line-height: 1;
+            margin: 0;
+            background-color: #fff;
+            color: #000;
         }
     </Styled>
 
