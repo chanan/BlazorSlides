@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using System;
 
 namespace BlazorSlides.Internal.Components
@@ -35,9 +36,13 @@ namespace BlazorSlides.Internal.Components
             }
             return Math.Min(pastCount / (totalCount - 1), 1d);
         }
-        /*
-            TODO:
-            * Progress click
-        */
+
+        //Events
+        private void _onClick(MouseEventArgs e)
+        {
+            int slidesTotal = SlidesAPI.State.HorizontalSlideCount;
+            int slideIndex = (int)Math.Floor((double)( e.ClientX / SlidesAPI.State.SlidesWidth) * slidesTotal);
+            SlidesAPI.NavigateTo(slideIndex);
+        }
     }
 }
