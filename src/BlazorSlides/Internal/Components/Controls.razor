@@ -1,4 +1,9 @@
 ﻿<aside class="@_controlsFinal">
+    @if (!SlidesAPI.State.HasHorizontal && !SlidesAPI.State.HasVertical && SlidesAPI.State.CurrentFragmentCount > 0)
+    {
+        <ControlButton ArrowDirection="ArrowDirection.Left" IsEnabled="@IsArrowLeftEnabled" OnClick="@OnPrevious" />
+        <ControlButton ArrowDirection="ArrowDirection.Right" IsEnabled="@IsArrowRightEnabled" OnClick="@OnNext" />
+    }
     @if (SlidesAPI.State.HasHorizontal)
     {
         <ControlButton ArrowDirection="ArrowDirection.Left" IsEnabled="@IsArrowLeftEnabled" OnClick="@OnPrevious" />

@@ -1,0 +1,32 @@
+﻿@inherits FragmentBase
+
+<span class="@_fragmentClass">
+    @ChildContent
+</span>
+
+<Styled @bind-Classname="@_fragmentClass"
+        ComposePast="@_past" ComposePastIf="@IsPast"
+        ComposeVisible="@_visible" ComposeVisibleIf="@IsVisible"
+        ComposeCurrent="@_currentFragment" ComposeCurrentIf="@IsCurrent">
+    label: fragment-fade-in-fade-out;
+    display: inline-block;
+    opacity: 0;
+    visibility: hidden;
+    transition: all .2s ease;
+</Styled>
+
+<Styled @bind-Classname="@_currentFragment">
+    label: current-fragment-fade-in-fade-out;
+    opacity: 1;
+    visibility: inherit;
+</Styled>
+
+<Styled @bind-Classname="@_past">
+    label: past-fragment;
+    opacity: 0;
+    visibility: hidden;
+</Styled>
+
+<Styled @bind-Classname="@_visible">
+    label: fragment-fade-in-fade-out-visible;
+</Styled>
