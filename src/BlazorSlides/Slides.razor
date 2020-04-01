@@ -98,10 +98,10 @@
     </Styled>
 
     <Styled @bind-Classname="@_size">
-        label: size;
-        width: @HeightInPx;
-        height: @WidthInPx;;
-        zoom: 1;
+        label: slides-size;
+        width: @(DoubleToPx(Width));
+        height: @(DoubleToPx(Height));
+        zoom: @(DoubleToString(SlidesAPI.State.ComputedSize.Scale));
     </Styled>
 
     <Styled @bind-Classname="@_slidesContainer" ComposeSlides="@_slidesClass" ComposeCenter="@_center" ComposeSize="@_size" />

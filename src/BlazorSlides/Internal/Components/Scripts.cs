@@ -32,16 +32,18 @@ namespace BlazorSlides.Internal.Components
         //Events
         [Parameter] public EventCallback OnWindowResize { get; set; }
 
-        internal ValueTask<int> GetOffsetWidth()
+        //Javascript commands
+        internal async Task<Size> GetScreenSize()
         {
             if (DomWrapper == null)
             {
-                return new ValueTask<int>(0);
+                return new Size();
             }
-            return JSRuntime.InvokeAsync<int>("BlazorSlides.offsetWidth", DomWrapper);
+            int width = await JSRuntime.InvokeAsync<int>("BlazorSlides.offsetWidth", DomWrapper);
+            int height = await JSRuntime.InvokeAsync<int>("BlazorSlides.offsetHeight", DomWrapper);
+            return new Size { Height = height, Width = width };
         }
 
-        //Javascript commands
         internal async Task SetInstance()
         {
             await _lock.WaitAsync();
@@ -57,6 +59,11 @@ namespace BlazorSlides.Internal.Components
         internal async Task UpdateHash(string hash)
         {
             await JSRuntime.InvokeVoidAsync("BlazorSlides.updateHash", hash);
+        }
+
+        internal ValueTask<int> GetScrollHeight(ElementReference elementReference)
+        {
+            return JSRuntime.InvokeAsync<int>("BlazorSlides.getScrollHeight", elementReference);
         }
 
         [JSInvokable]
@@ -75,6 +82,9 @@ window.BlazorSlides = {
     offsetWidth: function (domWrapper) {
         return domWrapper ? domWrapper.offsetWidth : 0;
     },
+    offsetHeight: function (domWrapper) {
+        return domWrapper ? domWrapper.offsetHeight : 0;
+    },
     log: function (msg, obj) {
         console.log(msg, obj);
     },
@@ -82,6 +92,9 @@ window.BlazorSlides = {
         if(window.location.hash !== hash) {
             window.location.hash = hash;
         }
+    },
+    getScrollHeight: function (element) {
+        return element ? element.scrollHeight : 0;
     }
 }
 

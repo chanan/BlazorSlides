@@ -1,0 +1,8 @@
+﻿@switch(SlidesAPI.State.Transition)
+{
+    case Transition.Slide:
+        <BlazorSlides.Internal.Components.Transitions.Slide SectionClassname="@SectionClassname" PastSectionClassname="@PastSectionClassname" FutureSectionClassname="@FutureSectionClassname" />
+        break;
+    default:
+        break;
+}

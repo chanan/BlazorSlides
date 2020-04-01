@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Components;
+using System;
 
 namespace BlazorSlides
 {
@@ -26,6 +27,11 @@ namespace BlazorSlides
         internal int RegisterFragment(int horizontalIndex, int? verticalIndex)
         {
             return State.AddFragment(horizontalIndex, verticalIndex);
+        }
+
+        internal void UpdateSlideElementReference(int horizontalIndex, int? verticalIndex, ElementReference domSlide)
+        {
+            State.UpdateSlideElementReference(horizontalIndex, verticalIndex, domSlide);
         }
 
         public void MoveNext()
@@ -107,7 +113,7 @@ namespace BlazorSlides
             }
         }
 
-        private void UpdateStatus()
+        internal void UpdateStatus()
         {
             StateUpdated?.Invoke(this, State);
         }

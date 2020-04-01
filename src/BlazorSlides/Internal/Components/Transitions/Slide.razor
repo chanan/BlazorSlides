@@ -1,0 +1,31 @@
+﻿@inherits TransitionBase
+
+@if (SectionClassname != null)
+{
+    <Styled>
+        .@SectionClassname {
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+    </Styled>
+}
+
+@if (PastSectionClassname != null)
+{
+    <Styled>
+        .@PastSectionClassname {
+            -webkit-transform: translate(-150%, 0);
+            transform: translate(-150%, 0);
+        }
+    </Styled>
+}
+
+@if (FutureSectionClassname != null)
+{
+    <Styled>
+        .@FutureSectionClassname {
+            -webkit-transform: translate(150%, 0);
+            transform: translate(150%, 0);
+        }
+    </Styled>
+}

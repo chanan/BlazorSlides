@@ -1,4 +1,5 @@
-﻿using BlazorSlides.Internal.Components;
+﻿using BlazorSlides.Internal;
+using BlazorSlides.Internal.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Components.Web;
@@ -55,9 +56,6 @@ namespace BlazorSlides
         [Parameter] public double MaxScale { get; set; } = 2.00d;
         [Parameter] public Transition Transition { get; set; } = Transition.Slide;
 
-        private string HeightInPx => Height + "px";
-        private string WidthInPx => Width + "px";
-
         //Component events
         protected override void OnInitialized()
         {
@@ -92,6 +90,7 @@ namespace BlazorSlides
                 await _scripts.Log("Initial State: ", SlidesAPI.State);
                 SlidesAPI.State.Ready = true;
                 _visible = string.Empty;
+                await UpdateJsInteropVars();
                 await InvokeAsync(() => StateHasChanged());
             }
         }
@@ -124,6 +123,7 @@ namespace BlazorSlides
             await _scripts.Log("State: ", state);
             string hash = Hash(state);
             await _scripts.UpdateHash(hash);
+            await UpdateJsInteropVars();
             await InvokeAsync(StateHasChanged).ConfigureAwait(false);
         }
 
@@ -207,16 +207,38 @@ namespace BlazorSlides
         private async Task _OnWindowResize(object ignored)
         {
             await UpdateJsInteropVars();
+            SlidesAPI.UpdateStatus();
         }
 
         private async Task UpdateJsInteropVars()
         {
-            int width = await _scripts.GetOffsetWidth();
-            if (width != SlidesAPI.State.SlidesWidth)
+            //This needs to occur when the slide is visible
+            int scrollHeight = await _scripts.GetScrollHeight(SlidesAPI.State.CurrentSlide.ElementReference);
+            SlidesAPI.State.CurrentSlide.Top = Math.Max((Height - scrollHeight) / 2, 0);
+            //End
+
+            Size size = await _scripts.GetScreenSize();
+            size.Width -= size.Width * Margin;
+            size.Height -= size.Height * Margin;
+            if (size.Width != SlidesAPI.State.ComputedSize.Width || size.Height != SlidesAPI.State.ComputedSize.Height)
             {
-                SlidesAPI.State.SlidesWidth = width;
-                await InvokeAsync(() => StateHasChanged());
+                size.Scale = Math.Min(size.Width / Width, size.Height / Height);
+                size.Scale = Math.Max(size.Scale, SlidesAPI.State.MinScale);
+                size.Scale = Math.Min(size.Scale, SlidesAPI.State.MaxScale);
+                SlidesAPI.State.ComputedSize = size;
+                await InvokeAsync(StateHasChanged).ConfigureAwait(false);
             }
+        }
+
+        //Private methods
+        private string DoubleToPx(double value)
+        {
+            return DoubleToString(value) + "px";
+        }
+
+        private string DoubleToString(double value)
+        {
+            return value.ToString("F");
         }
     }
 }
