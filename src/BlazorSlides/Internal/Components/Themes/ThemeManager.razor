@@ -15,3 +15,12 @@
                                                               ProgressClassname="@ProgressClassname"
                                                               ControlsClassname="@ControlsClassname" />
 }
+
+@if (SlidesAPI.State.Theme == Theme.League)
+{
+    <BlazorSlides.Internal.Components.Themes.League.LeagueTheme Region="@Region"
+                                                                @bind-Classname="@_classname"
+                                                                RevealClassname="@RevealClassname"
+                                                                ProgressClassname="@ProgressClassname"
+                                                                ControlsClassname="@ControlsClassname" />
+}

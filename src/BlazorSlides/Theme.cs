@@ -3,6 +3,7 @@
     public enum Theme
     {
         Black,
-        White
+        White,
+        League
     }
 }
