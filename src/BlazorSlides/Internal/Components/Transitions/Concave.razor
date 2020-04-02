@@ -1,0 +1,51 @@
+﻿@inherits TransitionBase
+
+@if (PastSectionClassname != null)
+{
+    <Styled>
+        .@PastSectionClassname {
+            -webkit-transform: translate3d(-100%, 0, 0) rotateY(90deg) translate3d(-100%, 0, 0);
+            transform: translate3d(-100%, 0, 0) rotateY(90deg) translate3d(-100%, 0, 0);
+        }
+    </Styled>
+}
+
+@if (FutureSectionClassname != null)
+{
+    <Styled>
+        .@FutureSectionClassname {
+           -webkit-transform: translate3d(100%, 0, 0) rotateY(-90deg) translate3d(100%, 0, 0);
+           transform: translate3d(100%, 0, 0) rotateY(-90deg) translate3d(100%, 0, 0);
+        }
+    </Styled>
+}
+
+@if (StackClassname != null)
+{
+    <Styled>
+        .@StackClassname {
+            -webkit-transform-style: preserve-3d;
+            transform-style: preserve-3d;
+        }
+    </Styled>
+}
+
+@if (VerticalPastSectionClassname != null)
+{
+    <Styled>
+        .@VerticalPastSectionClassname {
+            -webkit-transform: translate3d(0, -80%, 0) rotateX(-70deg) translate3d(0, -80%, 0);
+            transform: translate3d(0, -80%, 0) rotateX(-70deg) translate3d(0, -80%, 0);
+        }
+    </Styled>
+}
+
+@if (VerticalFutureSectionClassname != null)
+{
+    <Styled>
+        .@VerticalFutureSectionClassname {
+            -webkit-transform: translate3d(0, 80%, 0) rotateX(70deg) translate3d(0, 80%, 0);
+            transform: translate3d(0, 80%, 0) rotateX(70deg) translate3d(0, 80%, 0);
+        }
+    </Styled>
+}

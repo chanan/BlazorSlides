@@ -20,6 +20,16 @@
             <BlazorSlides.Internal.Components.Transitions.Convex VerticalPastSectionClassname="@PastSectionClassname" VerticalFutureSectionClassname="@FutureSectionClassname" StackClassname="@StackClassname" />
         }
         break;
+    case Transition.Concave:
+        @if (!IsVertical)
+        {
+            <BlazorSlides.Internal.Components.Transitions.Concave PastSectionClassname="@PastSectionClassname" FutureSectionClassname="@FutureSectionClassname" />
+        }
+        @if (IsVertical)
+        {
+            <BlazorSlides.Internal.Components.Transitions.Concave VerticalPastSectionClassname="@PastSectionClassname" VerticalFutureSectionClassname="@FutureSectionClassname" StackClassname="@StackClassname" />
+        }
+        break;
     default:
         break;
 }
