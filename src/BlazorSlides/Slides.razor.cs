@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Components.Web;
 using Polished;
 using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -85,9 +86,10 @@ namespace BlazorSlides
         {
             if (firstRender)
             {
-                await _scripts.SetInstance();
+                await _scripts.SetInstance();                
                 await UpdateJsInteropVars();
                 await _scripts.Log("Initial State: ", SlidesAPI.State);
+                ParseURL(NavigationManager.Uri);
                 SlidesAPI.State.Ready = true;
                 _visible = string.Empty;
                 await UpdateJsInteropVars();
@@ -150,10 +152,63 @@ namespace BlazorSlides
         //NavigationManager events
         private void HandleLocationChanged(object sender, LocationChangedEventArgs e)
         {
-            if (e.Location.Contains("#/"))
+            ParseURL(e.Location);
+        }
+
+        private void ParseURL(string location)
+        {
+            //Config
+            List<KeyValuePair<string, string>> pairs = ParseQuery(location);
+            SetConfig(pairs);
+
+            //Navigation
+            if (location.Contains("#/"))
             {
-                Navigate(e.Location.Substring(e.Location.IndexOf("#/") + 1));
+                Navigate(location.Substring(location.IndexOf("#/") + 1));
             }
+        }
+
+        private void SetConfig(List<KeyValuePair<string, string>> pairs)
+        {
+            foreach(KeyValuePair<string, string> kvp in pairs)
+            {
+                switch (kvp.Key.ToLower())
+                {
+                    case "transition":
+                        if(Transition.TryParse<Transition>(kvp.Value, true, out Transition transition))
+                        {
+                            Transition = transition;
+                            SlidesAPI.State.Transition = transition;
+                        }
+                        break;
+                    case "theme":
+                        if (Theme.TryParse<Theme>(kvp.Value, true, out Theme theme))
+                        {
+                            Theme = theme;
+                            SlidesAPI.State.Theme = theme;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        private List<KeyValuePair<string, string>> ParseQuery(string location)
+        {
+            List <KeyValuePair<string, string>> list = new List<KeyValuePair<string, string>>();
+            if (location.IndexOf("?") == -1) return list;
+            int start = location.IndexOf("?") + 1;
+            int end = location.IndexOf("#") != -1 ? location.IndexOf("#") : location.Length;
+            string query = location.Substring(start, end - start);
+            string[] arr = query.Split("&");
+            foreach (string strPair in arr)
+            {
+                string[] arrPair = strPair.Split("=");
+                KeyValuePair<string, string> pair = new KeyValuePair<string, string>(arrPair[0], arrPair[1]);
+                list.Add(pair);
+            }
+            return list;
         }
 
         private void Navigate(string hash)
