@@ -54,7 +54,7 @@ namespace BlazorSlides
                 if (State.CurrentHorizontalIndex != 0)
                 {
                     State.CurrentHorizontalIndex--;
-                    State.CurrentFragmentIndex = State.CurrentFragmentCount;
+                    State.CurrentFragmentIndex = State.CurrentFragmentCount == 0 ? -1 : State.CurrentFragmentCount;
                 }
             }
             UpdateStatus();

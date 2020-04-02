@@ -1,0 +1,52 @@
+﻿@inherits TransitionBase
+
+@if (SectionClassname!=null)
+{
+    <Styled>
+        .@SectionClassname {
+            transition-timing-function: ease;
+        }
+    </Styled>
+}
+
+@if (PastSectionClassname != null)
+{
+    <Styled>
+        .@PastSectionClassname {
+            visibility: hidden;
+            -webkit-transform: scale(16);
+            transform: scale(16);
+        }
+    </Styled>
+}
+
+@if (FutureSectionClassname != null)
+{
+    <Styled>
+        .@FutureSectionClassname {
+            visibility: hidden;
+            -webkit-transform: scale(0.2);
+            transform: scale(0.2);
+        }
+    </Styled>
+}
+
+@if (VerticalPastSectionClassname != null)
+{
+    <Styled>
+        .@VerticalPastSectionClassname {
+            -webkit-transform: scale(16);
+            transform: scale(16);
+        }
+    </Styled>
+}
+
+@if (VerticalFutureSectionClassname != null)
+{
+    <Styled>
+        .@VerticalFutureSectionClassname {
+            -webkit-transform: scale(0.2);
+            transform: scale(0.2);
+        }
+    </Styled>
+}

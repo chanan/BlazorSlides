@@ -30,6 +30,16 @@
             <BlazorSlides.Internal.Components.Transitions.Concave VerticalPastSectionClassname="@PastSectionClassname" VerticalFutureSectionClassname="@FutureSectionClassname" StackClassname="@StackClassname" />
         }
         break;
+    case Transition.Zoom:
+        @if (!IsVertical)
+        {
+            <BlazorSlides.Internal.Components.Transitions.Zoom SectionClassname="@SectionClassname" PastSectionClassname="@PastSectionClassname" FutureSectionClassname="@FutureSectionClassname" />
+        }
+        @if (IsVertical)
+        {
+            <BlazorSlides.Internal.Components.Transitions.Zoom VerticalPastSectionClassname="@PastSectionClassname" VerticalFutureSectionClassname="@FutureSectionClassname" />
+        }
+        break;
     default:
         break;
 }
