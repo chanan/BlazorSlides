@@ -40,6 +40,12 @@
             <BlazorSlides.Internal.Components.Transitions.Zoom VerticalPastSectionClassname="@PastSectionClassname" VerticalFutureSectionClassname="@FutureSectionClassname" />
         }
         break;
+    case Transition.Fade:
+        <BlazorSlides.Internal.Components.Transitions.Fade SectionClassname="@SectionClassname" />
+        break;
+    case Transition.None:
+        <BlazorSlides.Internal.Components.Transitions.None SectionClassname="@SectionClassname" />
+        break;
     default:
         break;
 }

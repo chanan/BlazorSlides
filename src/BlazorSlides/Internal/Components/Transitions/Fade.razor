@@ -1,0 +1,12 @@
+﻿@inherits TransitionBase
+
+@if (SectionClassname != null)
+{
+    <Styled>
+        .@SectionClassname {
+            -webkit-transform: none;
+            transform: none;
+            transition: opacity 0.5s;
+        }
+    </Styled>
+}

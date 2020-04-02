@@ -212,10 +212,11 @@ namespace BlazorSlides
 
         private async Task UpdateJsInteropVars()
         {
-            //This needs to occur when the slide is visible
-            int scrollHeight = await _scripts.GetScrollHeight(SlidesAPI.State.CurrentSlide.ElementReference);
-            SlidesAPI.State.CurrentSlide.Top = Math.Max((Height - scrollHeight) / 2, 0);
-            //End
+            foreach(InternalSlide slide in SlidesAPI.State.Slides)
+            {
+                int scrollHeight = await _scripts.GetScrollHeight(slide.ElementReference);
+                slide.Top = Math.Max((Height - scrollHeight) / 2, 0);
+            }
 
             Size size = await _scripts.GetScreenSize(Margin, SlidesAPI.State.MinScale, SlidesAPI.State.MaxScale, Width, Height);
             if (size.Width != SlidesAPI.State.ComputedSize.Width || size.Height != SlidesAPI.State.ComputedSize.Height)
