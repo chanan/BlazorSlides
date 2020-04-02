@@ -11,5 +11,9 @@ namespace BlazorSlides.Internal.Components.Transitions
         [Parameter] public string SectionClassname { get; set; }
         [Parameter] public string PastSectionClassname { get; set; }
         [Parameter] public string FutureSectionClassname { get; set; }
+        [Parameter] public string StackClassname { get; set; }
+        [Parameter] public string VerticalSectionClassname { get; set; }
+        [Parameter] public string VerticalPastSectionClassname { get; set; }
+        [Parameter] public string VerticalFutureSectionClassname { get; set; }
     }
 }

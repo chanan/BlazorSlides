@@ -1,7 +1,24 @@
-﻿@switch(SlidesAPI.State.Transition)
+﻿@switch (SlidesAPI.State.Transition)
 {
     case Transition.Slide:
-        <BlazorSlides.Internal.Components.Transitions.Slide SectionClassname="@SectionClassname" PastSectionClassname="@PastSectionClassname" FutureSectionClassname="@FutureSectionClassname" />
+        @if (!IsVertical)
+        {
+            <BlazorSlides.Internal.Components.Transitions.Slide SectionClassname="@SectionClassname" PastSectionClassname="@PastSectionClassname" FutureSectionClassname="@FutureSectionClassname" />
+        }
+        @if (IsVertical)
+        {
+            <BlazorSlides.Internal.Components.Transitions.Slide VerticalPastSectionClassname="@PastSectionClassname" VerticalFutureSectionClassname="@FutureSectionClassname" />
+        }
+        break;
+    case Transition.Convex:
+        @if (!IsVertical)
+        {
+            <BlazorSlides.Internal.Components.Transitions.Convex PastSectionClassname="@PastSectionClassname" FutureSectionClassname="@FutureSectionClassname" />
+        }
+        @if (IsVertical)
+        {
+            <BlazorSlides.Internal.Components.Transitions.Convex VerticalPastSectionClassname="@PastSectionClassname" VerticalFutureSectionClassname="@FutureSectionClassname" StackClassname="@StackClassname" />
+        }
         break;
     default:
         break;

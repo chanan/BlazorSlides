@@ -4,9 +4,8 @@
     </section>
 </CascadingValue>
 
-<Styled @bind-Classname="@_slide">
-    label: section;
-    display: none;
+<Styled @bind-Classname="@_stack">
+    label: stack;
     position: absolute;
     width: 100%;
     padding: 20px 0px;
@@ -18,44 +17,39 @@
     transition: transform-origin 800ms cubic-bezier(0.26, 0.86, 0.44, 0.985), transform 800ms cubic-bezier(0.26, 0.86, 0.44, 0.985), visibility 800ms cubic-bezier(0.26, 0.86, 0.44, 0.985), opacity 800ms cubic-bezier(0.26, 0.86, 0.44, 0.985);
     -webkit-perspective: 600px;
     perspective: 600px;
-</Styled>
-
-<Styled @bind-Classname="@_present">
-    label: present;
-    display: block;
-    z-index: 11;
-    opacity: 1;
-</Styled>
-
-<Styled @bind-Classname="@_notPresent">
-    label: not-present;
-    pointer-events: none;
-    opacity: 0;
-</Styled>
-
-<Styled @bind-Classname="@_future">
-    label: future;
-    pointer-events: none;
-</Styled>
-
-<Styled @bind-Classname="@_past">
-    label: past;
-    pointer-events: none;
-</Styled>
-
-<Styled @bind-Classname="@_stack">
-    label: stack;
     padding-top: 0;
     padding-bottom: 0;
     pointer-events: none;
     height: 100%;
 </Styled>
 
+<Styled @bind-Classname="@_present">
+    label: stack-present;
+    display: block;
+    z-index: 11;
+    opacity: 1;
+</Styled>
+
+<Styled @bind-Classname="@_notPresent">
+    label: stack-not-present;
+    pointer-events: none;
+    opacity: 0;
+</Styled>
+
+<Styled @bind-Classname="@_future">
+    label: stack-future;
+</Styled>
+
+<Styled @bind-Classname="@_past">
+    label: stack-past;
+</Styled>
+
 <Styled @bind-Classname="@_currentSlideClass"
-        ComposeSlide="@_slide"
-        ComposeCenter="@IStyled.GlobalStyles["Helpers.Center"]"
         ComposeStack="@_stack"
+        ComposeCenter="@IStyled.GlobalStyles["Helpers.Center"]"
         ComposePresent="@_present" ComposePresentIf="@IsPresent"
         ComposeNotPresent="@_notPresent" ComposeNotPresentIf="@(!IsPresent)"
         ComposePast="@_past" ComposePastIf="@IsPast"
         ComposeFuture="@_future" ComposeFutureIf="@IsFuture" />
+
+<TransitionManager StackClassname="@_stack" />

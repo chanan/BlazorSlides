@@ -25,6 +25,7 @@ namespace BlazorSlides
         [Parameter] public string Id { get; set; }
         public int HorizontalIndex { get; private set; }
         public int? VerticalIndex { get; private set; }
+        public string Label => IsVertical ? "vertical-section" : "section";
         public bool IsPresent => (!VerticalIndex.HasValue &&
                                     HorizontalIndex == SlidesAPI.State.CurrentHorizontalIndex) ||
                                  (VerticalIndex.HasValue &&

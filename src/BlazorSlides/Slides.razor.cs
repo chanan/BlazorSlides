@@ -217,14 +217,9 @@ namespace BlazorSlides
             SlidesAPI.State.CurrentSlide.Top = Math.Max((Height - scrollHeight) / 2, 0);
             //End
 
-            Size size = await _scripts.GetScreenSize();
-            size.Width -= size.Width * Margin;
-            size.Height -= size.Height * Margin;
+            Size size = await _scripts.GetScreenSize(Margin, SlidesAPI.State.MinScale, SlidesAPI.State.MaxScale, Width, Height);
             if (size.Width != SlidesAPI.State.ComputedSize.Width || size.Height != SlidesAPI.State.ComputedSize.Height)
             {
-                size.Scale = Math.Min(size.Width / Width, size.Height / Height);
-                size.Scale = Math.Max(size.Scale, SlidesAPI.State.MinScale);
-                size.Scale = Math.Min(size.Scale, SlidesAPI.State.MaxScale);
                 SlidesAPI.State.ComputedSize = size;
                 await InvokeAsync(StateHasChanged).ConfigureAwait(false);
             }

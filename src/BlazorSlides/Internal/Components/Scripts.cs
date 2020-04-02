@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -33,15 +34,20 @@ namespace BlazorSlides.Internal.Components
         [Parameter] public EventCallback OnWindowResize { get; set; }
 
         //Javascript commands
-        internal async Task<Size> GetScreenSize()
+        internal async Task<Size> GetScreenSize(double margin, double minScale, double maxScale, int configWidth, int configHeight)
         {
             if (DomWrapper == null)
             {
                 return new Size();
             }
-            int width = await JSRuntime.InvokeAsync<int>("BlazorSlides.offsetWidth", DomWrapper);
-            int height = await JSRuntime.InvokeAsync<int>("BlazorSlides.offsetHeight", DomWrapper);
-            return new Size { Height = height, Width = width };
+            int offsetWidth = await JSRuntime.InvokeAsync<int>("BlazorSlides.offsetWidth", DomWrapper);
+            int offsetHeight = await JSRuntime.InvokeAsync<int>("BlazorSlides.offsetHeight", DomWrapper);
+            double width = offsetWidth - offsetWidth * margin;
+            double height = offsetHeight - offsetHeight * margin;
+            double scale = Math.Min(width / configWidth, height / configHeight);
+            scale = Math.Max(scale, minScale);
+            scale = Math.Min(scale, maxScale);
+            return new Size { OffsetHeight = offsetHeight, OffsetWidth = offsetWidth, Height = height, Width = width, Scale = scale };
         }
 
         internal async Task SetInstance()

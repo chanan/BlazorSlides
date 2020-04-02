@@ -8,7 +8,6 @@ namespace BlazorSlides
         //Styles
         private string _stack;
         private string _currentSlideClass;
-        private string _slide;
         private string _notPresent;
         private string _future;
         private string _present;

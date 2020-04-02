@@ -7,7 +7,7 @@
 </CascadingValue>
 
 <Styled @bind-Classname="@_section">
-    label: section;
+    label: @Label;
     position: absolute;
     width: 100%;
     padding: 20px 0px;
@@ -33,24 +33,25 @@
 </Styled>
 
 <Styled @bind-Classname="@_present">
-    label: section-present;
+    label: @Label-present;
     display: block;
     z-index: 11;
     opacity: 1;
 </Styled>
 
 <Styled @bind-Classname="@_notPresent">
-    label: section-not-present;
+    label: @Label-not-present;
     pointer-events: none;
     opacity: 0;
 </Styled>
 
 <Styled @bind-Classname="@_future">
-    label: section-future;
+    label: @Label-future;
 </Styled>
 
 <Styled @bind-Classname="@_past">
-    label: section-past;
+    label: @Label-past;
 </Styled>
 
-<TransitionManager SectionClassname="@_section" PastSectionClassname="@_past" FutureSectionClassname="@_future" />
+
+<TransitionManager IsVertical="@IsVertical" SectionClassname="@_section" PastSectionClassname="@_past" FutureSectionClassname="@_future" />

@@ -29,3 +29,23 @@
         }
     </Styled>
 }
+
+@if (VerticalPastSectionClassname != null)
+{
+    <Styled>
+        .@VerticalPastSectionClassname {
+            -webkit-transform: translate(0, -150%);
+            transform: translate(0, -150%);
+        }
+    </Styled>
+}
+
+@if (VerticalFutureSectionClassname != null)
+{
+    <Styled>
+        .@VerticalFutureSectionClassname {
+            -webkit-transform: translate(0, 150%);
+            transform: translate(0, 150%);
+        }
+    </Styled>
+}

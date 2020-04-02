@@ -18,7 +18,7 @@ namespace BlazorSlides.Internal.Components
             get
             {
                 double progress = GetProgress();
-                progress *= SlidesAPI.State.ComputedSize.Width;
+                progress *= SlidesAPI.State.ComputedSize.OffsetWidth;
                 return progress.ToString("F2") + "px;";
             }
         }
@@ -41,7 +41,7 @@ namespace BlazorSlides.Internal.Components
         private void _onClick(MouseEventArgs e)
         {
             int slidesTotal = SlidesAPI.State.HorizontalSlideCount;
-            int slideIndex = (int)Math.Floor((double)( e.ClientX / SlidesAPI.State.ComputedSize.Width) * slidesTotal);
+            int slideIndex = (int)Math.Floor((double)( e.ClientX / SlidesAPI.State.ComputedSize.OffsetWidth) * slidesTotal);
             SlidesAPI.NavigateTo(slideIndex);
         }
     }
