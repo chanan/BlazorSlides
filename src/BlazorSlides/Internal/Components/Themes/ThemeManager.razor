@@ -51,3 +51,12 @@
                                                                 ProgressClassname="@ProgressClassname"
                                                                 ControlsClassname="@ControlsClassname" />
 }
+
+@if (SlidesAPI.State.Theme == Theme.Serif)
+{
+    <BlazorSlides.Internal.Components.Themes.Serif.SerifTheme Region="@Region"
+                                                              @bind-Classname="@_classname"
+                                                              RevealClassname="@RevealClassname"
+                                                              ProgressClassname="@ProgressClassname"
+                                                              ControlsClassname="@ControlsClassname" />
+}

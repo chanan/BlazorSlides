@@ -5,6 +5,7 @@
         Beige,
         Black,
         League,
+        Serif,
         Simple,
         Sky,
         White
