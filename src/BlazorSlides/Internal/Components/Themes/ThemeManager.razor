@@ -69,3 +69,12 @@
                                                               ProgressClassname="@ProgressClassname"
                                                               ControlsClassname="@ControlsClassname" />
 }
+
+@if (SlidesAPI.State.Theme == Theme.Night)
+{
+    <BlazorSlides.Internal.Components.Themes.Night.NightTheme Region="@Region"
+                                                              @bind-Classname="@_classname"
+                                                              RevealClassname="@RevealClassname"
+                                                              ProgressClassname="@ProgressClassname"
+                                                              ControlsClassname="@ControlsClassname" />
+}
