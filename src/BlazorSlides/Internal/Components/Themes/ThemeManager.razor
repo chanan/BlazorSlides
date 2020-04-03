@@ -24,3 +24,12 @@
                                                                 ProgressClassname="@ProgressClassname"
                                                                 ControlsClassname="@ControlsClassname" />
 }
+
+@if (SlidesAPI.State.Theme == Theme.Sky)
+{
+    <BlazorSlides.Internal.Components.Themes.Sky.SkyTheme Region="@Region"
+                                                             @bind-Classname="@_classname"
+                                                             RevealClassname="@RevealClassname"
+                                                             ProgressClassname="@ProgressClassname"
+                                                             ControlsClassname="@ControlsClassname" />
+}
