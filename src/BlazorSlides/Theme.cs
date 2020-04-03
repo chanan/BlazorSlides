@@ -4,6 +4,7 @@
     {
         Beige,
         Black,
+        Blood,
         League,
         Serif,
         Simple,

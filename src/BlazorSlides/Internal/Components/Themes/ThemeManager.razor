@@ -60,3 +60,12 @@
                                                               ProgressClassname="@ProgressClassname"
                                                               ControlsClassname="@ControlsClassname" />
 }
+
+@if (SlidesAPI.State.Theme == Theme.Blood)
+{
+    <BlazorSlides.Internal.Components.Themes.Blood.BloodTheme Region="@Region"
+                                                              @bind-Classname="@_classname"
+                                                              RevealClassname="@RevealClassname"
+                                                              ProgressClassname="@ProgressClassname"
+                                                              ControlsClassname="@ControlsClassname" />
+}
