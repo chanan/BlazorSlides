@@ -5,6 +5,7 @@
         Beige,
         Black,
         League,
+        Simple,
         Sky,
         White
     }
