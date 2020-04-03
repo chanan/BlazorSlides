@@ -28,8 +28,17 @@
 @if (SlidesAPI.State.Theme == Theme.Sky)
 {
     <BlazorSlides.Internal.Components.Themes.Sky.SkyTheme Region="@Region"
-                                                             @bind-Classname="@_classname"
-                                                             RevealClassname="@RevealClassname"
-                                                             ProgressClassname="@ProgressClassname"
-                                                             ControlsClassname="@ControlsClassname" />
+                                                          @bind-Classname="@_classname"
+                                                          RevealClassname="@RevealClassname"
+                                                          ProgressClassname="@ProgressClassname"
+                                                          ControlsClassname="@ControlsClassname" />
+}
+
+@if (SlidesAPI.State.Theme == Theme.Beige)
+{
+    <BlazorSlides.Internal.Components.Themes.Beige.BeigeTheme Region="@Region"
+                                                              @bind-Classname="@_classname"
+                                                              RevealClassname="@RevealClassname"
+                                                              ProgressClassname="@ProgressClassname"
+                                                              ControlsClassname="@ControlsClassname" />
 }

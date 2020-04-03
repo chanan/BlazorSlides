@@ -2,6 +2,7 @@
 {
     public enum Theme
     {
+        Beige,
         Black,
         League,
         Sky,
