@@ -78,3 +78,12 @@
                                                               ProgressClassname="@ProgressClassname"
                                                               ControlsClassname="@ControlsClassname" />
 }
+
+@if (SlidesAPI.State.Theme == Theme.Moon)
+{
+    <BlazorSlides.Internal.Components.Themes.Moon.MoonTheme Region="@Region"
+                                                            @bind-Classname="@_classname"
+                                                            RevealClassname="@RevealClassname"
+                                                            ProgressClassname="@ProgressClassname"
+                                                            ControlsClassname="@ControlsClassname" />
+}

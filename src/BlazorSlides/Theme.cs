@@ -6,6 +6,7 @@
         Black,
         Blood,
         League,
+        Moon,
         Night,
         Serif,
         Simple,

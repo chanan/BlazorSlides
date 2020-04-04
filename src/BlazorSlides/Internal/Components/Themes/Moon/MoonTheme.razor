@@ -1,0 +1,35 @@
+﻿@switch(Region)
+{
+    case Region.Font:
+        <Font />
+        break;
+    case Region.Global:
+        <Global />
+        break;
+    case Region.Headers:
+        <Headers RevealClassname="@RevealClassname" />
+        break;
+    case Region.Reveal:
+        <Reveal @bind-Classname="@_classname" />
+        break;
+    case Region.Other:
+        <Other RevealClassname="@RevealClassname" />
+        break;
+    case Region.Links:
+        <Links RevealClassname="@RevealClassname" />
+        break;
+    case Region.Controls:
+        <BlazorSlides.Internal.Components.Themes.Moon.Controls ControlsClassname="@ControlsClassname" />
+        break;
+    case Region.Images:
+        <Images RevealClassname="@RevealClassname" />
+        break;
+    case Region.Print:
+        <Print />
+        break;
+    case Region.Progress:
+        <BlazorSlides.Internal.Components.Themes.Moon.Progress ProgressClassname="@ProgressClassname" />
+        break;
+    default:
+        break;
+}
