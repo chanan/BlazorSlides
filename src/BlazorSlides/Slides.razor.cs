@@ -42,7 +42,7 @@ namespace BlazorSlides
 
         //Parameters
         [Parameter] public RenderFragment ChildContent { get; set; }
-        [Parameter] public Theme Theme { get; set; } = Theme.White;
+        [Parameter] public Theme Theme { get; set; } = Theme.Black;
         [Parameter] public ControlsBackArrows ControlsBackArrows { get; set; } = ControlsBackArrows.Faded;
         [Parameter] public ControlsLayout ControlsLayout { get; set; } = ControlsLayout.BottomRight;
         [Parameter] public bool ControlsTutorial { get; set; } = true;
@@ -170,6 +170,7 @@ namespace BlazorSlides
 
         private void SetConfig(List<KeyValuePair<string, string>> pairs)
         {
+            bool changed = false;
             foreach(KeyValuePair<string, string> kvp in pairs)
             {
                 switch (kvp.Key.ToLower())
@@ -179,6 +180,7 @@ namespace BlazorSlides
                         {
                             Transition = transition;
                             SlidesAPI.State.Transition = transition;
+                            changed = true;
                         }
                         break;
                     case "theme":
@@ -186,11 +188,16 @@ namespace BlazorSlides
                         {
                             Theme = theme;
                             SlidesAPI.State.Theme = theme;
+                            changed = true;
                         }
                         break;
                     default:
                         break;
                 }
+            }
+            if(changed)
+            {
+                SlidesAPI.UpdateStatus();
             }
         }
 

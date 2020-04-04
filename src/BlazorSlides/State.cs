@@ -95,7 +95,7 @@ namespace BlazorSlides
         public double Margin { get; internal set; } = 0.04d;
         public double MinScale { get; internal set; } = 0.2d;
         public double MaxScale { get; internal set; } = 2.00d;
-        public Theme Theme { get; internal set; } = Theme.White;
+        public Theme Theme { get; internal set; } = Theme.Black;
         public Transition Transition { get; internal set; } = Transition.Slide;
         public Size ComputedSize { get; internal set; } = new Size();
         internal IEnumerable<InternalSlide> Slides

@@ -1,16 +1,243 @@
 ﻿@page "/"
-<Slides Theme="Theme.Solarized">
-    <Slide>
-        <h1>Slide 1</h1>
-    </Slide>
-    <Stack>
-        <Slide><h2>Slide 2.1</h2></Slide>
-        <Slide><h2>Slide 2.2</h2></Slide>
-    </Stack>
-    <Slide>
-        <h1>Slide 3</h1>
-    </Slide>
-    <Slide>
-        <h1>Slide 4</h1>
-    </Slide>
-</Slides>
+    <Slides>
+        <Slide>
+            <h1>BlazorSlides</h1>
+            <h3>Reveal.js Blazor port</h3>
+            <h4>The HTML Presentation Framework</h4>
+            <p><strong>This is a work in progress and is not released yet!</strong></p>
+            <p>
+                <small>BlazorSlides Created by Chanan Braunstein. Reveal.js by <a href="http://hakim.se">Hakim El Hattab</a></small>
+            </p>
+        </Slide>
+        <Slide>
+            <h2>Hello There</h2>
+            <p>
+                BlazorSlides enables you to create beautiful interactive slide decks using Blazor. This presentation will show you examples of what it can do.
+            </p>
+        </Slide>
+        <Stack>
+            <Slide>
+                <h2>Vertical Slides</h2>
+                <p>Slides can be nested inside of each other.</p>
+                <p>Use the <em>Space</em> key to navigate through all slides.</p>
+                <br>
+                <a href="#/2/1" class="navigate-down">
+                    <img width="178" height="238" src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
+                </a>
+            </Slide>
+            <Slide>
+                <h2>Basement Level 1</h2>
+                <p>Nested slides are useful for adding additional detail underneath a high level horizontal slide.</p>
+            </Slide>
+            <Slide>
+                <h2>Basement Level 2</h2>
+                <p>That's it, time to go back up.</p>
+                <br>
+                <a href="#/2/0">
+                    <img width="178" height="238" src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Up arrow" style="transform: rotate(180deg); -webkit-transform: rotate(180deg);">
+                </a>
+            </Slide>
+        </Stack>
+        <Slide>
+            <h2>Point of View</h2>
+            <p><strong>Not implemented yet.</strong></p>
+            <p>
+                Press <strong>ESC</strong> to enter the slide overview.
+            </p>
+            <p>
+                Hold down the <strong>alt</strong> key (<strong>ctrl</strong> in Linux) and click on any element to zoom towards it. Click again to zoom back out.
+            </p>
+            <p>
+                (NOTE: Use ctrl + click in Linux.)
+            </p>
+        </Slide>
+        <Slide>
+            <h2>Touch Optimized</h2>
+            <p><strong>Not (fully) implemented yet.</strong></p>
+            <p>
+                Presentations look great on touch devices, like mobile phones and tablets. Simply swipe through your slides.
+            </p>
+        </Slide>
+        <Slide>
+            <Markdown>
+                ## Markdown support
+
+                Write content using inline or external Markdown.
+                Instructions and more info available in the [readme](https://github.com/hakimel/reveal.js#markdown).
+
+                ```
+                ## Markdown support
+
+                Write content using inline or external Markdown.
+                Instructions and more info available in the [readme](https://github.com/hakimel/reveal.js#markdown).
+                ```
+            </Markdown>
+        </Slide>
+        <Stack>
+            <Slide Id="fragments">
+                <h2>Fragments</h2>
+                <p>Hit the next arrow...</p>
+                <p class="fragment">... to step through ...</p>
+                <p><Fragment>... a</Fragment> <Fragment>fragmented</Fragment> <Fragment>slide.</Fragment></p>
+
+                <aside class="notes">
+                    This slide has fragments which are also stepped through in the notes window.
+                </aside>
+            </Slide>
+            <Slide>
+                <h2>Fragment Styles</h2>
+                <p>There's different types of fragments, like:</p>
+                <p><Fragment FragmentStyle="FragmentStyle.Grow">grow</Fragment></p>
+                <p><Fragment FragmentStyle="FragmentStyle.Shrink">shrink</Fragment></p>
+                <p><Fragment FragmentStyle="FragmentStyle.ZoomIn">Zoom in</Fragment></p>
+                <p><Fragment FragmentStyle="FragmentStyle.FadeOut">fade-out</Fragment></p>
+                <p>
+                    <Fragment FragmentStyle="FragmentStyle.FadeRight">fade-right, </Fragment>
+                    <Fragment FragmentStyle="FragmentStyle.FadeUp">up, </Fragment>
+                    <Fragment FragmentStyle="FragmentStyle.FadeDown">down, </Fragment>
+                    <Fragment FragmentStyle="FragmentStyle.FadeLeft">left</Fragment>
+                </p>
+                <p><Fragment FragmentStyle="FragmentStyle.FadeInThenOut">fade-in-then-out</Fragment></p>
+                <p><Fragment FragmentStyle="FragmentStyle.FadeInThenSemiOut">fade-in-then-semi-out</Fragment></p>
+                <p>Highlight <Fragment FragmentStyle="FragmentStyle.HighlightRed">red</Fragment> <Fragment FragmentStyle="FragmentStyle.HighlightBlue">blue</Fragment> <Fragment FragmentStyle="FragmentStyle.HighlightGreen">green</Fragment></p>
+            </Slide>
+        </Stack>
+        <Slide Id="transitions">
+            <h2>Transition Styles</h2>
+            <p>
+                You can select from different transitions, like: <br>
+                <a href="?transition=none#/transitions">None</a> -
+                <a href="?transition=fade#/transitions">Fade</a> -
+                <a href="?transition=slide#/transitions">Slide</a> -
+                <a href="?transition=convex#/transitions">Convex</a> -
+                <a href="?transition=concave#/transitions">Concave</a> -
+                <a href="?transition=zoom#/transitions">Zoom</a>
+            </p>
+        </Slide>
+        <Slide id="themes">
+            <h2>Themes</h2>
+            <p>
+                BlazorSlides comes with a few themes built in: <br>
+                <a href="?theme=Black#" /themes">Black (default)</a> -
+                <a href="?theme=White#" /themes">White</a> -
+                <a href="?theme=League#" /themes">League</a> -
+                <a href="?theme=Sky#" /themes">Sky</a> -
+                <a href="?theme=Beige#" /themes">Beige</a> -
+                <a href="?theme=Simple#" /themes">Simple</a> <br>
+                <a href="?theme=Serif#" /themes">Serif</a> -
+                <a href="?theme=Blood#" /themes">Blood</a> -
+                <a href="?theme=Night#" /themes">Night</a> -
+                <a href="?theme=Moon#" /themes">Moon</a> -
+                <a href="?theme=Solarized#" /themes">Solarized</a>
+            </p>
+        </Slide>
+        <Slide>
+            <h2>Slide Backgrounds</h2>
+            <p><strong>Not implemented yet</strong></p>
+        </Slide>
+        <Slide>
+            <h2>Pretty Code</h2>
+            <p><strong>Not implemented yet</strong></p>
+        </Slide>
+        <Slide>
+            <h2>Marvelous List</h2>
+            <ul>
+                <li>No order here</li>
+                <li>Or here</li>
+                <li>Or here</li>
+                <li>Or here</li>
+            </ul>
+        </Slide>
+        <Slide>
+            <h2>Fantastic Ordered List</h2>
+            <ol>
+                <li>One is smaller than...</li>
+                <li>Two is smaller than...</li>
+                <li>Three!</li>
+            </ol>
+        </Slide>
+        <Slide>
+            <h2>Tabular Tables</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Value</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Apples</td>
+                        <td>$1</td>
+                        <td>7</td>
+                    </tr>
+                    <tr>
+                        <td>Lemonade</td>
+                        <td>$2</td>
+                        <td>18</td>
+                    </tr>
+                    <tr>
+                        <td>Bread</td>
+                        <td>$3</td>
+                        <td>2</td>
+                    </tr>
+                </tbody>
+            </table>
+        </Slide>
+        <Slide>
+            <h2>Clever Quotes</h2>
+            <p>
+                These guys come in two forms, inline: <q cite="http://searchservervirtualization.techtarget.com/definition/Our-Favorite-Technology-Quotations">The nice thing about standards is that there are so many to choose from</q> and block:
+            </p>
+            <blockquote cite="http://searchservervirtualization.techtarget.com/definition/Our-Favorite-Technology-Quotations">
+                &ldquo;For years there has been a theory that millions of monkeys typing at random on millions of typewriters would
+                reproduce the entire works of Shakespeare. The Internet has proven this theory to be untrue.&rdquo;
+            </blockquote>
+        </Slide>
+        <Slide>
+            <h2>Intergalactic Interconnections</h2>
+            <p>
+                You can link between slides internally,
+                <a href="#/2/3">like this</a>.
+            </p>
+        </Slide>
+        <Slide>
+            <h2>Blazor Components</h2>
+            <p>Use your own components inside the slide show:</p>
+            <Counter />
+        </Slide>
+        <Slide>
+            <h2>Speaker View</h2>
+            <p><strong>Not implemented yet</strong></p>
+        </Slide>
+        <Slide>
+            <h2>Export to PDF</h2>
+            <p><strong>Not implemented yet</strong></p>
+        </Slide>
+        <Slide>
+            <h2>Global State</h2>
+            <p><strong>Not implemented yet</strong></p>
+        </Slide>
+        <Slide>
+            <h2>State Events</h2>
+            <p><strong>Not (fully) implemented yet</strong></p>
+        </Slide>
+        <Slide>
+            <h2>Take a Moment</h2>
+            <p><strong>Not implemented yet</strong></p>
+        </Slide>
+        <Slide>
+            <h2>Much more (to be implemented):</h2>
+            <ul>
+                <li>Right-to-left support</li>
+                <li>Extensive API</li>
+                <li>Auto-progression</li>
+                <li>Parallax backgrounds</li>
+                <li>Custom keyboard bindings</li>
+            </ul>
+        </Slide>
+        <Slide>
+            <h1>THE END</h1>
+        </Slide>
+    </Slides>
