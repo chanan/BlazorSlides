@@ -30,7 +30,8 @@ namespace SampleServerSide
                     o.DetailedErrors = true;
                 }
             });
-            services.AddBlazorStyled(isDevelopment: true, isDebug: true);
+            IConfigurationSection section = Configuration.GetSection("BlazorStyled");
+            services.AddBlazorStyled(isDevelopment: section.GetValue<bool>("development"), isDebug: section.GetValue<bool>("debug"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
