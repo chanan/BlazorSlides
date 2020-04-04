@@ -87,3 +87,12 @@
                                                             ProgressClassname="@ProgressClassname"
                                                             ControlsClassname="@ControlsClassname" />
 }
+
+@if (SlidesAPI.State.Theme == Theme.Solarized)
+{
+    <BlazorSlides.Internal.Components.Themes.Solarized.SolarizedTheme Region="@Region"
+                                                                      @bind-Classname="@_classname"
+                                                                      RevealClassname="@RevealClassname"
+                                                                      ProgressClassname="@ProgressClassname"
+                                                                      ControlsClassname="@ControlsClassname" />
+}

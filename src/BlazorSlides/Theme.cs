@@ -11,6 +11,7 @@
         Serif,
         Simple,
         Sky,
+        Solarized,
         White
     }
 }
