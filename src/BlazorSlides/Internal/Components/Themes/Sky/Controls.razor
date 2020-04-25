@@ -1,5 +1,8 @@
-﻿<Styled>
-    .@ControlsClassname {
-        color: #3b759e;
-    }
-</Styled>
+﻿@if (ControlsClassname != null)
+{
+    <Styled Id="BlazorSlidesTheme" Priority="200_000">
+        .@ControlsClassname {
+            color: #3b759e;
+        }
+    </Styled>
+}

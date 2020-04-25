@@ -1,20 +1,23 @@
-﻿<Styled>
-    .@RevealClassname a {
-        color: #13DAEC;
-        text-decoration: none;
-        -webkit-transition: color .15s ease;
-        -moz-transition: color .15s ease;
-        transition: color .15s ease; 
-    }
+﻿@if (RevealClassname != null)
+{
+    <Styled Id="BlazorSlidesTheme" Priority="200_000">
+        .@RevealClassname a {
+            color: #13DAEC;
+            text-decoration: none;
+            -webkit-transition: color .15s ease;
+            -moz-transition: color .15s ease;
+            transition: color .15s ease;
+        }
 
-    .@RevealClassname a:hover {
-        color: #71e9f4;
-        text-shadow: none;
-        border: none; 
-    }
+        .@RevealClassname a:hover {
+            color: #71e9f4;
+            text-shadow: none;
+            border: none;
+        }
 
-    .@RevealClassname .roll span:after {
-        color: #fff;
-        background: #0d99a5;
-    }
-</Styled>
+        .@RevealClassname .roll span:after {
+            color: #fff;
+            background: #0d99a5;
+        }
+    </Styled>
+}

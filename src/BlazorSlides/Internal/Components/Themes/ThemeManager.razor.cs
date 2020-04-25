@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using BlazorStyled;
+using Microsoft.AspNetCore.Components;
 using System.Threading.Tasks;
 
 namespace BlazorSlides.Internal.Components.Themes
 {
     public partial class ThemeManager : ComponentBase
     {
+        [Inject] public IStyled Styled { get; set; }
+
         private string _previousClassname = null;
         private string _classname;
         private bool _rendered = false;
@@ -29,10 +32,12 @@ namespace BlazorSlides.Internal.Components.Themes
             }
             if (_currentTheme != SlidesAPI.State.Theme)
             {
+                IStyled themeStyled = Styled.WithId("BlazorSlidesTheme", 200_000);
+                await themeStyled.ClearStylesAsync();
                 _currentTheme = SlidesAPI.State.Theme;
                 _rendered = false;
             }
-            if (_classname != null && _previousClassname != _classname && !_rendered )
+            if (_classname != null && _previousClassname != _classname && !_rendered)
             {
                 _previousClassname = _classname;
                 _rendered = true;

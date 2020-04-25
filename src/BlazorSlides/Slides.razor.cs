@@ -1,5 +1,5 @@
 ﻿using BlazorSlides.Internal;
-using BlazorSlides.Internal.Components;
+using BlazorStyled;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Components.Web;
@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace BlazorSlides
 {
     public partial class Slides : ComponentBase
-    {
+    { 
         //Main reveal container
         private string _revealContainer;
         private string _reveal;
@@ -29,7 +29,7 @@ namespace BlazorSlides
         private readonly IMixins _mixins = new Mixins();
 
         //JsInterop
-        [Inject] IJSRuntime JSRuntime { get; set; }
+        [Inject] private IJSRuntime JSRuntime { get; set; }
         private ScriptManager _scriptManager;
         private ElementReference _domWrapper;
 
@@ -60,6 +60,7 @@ namespace BlazorSlides
         [Parameter] public Transition Transition { get; set; } = Transition.Slide;
 
         //Component events
+
         protected override void OnParametersSet()
         {
             SlidesAPI.State.ControlsBackArrows = ControlsBackArrows;
@@ -84,10 +85,12 @@ namespace BlazorSlides
             {
                 SlidesAPI.StateUpdated += StateUpdated;
                 NavigationManager.LocationChanged += HandleLocationChanged;
-                _scriptManager = new ScriptManager(JSRuntime);
-                _scriptManager.DomWrapper = _domWrapper;
+                _scriptManager = new ScriptManager(JSRuntime)
+                {
+                    DomWrapper = _domWrapper
+                };
                 _scriptManager.OnWindowResize += OnWindowResize;
-                await _scriptManager.SetInstance();                
+                await _scriptManager.SetInstance();
                 await UpdateJsInteropVars();
                 await _scriptManager.Log("Initial State: ", SlidesAPI.State);
                 ParseURL(NavigationManager.Uri);
@@ -134,7 +137,7 @@ namespace BlazorSlides
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("/");
-            if(state.CurrentSlideId == null)
+            if (state.CurrentSlideId == null)
             {
                 sb.Append(state.CurrentHorizontalIndex);
                 if (state.IsVerticalSlide)
@@ -172,12 +175,12 @@ namespace BlazorSlides
         private void SetConfig(List<KeyValuePair<string, string>> pairs)
         {
             bool changed = false;
-            foreach(KeyValuePair<string, string> kvp in pairs)
+            foreach (KeyValuePair<string, string> kvp in pairs)
             {
                 switch (kvp.Key.ToLower())
                 {
                     case "transition":
-                        if(Transition.TryParse<Transition>(kvp.Value, true, out Transition transition))
+                        if (Transition.TryParse<Transition>(kvp.Value, true, out Transition transition))
                         {
                             Transition = transition;
                             SlidesAPI.State.Transition = transition;
@@ -196,7 +199,7 @@ namespace BlazorSlides
                         break;
                 }
             }
-            if(changed)
+            if (changed)
             {
                 SlidesAPI.UpdateStatus();
             }
@@ -204,8 +207,12 @@ namespace BlazorSlides
 
         private List<KeyValuePair<string, string>> ParseQuery(string location)
         {
-            List <KeyValuePair<string, string>> list = new List<KeyValuePair<string, string>>();
-            if (location.IndexOf("?") == -1) return list;
+            List<KeyValuePair<string, string>> list = new List<KeyValuePair<string, string>>();
+            if (location.IndexOf("?") == -1)
+            {
+                return list;
+            }
+
             int start = location.IndexOf("?") + 1;
             int end = location.IndexOf("#") != -1 ? location.IndexOf("#") : location.Length;
             string query = location.Substring(start, end - start);
@@ -229,7 +236,7 @@ namespace BlazorSlides
         private int? ParseVertical(string hash)
         {
             string[] arr = hash.Split('/');
-            if(arr.Length != 3)
+            if (arr.Length != 3)
             {
                 return null;
             }
@@ -249,13 +256,13 @@ namespace BlazorSlides
         private int ParseHorizontal(string hash)
         {
             string[] arr = hash.Split('/');
-            if(int.TryParse(arr[1], out int result))
+            if (int.TryParse(arr[1], out int result))
             {
                 return result;
             }
             else
             {
-                if(SlidesAPI.State.TryGetHorizontalById(arr[1], out int res))
+                if (SlidesAPI.State.TryGetHorizontalById(arr[1], out int res))
                 {
                     return res;
                 }
@@ -275,7 +282,7 @@ namespace BlazorSlides
 
         private async Task UpdateJsInteropVars()
         {
-            foreach(InternalSlide slide in SlidesAPI.State.Slides)
+            foreach (InternalSlide slide in SlidesAPI.State.Slides)
             {
                 int scrollHeight = await _scriptManager.GetScrollHeight(slide.ElementReference);
                 slide.Top = Math.Max((Height - scrollHeight) / 2, 0);

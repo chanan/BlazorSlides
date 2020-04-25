@@ -1,38 +1,41 @@
-﻿<Styled>
-    .@RevealClassname h1,
-    .@RevealClassname h2,
-    .@RevealClassname h3,
-    .@RevealClassname h4,
-    .@RevealClassname h5,
-    .@RevealClassname h6 {
-        margin: 0 0 20px 0;
-        color: #222;
-        font-family: "Source Sans Pro", Helvetica, sans-serif;
-        font-weight: 600;
-        line-height: 1.2;
-        letter-spacing: normal;
-        text-transform: uppercase;
-        text-shadow: none;
-        word-wrap: break-word;
-    }
+﻿@if (RevealClassname != null)
+{
+    <Styled Id="BlazorSlidesTheme" Priority="200_000">
+        .@RevealClassname h1,
+        .@RevealClassname h2,
+        .@RevealClassname h3,
+        .@RevealClassname h4,
+        .@RevealClassname h5,
+        .@RevealClassname h6 {
+            margin: 0 0 20px 0;
+            color: #222;
+            font-family: "Source Sans Pro", Helvetica, sans-serif;
+            font-weight: 600;
+            line-height: 1.2;
+            letter-spacing: normal;
+            text-transform: uppercase;
+            text-shadow: none;
+            word-wrap: break-word;
+        }
 
-    .@RevealClassname h1 {
-        font-size: 2.5em; 
-    }
+        .@RevealClassname h1 {
+            font-size: 2.5em; 
+        }
 
-    .@RevealClassname h2 {
-        font-size: 1.6em; 
-    }
+        .@RevealClassname h2 {
+            font-size: 1.6em; 
+        }
 
-    .@RevealClassname h3 {
-        font-size: 1.3em; 
-    }
+        .@RevealClassname h3 {
+            font-size: 1.3em; 
+        }
 
-    .@RevealClassname h4 {
-        font-size: 1em; 
-    }
+        .@RevealClassname h4 {
+            font-size: 1em; 
+        }
 
-    .@RevealClassname h1 {
-        text-shadow: none; 
-    }
-</Styled>
+        .@RevealClassname h1 {
+            text-shadow: none; 
+        }
+    </Styled>
+}

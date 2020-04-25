@@ -1,39 +1,42 @@
-﻿<Styled>
-    .@RevealClassname h1,
-    .@RevealClassname h2,
-    .@RevealClassname h3,
-    .@RevealClassname h4,
-    .@RevealClassname h5,
-    .@RevealClassname h6 {
-        margin: 0 0 20px 0;
-        color: #eee;
-        font-family: Ubuntu, "sans-serif";
-        font-weight: normal;
-        line-height: 1.2;
-        letter-spacing: normal;
-        text-transform: uppercase;
-        text-shadow: 2px 2px 2px #222;
-        word-wrap: break-word;
-        font-weight: 700;
-    }
+﻿@if (RevealClassname != null)
+{
+    <Styled Id="BlazorSlidesTheme" Priority="200_000">
+        .@RevealClassname h1,
+        .@RevealClassname h2,
+        .@RevealClassname h3,
+        .@RevealClassname h4,
+        .@RevealClassname h5,
+        .@RevealClassname h6 {
+            margin: 0 0 20px 0;
+            color: #eee;
+            font-family: Ubuntu, "sans-serif";
+            font-weight: normal;
+            line-height: 1.2;
+            letter-spacing: normal;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 2px #222;
+            word-wrap: break-word;
+            font-weight: 700;
+        }
 
-    .@RevealClassname h1 {
-        font-size: 3.77em; 
-    }
+        .@RevealClassname h1 {
+            font-size: 3.77em;
+        }
 
-    .@RevealClassname h2 {
-        font-size: 2.11em; 
-    }
+        .@RevealClassname h2 {
+            font-size: 2.11em;
+        }
 
-    .@RevealClassname h3 {
-        font-size: 1.55em; 
-    }
+        .@RevealClassname h3 {
+            font-size: 1.55em;
+        }
 
-    .@RevealClassname h4 {
-        font-size: 1em; 
-    }
+        .@RevealClassname h4 {
+            font-size: 1em;
+        }
 
-    .@RevealClassname h1 {
-        text-shadow: 0 1px 0 #ccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaa, 0 6px 1px rgba(0, 0, 0, 0.1), 0 0 5px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.3), 0 3px 5px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.25), 0 20px 20px rgba(0, 0, 0, 0.15);
-    }
-</Styled>
+        .@RevealClassname h1 {
+            text-shadow: 0 1px 0 #ccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaa, 0 6px 1px rgba(0, 0, 0, 0.1), 0 0 5px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.3), 0 3px 5px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.25), 0 20px 20px rgba(0, 0, 0, 0.15);
+        }
+    </Styled>
+}
