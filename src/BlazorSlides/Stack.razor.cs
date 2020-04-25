@@ -12,6 +12,7 @@ namespace BlazorSlides
         private string _future;
         private string _present;
         private string _past;
+        private string _center;
 
         //Parameters
         [Parameter] public RenderFragment ChildContent { get; set; }

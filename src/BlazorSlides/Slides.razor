@@ -16,8 +16,6 @@
             <SlideNumbers />
         }
     </div>
-    <Scripts @ref="@_scripts" DomWrapper="@_domWrapper" OnWindowResize="@_OnWindowResize" />
-
 
     @* Reset CSS *@
     <Styled>
@@ -63,7 +61,7 @@
         font-style: italic;
     </Styled>
 
-    <Styled @bind-Classname="@_center" GlobalStyle="Helpers.Center">
+    <Styled @bind-Classname="@_center">
         label: center;
         min-height: 0 !important;
     </Styled>

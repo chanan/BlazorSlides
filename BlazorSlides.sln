@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleClientSide", "src\Sam
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleServerSide", "src\SampleServerSide\SampleServerSide.csproj", "{DE420950-ACCD-4386-BA10-495EDC093C3C}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorStyled", "..\BlazorStyled\src\BlazorStyled\BlazorStyled.csproj", "{95042FF5-8195-4994-88C9-1211A57E0710}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{DE420950-ACCD-4386-BA10-495EDC093C3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE420950-ACCD-4386-BA10-495EDC093C3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE420950-ACCD-4386-BA10-495EDC093C3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95042FF5-8195-4994-88C9-1211A57E0710}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95042FF5-8195-4994-88C9-1211A57E0710}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95042FF5-8195-4994-88C9-1211A57E0710}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95042FF5-8195-4994-88C9-1211A57E0710}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -44,9 +44,14 @@
     label: stack-past;
 </Styled>
 
+<Styled @bind-Classname="@_center">
+    label: center;
+    min-height: 0 !important;
+</Styled>
+
 <Styled @bind-Classname="@_currentSlideClass"
         ComposeStack="@_stack"
-        ComposeCenter="@IStyled.GlobalStyles["Helpers.Center"]"
+        ComposeCenter="@_center"
         ComposePresent="@_present" ComposePresentIf="@IsPresent"
         ComposeNotPresent="@_notPresent" ComposeNotPresentIf="@(!IsPresent)"
         ComposePast="@_past" ComposePastIf="@IsPast"

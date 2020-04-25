@@ -3,6 +3,7 @@ using BlazorSlides.Internal.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.JSInterop;
 using Polished;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,8 @@ namespace BlazorSlides
         private readonly IMixins _mixins = new Mixins();
 
         //JsInterop
-        private Scripts _scripts;
+        [Inject] IJSRuntime JSRuntime { get; set; }
+        private ScriptManager _scriptManager;
         private ElementReference _domWrapper;
 
         //State
@@ -58,12 +60,6 @@ namespace BlazorSlides
         [Parameter] public Transition Transition { get; set; } = Transition.Slide;
 
         //Component events
-        protected override void OnInitialized()
-        {
-            SlidesAPI.StateUpdated += StateUpdated;
-            NavigationManager.LocationChanged += HandleLocationChanged;
-        }
-
         protected override void OnParametersSet()
         {
             SlidesAPI.State.ControlsBackArrows = ControlsBackArrows;
@@ -86,14 +82,19 @@ namespace BlazorSlides
         {
             if (firstRender)
             {
-                await _scripts.SetInstance();                
+                SlidesAPI.StateUpdated += StateUpdated;
+                NavigationManager.LocationChanged += HandleLocationChanged;
+                _scriptManager = new ScriptManager(JSRuntime);
+                _scriptManager.DomWrapper = _domWrapper;
+                _scriptManager.OnWindowResize += OnWindowResize;
+                await _scriptManager.SetInstance();                
                 await UpdateJsInteropVars();
-                await _scripts.Log("Initial State: ", SlidesAPI.State);
+                await _scriptManager.Log("Initial State: ", SlidesAPI.State);
                 ParseURL(NavigationManager.Uri);
                 SlidesAPI.State.Ready = true;
                 _visible = string.Empty;
                 await UpdateJsInteropVars();
-                await InvokeAsync(() => StateHasChanged());
+                await InvokeAsync(() => StateHasChanged()).ConfigureAwait(false);
             }
         }
 
@@ -122,9 +123,9 @@ namespace BlazorSlides
         private async void StateUpdated(object sender, State state)
         {
             await UpdateJsInteropVars();
-            await _scripts.Log("State: ", state);
+            await _scriptManager.Log("State: ", state);
             string hash = Hash(state);
-            await _scripts.UpdateHash(hash);
+            await _scriptManager.UpdateHash(hash);
             await UpdateJsInteropVars();
             await InvokeAsync(StateHasChanged).ConfigureAwait(false);
         }
@@ -266,7 +267,7 @@ namespace BlazorSlides
         }
 
         //Scripts Events
-        private async Task _OnWindowResize(object ignored)
+        private async void OnWindowResize(object sender, EventArgs e)
         {
             await UpdateJsInteropVars();
             SlidesAPI.UpdateStatus();
@@ -276,11 +277,11 @@ namespace BlazorSlides
         {
             foreach(InternalSlide slide in SlidesAPI.State.Slides)
             {
-                int scrollHeight = await _scripts.GetScrollHeight(slide.ElementReference);
+                int scrollHeight = await _scriptManager.GetScrollHeight(slide.ElementReference);
                 slide.Top = Math.Max((Height - scrollHeight) / 2, 0);
             }
 
-            Size size = await _scripts.GetScreenSize(Margin, SlidesAPI.State.MinScale, SlidesAPI.State.MaxScale, Width, Height);
+            Size size = await _scriptManager.GetScreenSize(Margin, SlidesAPI.State.MinScale, SlidesAPI.State.MaxScale, Width, Height);
             if (size.Width != SlidesAPI.State.ComputedSize.Width || size.Height != SlidesAPI.State.ComputedSize.Height)
             {
                 SlidesAPI.State.ComputedSize = size;

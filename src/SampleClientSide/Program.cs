@@ -16,7 +16,7 @@ namespace SampleClientSide
             //IConfigurationSection section = builder.Configuration.Build().GetSection("BlazorStyled");
             //builder.Services.AddBlazorStyled(isDevelopment: GetValue(section, "development"), isDebug: GetValue(section, "debug"));
 
-            builder.Services.AddBlazorStyled(isDevelopment: false, isDebug: false);
+            builder.Services.AddBlazorStyled(isDevelopment: false, isDebug: true);
             //End Configure Services
 
             builder.RootComponents.Add<App>("app");

@@ -17,16 +17,15 @@
 
 
   <ItemGroup>
-    <PackageReference Include="BlazorStyled" Version="2.2.0" />
-    <PackageReference Include="Markdig" Version="0.18.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="3.2.0-preview3.20168.3" />
+    <PackageReference Include="Markdig" Version="0.20.0" />
+    
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="3.1.2" />
     <PackageReference Include="Polished" Version="1.0.0" />
   </ItemGroup>
 
 
   <ItemGroup>
-    <Folder Include="Internal\Components\Themes\Black\" />
+    <ProjectReference Include="..\..\..\BlazorStyled\src\BlazorStyled\BlazorStyled.csproj" />
   </ItemGroup>
 
 </Project>

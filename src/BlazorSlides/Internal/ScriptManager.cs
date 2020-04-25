@@ -1,37 +1,42 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 
-namespace BlazorSlides.Internal.Components
+namespace BlazorSlides.Internal
 {
-    public class Scripts : ComponentBase
+    internal class ScriptManager
     {
-        private SemaphoreSlim _lock = new SemaphoreSlim(1, 1);
-        //Injections
-        [Inject] private IJSRuntime JSRuntime { get; set; }
+        private IJSRuntime JSRuntime { get; set; }
+        private bool _init = false;
 
-        //Parameters
-        [Parameter] public ElementReference? DomWrapper { get; set; }
-
-        //Components
-        protected override async Task OnInitializedAsync()
+        public ScriptManager(IJSRuntime jSRuntime)
         {
-            await _lock.WaitAsync();
+            JSRuntime = jSRuntime;
         }
 
-        protected override async void OnAfterRender(bool firstRender)
+        //Parameters
+        public ElementReference? DomWrapper { get; set; }
+
+        private async Task Init()
         {
-            if (firstRender)
+            try
             {
-                await JSRuntime.InvokeVoidAsync("eval", _script);
-                _lock.Release();
+                if (!_init)
+                {
+                    await JSRuntime.InvokeVoidAsync("eval", _script);
+                    _init = true;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw e;
             }
         }
 
         //Events
-        [Parameter] public EventCallback OnWindowResize { get; set; }
+        public EventHandler OnWindowResize { get; set; }
 
         //Javascript commands
         internal async Task<Size> GetScreenSize(double margin, double minScale, double maxScale, int configWidth, int configHeight)
@@ -52,30 +57,32 @@ namespace BlazorSlides.Internal.Components
 
         internal async Task SetInstance()
         {
-            await _lock.WaitAsync();
+            await Init();
             await JSRuntime.InvokeVoidAsync("BlazorSlides.setInstance", DotNetObjectReference.Create(this));
-            _lock.Release();
         }
 
         internal async Task Log(string msg, object obj)
         {
+            await Init();
             await JSRuntime.InvokeVoidAsync("BlazorSlides.log", msg, obj);
         }
 
         internal async Task UpdateHash(string hash)
         {
+            await Init();
             await JSRuntime.InvokeVoidAsync("BlazorSlides.updateHash", hash);
         }
 
-        internal ValueTask<int> GetScrollHeight(ElementReference elementReference)
+        internal async ValueTask<int> GetScrollHeight(ElementReference elementReference)
         {
-            return JSRuntime.InvokeAsync<int>("BlazorSlides.getScrollHeight", elementReference);
+            await Init();
+            return await JSRuntime.InvokeAsync<int>("BlazorSlides.getScrollHeight", elementReference);
         }
 
         [JSInvokable]
-        public async void _OnWindowResize()
+        public void _OnWindowResize()
         {
-            await OnWindowResize.InvokeAsync(new object());
+            OnWindowResize?.Invoke(this, new EventArgs());
         }
 
         private readonly string _script = @"
